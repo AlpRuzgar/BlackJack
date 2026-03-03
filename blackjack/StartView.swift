@@ -12,32 +12,30 @@ struct StartView: View {
     var body: some View {
         NavigationView{
             ZStack{
-                Image("BACKGROUND")
-                    .resizable()
-                    .interpolation(.high)
-                    .antialiased(true)
-                    .ignoresSafeArea()
+                Color.green.ignoresSafeArea()
+                    .brightness(-0.2)
 
                 VStack(){
                     HStack{
                         Text("Black")
-                            .font(.system(size: 40, weight: .bold, design: .default))
+                            .font(.system(size: 50, weight: .bold, design: .default))
                             .foregroundStyle(.black)
                         Text("Jack")
-                            .font(.system(size: 40, weight: .bold, design: .default))
+                            .font(.system(size: 50, weight: .bold, design: .default))
                             .foregroundStyle(.red)
                     }
                     .padding()
                     
                     NavigationLink(destination: ContentView()){
-                        Text("Play  ")
-                            .font(.system(size: 20, weight: .bold, design: .default))
+                        Text("Play")
+                            .font(.title)
+                            .bold()
+                            .frame(width: 250, height: 50)
+                            .foregroundStyle(.white)
+                            .background(LinearGradient(colors: [.red,.black], startPoint: .topLeading, endPoint: .bottomTrailing))
+                            .clipShape(.capsule)
+                        
                     }
-                    .padding()
-                    .foregroundStyle(.white)
-                    .background(.blue)
-                    .clipShape(.capsule)
-                    
                 }
             }
         }

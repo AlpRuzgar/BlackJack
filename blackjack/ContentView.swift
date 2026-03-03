@@ -66,8 +66,7 @@ struct ContentView: View {
                                 showAlert.toggle()
                             }
                         }, text: "Hit     ", backgroundColor: .red, textColor: .white)
-                        .font(.system(size: 20, weight: .bold))
-                        .padding()
+                        
                         .alert(alertMessage, isPresented: $showAlert) {
                             Button("Restart", role: .confirm) {
                                 viewModel.resetGame()
@@ -107,15 +106,13 @@ struct ContentView: View {
                                     showAlert.toggle()
                                 }
                                 else if viewModel.playersHandValue == viewModel.dealersHandValue {
-                                    alertMessage = "push"
+                                    alertMessage = "Push!"
                                     viewModel.gameOverMessage = "It's a push! No one wins or loses."
                                     showAlert.toggle()
                                 }
                             }
                             
                         }, text: "Stand", backgroundColor: .green, textColor: .white)
-                        .font(.system(size: 20, weight: .bold))
-                        .padding()
                         
                         .alert(alertMessage, isPresented: $showAlert) {
                             Button("Restart", role: .confirm) {
