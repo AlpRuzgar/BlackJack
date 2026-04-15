@@ -8,6 +8,7 @@
 import Foundation
 
 class Card: Identifiable {
+    let id = UUID()
     let value: String
     let suit: String
     var frontImage: String = ""
