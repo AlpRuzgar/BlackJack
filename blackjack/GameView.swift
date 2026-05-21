@@ -8,7 +8,7 @@
 import SwiftUI
 
 
-struct ContentView: View {
+struct GameView: View {
 
     @StateObject private var viewModel = ContentViewModel()
 
@@ -356,6 +356,6 @@ struct GameOverView{
 }
 
 #Preview {
-    ContentView()
+    GameView()
 }
 

@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class ContentViewModel: ObservableObject {
+class GameViewModel: ObservableObject {
     
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
