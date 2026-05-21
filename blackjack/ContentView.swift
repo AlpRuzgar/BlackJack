@@ -12,8 +12,7 @@ struct ContentView: View {
 
     @StateObject private var viewModel = ContentViewModel()
 
-    @State private var showAlert = false
-    @State private var alertMessage: String = ""
+    @State private var gameResult: GameOverOverlay.GameResult?
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
 
@@ -102,28 +101,15 @@ struct ContentView: View {
                                         withAnimation(.easeInOut(duration: 0.5)) {
                                             dealerFlipAngle = 180
                                         }
-                                        alertMessage = "You busted!"
-                                        showAlert.toggle()
+                                        withAnimation(.spring()) {
+                                            gameResult = .playerBust
+                                        }
                                     }
                                 },
                                 text: "HIT",
                                 backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2),
                                 textColor: .white
                             )
-                        
-                        .alert(alertMessage, isPresented: $showAlert) {
-                            Button("Restart", role: .confirm) {
-                                dealtCardIDs.removeAll()
-                                dealerFlipAngle = 0
-                                viewModel.resetGame()
-                                Task{
-                                    await viewModel.startGame()
-                                }
-                            }
-                            
-                        } message: {
-                            Text(viewModel.gameOverMessage)
-                        }
                             
                             ButtonView(
                                 action: {
@@ -138,25 +124,27 @@ struct ContentView: View {
                                             viewModel.calculateDealersHand()
                                             try? await Task.sleep(for: .milliseconds(500))
                                         }
+                                        
+                                        // Determine game result
                                         if viewModel.dealersHandValue > 21 {
-                                            alertMessage = "Dealer Bust!"
-                                            viewModel.gameOverMessage = "Dealer Busted! You win!"
-                                            showAlert.toggle()
+                                            withAnimation(.spring()) {
+                                                gameResult = .dealerBust
+                                            }
                                         }
                                         else if viewModel.playersHandValue > viewModel.dealersHandValue {
-                                            alertMessage = "Player Wins!"
-                                            viewModel.gameOverMessage = "Your hand is closer to 21 than the dealer's. You win!"
-                                            showAlert.toggle()
+                                            withAnimation(.spring()) {
+                                                gameResult = .playerWin
+                                            }
                                         }
                                         else if viewModel.playersHandValue < viewModel.dealersHandValue {
-                                            alertMessage = "Dealer Wins!"
-                                            viewModel.gameOverMessage = "The dealer's hand is closer to 21 than yours. You lose."
-                                            showAlert.toggle()
+                                            withAnimation(.spring()) {
+                                                gameResult = .dealerWin
+                                            }
                                         }
                                         else if viewModel.playersHandValue == viewModel.dealersHandValue {
-                                            alertMessage = "Push!"
-                                            viewModel.gameOverMessage = "It's a push! No one wins or loses."
-                                            showAlert.toggle()
+                                            withAnimation(.spring()) {
+                                                gameResult = .push
+                                            }
                                         }
                                     }
                                 },
@@ -168,26 +156,27 @@ struct ContentView: View {
                         .padding(.horizontal, 30)
                     }
                     .padding(.bottom, 30)
-                    
-                    .alert(alertMessage, isPresented: $showAlert) {
-                            Button("Restart", role: .confirm) {
-                                dealtCardIDs.removeAll()
-                                dealerFlipAngle = 0
-                                viewModel.resetGame()
-                                Task{
-                                    await viewModel.startGame()
-                                }
-                            }
-                            
-                        } message: {
-                            Text(viewModel.gameOverMessage)
-                        }
                 }
                 .onAppear() {
                     viewModel.isGameOver = false
                     Task{
                         await viewModel.startGame()
                     }
+                }
+                
+                // Game Over Overlay
+                if let result = gameResult {
+                    GameOverOverlay(result: result) {
+                        gameResult = nil
+                        dealtCardIDs.removeAll()
+                        dealerFlipAngle = 0
+                        viewModel.resetGame()
+                        Task {
+                            await viewModel.startGame()
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
                 }
             }
         }
@@ -247,6 +236,125 @@ struct ContentView: View {
             }
     }
 }
+
+struct GameOverOverlay: View {
+    let result: GameResult
+    let onRestart: () -> Void
+    @State private var scale: CGFloat = 0.5
+    @State private var opacity: Double = 0
+    
+    enum GameResult {
+        case playerWin, dealerWin, push, playerBust, dealerBust
+        
+        var title: String {
+            switch self {
+            case .playerWin: return "YOU WIN!"
+            case .dealerWin: return "DEALER WINS"
+            case .push: return "PUSH"
+            case .playerBust: return "BUST!"
+            case .dealerBust: return "DEALER BUST!"
+            }
+        }
+        
+        var message: String {
+            switch self {
+            case .playerWin: return "Your hand beats the dealer!"
+            case .dealerWin: return "Dealer's hand is closer to 21"
+            case .push: return "It's a tie!"
+            case .playerBust: return "You went over 21"
+            case .dealerBust: return "Dealer went over 21. You win!"
+            }
+        }
+        
+        var color: Color {
+            switch self {
+            case .playerWin, .dealerBust: return .green
+            case .dealerWin, .playerBust: return .red
+            case .push: return .orange
+            }
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            // Background layer (not animated with scale)
+            Color.black.opacity(0.7 * opacity)
+                .ignoresSafeArea()
+                .onTapGesture { }
+            
+            // Content layer (animated with scale)
+            VStack(spacing: 25) {
+                // Animated icon
+                ZStack {
+                    Circle()
+                        .fill(result.color.opacity(0.2))
+                        .frame(width: 120, height: 120)
+                    
+                    Circle()
+                        .stroke(result.color, lineWidth: 4)
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: iconName)
+                        .font(.system(size: 50, weight: .bold))
+                        .foregroundColor(result.color)
+                }
+                
+                VStack(spacing: 12) {
+                    Text(result.title)
+                        .font(.system(size: 36, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Text(result.message)
+                        .font(.system(size: 18, weight: .medium, design: .rounded))
+                        .foregroundColor(.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                }
+                
+                Button(action: onRestart) {
+                    HStack {
+                        Image(systemName: "arrow.clockwise")
+                        Text("PLAY AGAIN")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 16)
+                    .background(
+                        Capsule()
+                            .fill(result.color)
+                    )
+                }
+                .shadow(color: result.color.opacity(0.5), radius: 10, x: 0, y: 5)
+            }
+            .padding(40)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(.ultraThinMaterial)
+            )
+            .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+            .scaleEffect(scale)
+        }
+        .onAppear {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                scale = 1.0
+                opacity = 1.0
+            }
+        }
+    }
+    
+    private var iconName: String {
+        switch result {
+        case .playerWin, .dealerBust: return "crown.fill"
+        case .dealerWin, .playerBust: return "xmark.circle.fill"
+        case .push: return "equal.circle.fill"
+        }
+    }
+}
+
+struct GameOverView{
+    
+}
+
 #Preview {
     ContentView()
 }
