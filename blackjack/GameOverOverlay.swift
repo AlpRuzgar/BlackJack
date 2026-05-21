@@ -1,3 +1,12 @@
+//
+//  GameOverOverlay.swift
+//  blackjack
+//
+//  Created by Alp Rüzgar on 21.05.2026.
+//
+
+import SwiftUI
+
 struct GameOverOverlay: View {
     let result: GameResult
     let onRestart: () -> Void

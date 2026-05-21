@@ -81,7 +81,7 @@ struct StartView: View {
                     .padding(.bottom, 20)
                     
                     // Enhanced Play button using ButtonView
-                    NavigationLink(destination: ContentView()){
+                    NavigationLink(destination: GameView(viewModel: GameViewModel(chipsOwned: 0, requiredChips: 0, minimumBet: 5, gameType: .endless))){
                         HStack(spacing: 12) {
                             Image(systemName: "play.fill")
                                 .font(.system(size: 20, weight: .bold))
@@ -150,6 +150,7 @@ struct StartView: View {
         }
     }
 }
+
 #Preview {
     StartView()
 }

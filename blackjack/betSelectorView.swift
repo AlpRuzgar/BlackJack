@@ -69,11 +69,15 @@ struct betSelectorView: View {
 
                     HStack(spacing: 15) {
                         ButtonView(action: {
-                            viewModel.currentBet -= 5
+                            if viewModel.currentBet > viewModel.minimumBet {
+                                viewModel.currentBet -= 5
+                            }
                         }, text: "−", backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2), textColor: .white)
 
                         ButtonView(action: {
-                            viewModel.currentBet += 5
+                            if viewModel.currentBet < viewModel.chipsOwned {
+                                viewModel.currentBet += 5
+                            }
                         }, text: "+", backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3), textColor: .white)
                     }
                     .padding(.horizontal, 30)

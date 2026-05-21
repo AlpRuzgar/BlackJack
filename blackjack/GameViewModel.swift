@@ -7,9 +7,24 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-class GameViewModel: ObservableObject {
-    
+enum GameResult {
+    case playerWin, dealerWin, push, playerBust, dealerBust
+}
+enum GameStage {
+    case betting
+    case playing
+    case roundOver
+}
+enum GameType {
+    case level
+    case endless
+}
+
+
+
+class GameViewModel: ObservableObject {    
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
@@ -18,12 +33,26 @@ class GameViewModel: ObservableObject {
     @Published var playersHandArray: [Card] = []
     @Published var dealersHandValue: Int = 0
     @Published var playersHandValue: Int = 0
-    
-    @Published var chipAmount: Int = 100
-    @Published var betAmount: Int = 0
-    
-    @Published var isGameOver: Bool = false
+        
+    var gameStage: GameStage = .betting
+    var gameType: GameType
+
+    @Published var chipsOwned: Int
+    let requiredChips: Int
+    let minimumBet: Int
+    @Published var currentBet: Int
+
+    @Published var isGameOver: Bool = true
     @Published var gameOverMessage: String = ""
+    @Published var gameResult: GameResult?
+
+    init(chipsOwned: Int, requiredChips: Int, minimumBet: Int, gameType: GameType) {
+        self.chipsOwned = chipsOwned
+        self.requiredChips = requiredChips
+        self.minimumBet = minimumBet
+        self.currentBet = minimumBet
+        self.gameType = gameType
+    }
     
     func createDeck() -> Void {
         for value in cardValueArray{
@@ -38,10 +67,9 @@ class GameViewModel: ObservableObject {
     
     func giveCard(reciever: String)
     {
-        guard !cardsArray.isEmpty else { print("No cards left"); return }
+        guard !cardsArray.isEmpty else { return }
         let randomIndex = Int.random(in: 0..<cardsArray.count)
         let selectedCard = cardsArray.remove(at: randomIndex)
-        print(selectedCard.toString())
         switch reciever{
         case "dealer":
             dealersHandArray.append(selectedCard)
@@ -74,7 +102,6 @@ class GameViewModel: ObservableObject {
         if dealersHandValue > 21 {
             triggerGameOver(message: "Dealer busted! You win.")
         }
-        print("dealers hand: \(dealersHandValue)")
     }
     
     func calculatePlayersHand() {
@@ -96,7 +123,6 @@ class GameViewModel: ObservableObject {
         if playersHandValue > 21 {
             triggerGameOver(message: "You busted! Dealer wins.")
         }
-        print("players hand: \(playersHandValue)")
     }
     
     func calculateAces(base: Int, aceCount: Int) -> Int {
@@ -110,10 +136,9 @@ class GameViewModel: ObservableObject {
     }
     
     func startGame() async {
-        print("Game started")
+        print("Game started — bet: \(currentBet), chips: \(chipsOwned)")
         // Ensure fresh state
         resetGame()
-        isGameOver = false
         // Deal sequence with delays: dealer closed card first
         giveCard(reciever: "dealer")
         try? await Task.sleep(for: .milliseconds(500))
@@ -123,13 +148,61 @@ class GameViewModel: ObservableObject {
         try? await Task.sleep(for: .milliseconds(500))
         giveCard(reciever: "player")
     }
-    /*
-    func increaseBet() {
-        guard betAmount<chipAmount else { return }
-        betAmount += 5
-    }
-     */
     
+    func evaluateRoundResult() {
+        if dealersHandValue > 21 {
+            dealerBust()
+        } else if playersHandValue > dealersHandValue {
+            playerWin()
+        } else if playersHandValue < dealersHandValue {
+            dealerWin()
+        } else {
+            push()
+        }
+    }
+
+    func playerWin() {
+        withAnimation(.spring()) {
+            gameResult = .playerWin
+        }
+        handleChipGain()
+        logGameEndState()
+    }
+
+    func dealerWin() {
+        withAnimation(.spring()) {
+            gameResult = .dealerWin
+        }
+        logGameEndState()
+    }
+
+    func push() {
+        withAnimation(.spring()) {
+            gameResult = .push
+        }
+        handleChipPush()
+        logGameEndState()
+    }
+
+    func playerBust() {
+        withAnimation(.spring()) {
+            gameResult = .playerBust
+        }
+        logGameEndState()
+    }
+
+    func dealerBust() {
+        withAnimation(.spring()) {
+            gameResult = .dealerBust
+        }
+        handleChipGain()
+        logGameEndState()
+    }
+
+    private func logGameEndState() {
+        print("Game ended — bet: \(currentBet), chips: \(chipsOwned)")
+    }
+
     private func triggerGameOver(message: String) {
         gameOverMessage = message
         isGameOver = true
@@ -141,9 +214,21 @@ class GameViewModel: ObservableObject {
         playersHandArray.removeAll()
         dealersHandValue = 0
         playersHandValue = 0
-        isGameOver = false
         gameOverMessage = ""
+        gameResult = nil
         createDeck()
+    }
+    
+    func handleChipGain() {
+        if gameResult == .dealerBust || gameResult == .playerWin {
+            chipsOwned += currentBet*2
+        }
+    }
+        
+    func handleChipPush() {
+        if gameResult == .push {
+            chipsOwned += currentBet
+        }
     }
 }
 
