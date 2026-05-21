@@ -14,7 +14,12 @@ struct LevelView: View {
     var levelPassed: Bool {
         chipsOwned > requiredChips
     }
-    var levelOver = false
+    var outOfChips: Bool {
+        chipsOwned == 0
+    }
+    var levelOver: Bool {
+        levelPassed || chipsOwned == 0
+    }
     @State private var betsPlaced = false
     @StateObject private var viewModel: GameViewModel
 
@@ -26,11 +31,21 @@ struct LevelView: View {
     }
 
     var body: some View {
-        if !betsPlaced {
-            betSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+        if !levelOver {
+            if !betsPlaced {
+                betSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+            }
+            else {
+                GameView(viewModel: viewModel, onPlayAgain: { betsPlaced = false })
+            }
         }
         else {
-            GameView(viewModel: viewModel)
+            if levelPassed {
+                //TODO: LevelPassedView()
+            }
+            if outOfChips {
+                LevelLostView()
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ struct GameView: View {
     
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
+    var onPlayAgain: (() -> Void)? = nil
     var isEndless: Bool {
         viewModel.gameType == .endless
     }
@@ -170,19 +171,26 @@ struct GameView: View {
                     .padding(.bottom, 30)
                 }
                 .onAppear() {
-                    Task{
+                    Task {
                         await viewModel.startGame()
                         viewModel.isGameOver = false
-                        
                     }
                 }
-                
+
                 // Game Over Overlay
                 if let result = viewModel.gameResult {
                     GameOverOverlay(result: result) {
                         dealtCardIDs.removeAll()
                         dealerFlipAngle = 0
                         viewModel.resetGame()
+                        if let onPlayAgain {
+                            onPlayAgain()
+                        } else {
+                            Task {
+                                await viewModel.startGame()
+                                viewModel.isGameOver = false
+                            }
+                        }
                     }
                     .transition(.opacity)
                     .zIndex(1)
