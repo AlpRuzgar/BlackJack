@@ -9,13 +9,14 @@ import SwiftUI
 
 
 struct GameView: View {
-
-    @StateObject private var viewModel = ContentViewModel()
-
-    @State private var gameResult: GameOverOverlay.GameResult?
+    @StateObject var viewModel: GameViewModel
+    
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
-
+    var isEndless: Bool {
+        viewModel.gameType == .endless
+    }
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -29,8 +30,42 @@ struct GameView: View {
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-
+                
                 VStack(spacing: 20) {
+                    // Chip & Bet status bar
+                    if !isEndless {
+                        HStack {
+                            HStack(spacing: 6) {
+                                Image(systemName: "dollarsign.circle.fill")
+                                    .font(.system(size: 18))
+                                    .foregroundColor(.yellow)
+                                Text("\(viewModel.chipsOwned)")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(Capsule().fill(Color.black.opacity(0.3)))
+                            
+                            Spacer()
+                            
+                            HStack(spacing: 6) {
+                                Text("BET")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white.opacity(0.7))
+                                    .tracking(1.5)
+                                Text("\(viewModel.currentBet)")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
+                            .background(Capsule().fill(Color.black.opacity(0.3)))
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
+                        .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+                    }
                     // Dealer Section
                     VStack(spacing: 12) {
                         Text("DEALER")
@@ -57,8 +92,7 @@ struct GameView: View {
                         }
                         .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
                     }
-                    .padding(.top, 40)
-
+                    
                     Spacer()
                     
                     // Player Section
@@ -101,9 +135,7 @@ struct GameView: View {
                                         withAnimation(.easeInOut(duration: 0.5)) {
                                             dealerFlipAngle = 180
                                         }
-                                        withAnimation(.spring()) {
-                                            gameResult = .playerBust
-                                        }
+                                        viewModel.playerBust()
                                     }
                                 },
                                 text: "HIT",
@@ -125,27 +157,7 @@ struct GameView: View {
                                             try? await Task.sleep(for: .milliseconds(500))
                                         }
                                         
-                                        // Determine game result
-                                        if viewModel.dealersHandValue > 21 {
-                                            withAnimation(.spring()) {
-                                                gameResult = .dealerBust
-                                            }
-                                        }
-                                        else if viewModel.playersHandValue > viewModel.dealersHandValue {
-                                            withAnimation(.spring()) {
-                                                gameResult = .playerWin
-                                            }
-                                        }
-                                        else if viewModel.playersHandValue < viewModel.dealersHandValue {
-                                            withAnimation(.spring()) {
-                                                gameResult = .dealerWin
-                                            }
-                                        }
-                                        else if viewModel.playersHandValue == viewModel.dealersHandValue {
-                                            withAnimation(.spring()) {
-                                                gameResult = .push
-                                            }
-                                        }
+                                        viewModel.evaluateRoundResult()
                                     }
                                 },
                                 text: "STAND",
@@ -158,22 +170,19 @@ struct GameView: View {
                     .padding(.bottom, 30)
                 }
                 .onAppear() {
-                    viewModel.isGameOver = false
                     Task{
                         await viewModel.startGame()
+                        viewModel.isGameOver = false
+                        
                     }
                 }
                 
                 // Game Over Overlay
-                if let result = gameResult {
+                if let result = viewModel.gameResult {
                     GameOverOverlay(result: result) {
-                        gameResult = nil
                         dealtCardIDs.removeAll()
                         dealerFlipAngle = 0
                         viewModel.resetGame()
-                        Task {
-                            await viewModel.startGame()
-                        }
                     }
                     .transition(.opacity)
                     .zIndex(1)
@@ -181,6 +190,8 @@ struct GameView: View {
             }
         }
     }
+    
+    
     @ViewBuilder
     private func dealerCardView(index: Int, card: Card) -> some View {
         if index == 0 {
@@ -194,7 +205,7 @@ struct GameView: View {
                     .frame(width: 90, height: 135)
                     .scaleEffect(x: -1, y: 1)
                     .opacity(dealerFlipAngle > 90 ? 1 : 0)
-
+                
                 // Back of card
                 Image(card.backImage)
                     .resizable()
@@ -219,7 +230,7 @@ struct GameView: View {
             cardImageView(card: card)
         }
     }
-
+    
     private func cardImageView(card: Card) -> some View {
         Image(card.frontImage)
             .resizable()
@@ -237,125 +248,8 @@ struct GameView: View {
     }
 }
 
-struct GameOverOverlay: View {
-    let result: GameResult
-    let onRestart: () -> Void
-    @State private var scale: CGFloat = 0.5
-    @State private var opacity: Double = 0
-    
-    enum GameResult {
-        case playerWin, dealerWin, push, playerBust, dealerBust
-        
-        var title: String {
-            switch self {
-            case .playerWin: return "YOU WIN!"
-            case .dealerWin: return "DEALER WINS"
-            case .push: return "PUSH"
-            case .playerBust: return "BUST!"
-            case .dealerBust: return "DEALER BUST!"
-            }
-        }
-        
-        var message: String {
-            switch self {
-            case .playerWin: return "Your hand beats the dealer!"
-            case .dealerWin: return "Dealer's hand is closer to 21"
-            case .push: return "It's a tie!"
-            case .playerBust: return "You went over 21"
-            case .dealerBust: return "Dealer went over 21. You win!"
-            }
-        }
-        
-        var color: Color {
-            switch self {
-            case .playerWin, .dealerBust: return .green
-            case .dealerWin, .playerBust: return .red
-            case .push: return .orange
-            }
-        }
-    }
-    
-    var body: some View {
-        ZStack {
-            // Background layer (not animated with scale)
-            Color.black.opacity(0.7 * opacity)
-                .ignoresSafeArea()
-                .onTapGesture { }
-            
-            // Content layer (animated with scale)
-            VStack(spacing: 25) {
-                // Animated icon
-                ZStack {
-                    Circle()
-                        .fill(result.color.opacity(0.2))
-                        .frame(width: 120, height: 120)
-                    
-                    Circle()
-                        .stroke(result.color, lineWidth: 4)
-                        .frame(width: 120, height: 120)
-                    
-                    Image(systemName: iconName)
-                        .font(.system(size: 50, weight: .bold))
-                        .foregroundColor(result.color)
-                }
-                
-                VStack(spacing: 12) {
-                    Text(result.title)
-                        .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text(result.message)
-                        .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.9))
-                        .multilineTextAlignment(.center)
-                }
-                
-                Button(action: onRestart) {
-                    HStack {
-                        Image(systemName: "arrow.clockwise")
-                        Text("PLAY AGAIN")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                    }
-                    .foregroundColor(.white)
-                    .padding(.horizontal, 40)
-                    .padding(.vertical, 16)
-                    .background(
-                        Capsule()
-                            .fill(result.color)
-                    )
-                }
-                .shadow(color: result.color.opacity(0.5), radius: 10, x: 0, y: 5)
-            }
-            .padding(40)
-            .background(
-                RoundedRectangle(cornerRadius: 25)
-                    .fill(.ultraThinMaterial)
-            )
-            .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
-            .scaleEffect(scale)
-        }
-        .onAppear {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
-                scale = 1.0
-                opacity = 1.0
-            }
-        }
-    }
-    
-    private var iconName: String {
-        switch result {
-        case .playerWin, .dealerBust: return "crown.fill"
-        case .dealerWin, .playerBust: return "xmark.circle.fill"
-        case .push: return "equal.circle.fill"
-        }
-    }
-}
-
-struct GameOverView{
-    
-}
 
 #Preview {
-    GameView()
+    GameView(viewModel: GameViewModel(chipsOwned: 0, requiredChips: 0, minimumBet: 5, gameType: .endless))
 }
 

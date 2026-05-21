@@ -1,3 +1,12 @@
+//
+//  GameResult.swift
+//  blackjack
+//
+//  Created by Alp Rüzgar on 21.05.2026.
+//
+
+import SwiftUI
+
 extension GameResult {
     var title: String {
         switch self {
