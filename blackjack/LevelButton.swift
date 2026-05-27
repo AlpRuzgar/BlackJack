@@ -1,3 +1,12 @@
+//
+//  LevelButton.swift
+//  blackjack
+//
+//  Created by Alp Rüzgar on 27.05.2026.
+//
+
+import SwiftUI
+
 struct LevelButton: View {
     @ObservedObject var level: Level
 
@@ -24,6 +33,10 @@ struct LevelButton: View {
 
                 VStack(spacing: 8) {
                     HStack(spacing: 6) {
+                        Text("START:")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(.white.opacity(0.7))
+                            .tracking(1.5)
                         Image(systemName: "dollarsign.circle.fill")
                             .font(.system(size: 14))
                             .foregroundColor(.yellow)
@@ -40,6 +53,9 @@ struct LevelButton: View {
                             .font(.system(size: 11, weight: .bold, design: .rounded))
                             .foregroundColor(.white.opacity(0.7))
                             .tracking(1.5)
+                        Image(systemName: "dollarsign.circle.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(.yellow)
                         Text("\(level.requiredChips)")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
@@ -96,4 +112,8 @@ struct LevelButton: View {
             .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
         }
     }
+}
+
+#Preview {
+    LevelButton(level: Level(id: 1, name: "Level 1", startingChips: 10, requiredChips: 20, minimumBet: 2))
 }

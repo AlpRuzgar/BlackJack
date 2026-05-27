@@ -8,33 +8,48 @@
 import SwiftUI
 
 struct LevelView: View {
-    let chipsOwned: Int
-    let requiredChips: Int
-    let minimumBet: Int
-    var levelPassed: Bool {
-        chipsOwned > requiredChips
+    @ObservedObject var level: Level
+    let startingChips: Int
+    @State var betsPlaced = false
+    @State var isOutofChips: Bool = false
+    @StateObject var viewModel: LevelViewModel
+    
+    init(level: Level) {
+        self.level = level
+        self.startingChips = level.chipsOwned
+        _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
     }
-    var levelOver = false
-    @State private var betsPlaced = false
-    @StateObject private var viewModel: GameViewModel
-
-    init(chipsOwned: Int, requiredChips: Int, minimumBet: Int) {
-        self.chipsOwned = chipsOwned
-        self.requiredChips = requiredChips
-        self.minimumBet = minimumBet
-        _viewModel = StateObject(wrappedValue: GameViewModel(chipsOwned: chipsOwned, requiredChips: requiredChips, minimumBet: minimumBet, gameType: .level))
-    }
-
+    
     var body: some View {
-        if !betsPlaced {
-            betSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+        Group {
+            if !level.isCompleted && !isOutofChips {
+                if !betsPlaced {
+                    BetSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+                }
+                else {
+                    GameView(viewModel: viewModel) {
+                        betsPlaced = false
+                        if viewModel.checkLevelPass() {
+                            level.markCompleted()
+                        }
+                        isOutofChips = viewModel.checkOutOfChips()
+                    }
+                }
+            }
+            else if isOutofChips {
+                LevelOutcomeOverlay(isWon: false)
+            }
+            else if level.isCompleted {
+                LevelOutcomeOverlay(isWon: true)
+            }
         }
-        else {
-            GameView(viewModel: viewModel)
+        .onDisappear {
+            viewModel.resetGame()
         }
+        
     }
 }
 
 #Preview {
-    LevelView(chipsOwned: 100, requiredChips: 200, minimumBet: 10)
+    LevelView(level: Level(id: 1, name: "1", startingChips: 100, requiredChips: 120, minimumBet: 10))
 }

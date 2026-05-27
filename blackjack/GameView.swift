@@ -130,10 +130,18 @@ struct GameView: View {
             // Game Over Overlay
             if let result = viewModel.gameResult {
                 GameOverOverlay(result: result) {
-                    onRestart?()
                     dealtCardIDs.removeAll()
                     dealerFlipAngle = 0
-                    viewModel.resetGame()
+                    if let onRestart {
+                        onRestart()
+                        viewModel.resetGame()
+                    } else {
+                        // Endless mode: start a fresh round in place
+                        Task {
+                            await viewModel.startGame()
+                            viewModel.isGameOver = false
+                        }
+                    }
                 }
                 .transition(.opacity)
                 .zIndex(1)
