@@ -8,8 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct betSelectorView: View {
-    @ObservedObject var viewModel: GameViewModel
+struct BetSelectorView: View {
+    @ObservedObject var viewModel: LevelViewModel
     @Binding var betsPlaced: Bool
 
     var body: some View {
@@ -36,7 +36,7 @@ struct betSelectorView: View {
                             Image(systemName: "dollarsign.circle.fill")
                                 .font(.system(size: 26))
                                 .foregroundColor(.yellow)
-                            Text("\(viewModel.chipsOwned)")
+                            Text("\(viewModel.level.chipsOwned)")
                                 .font(.system(size: 32, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
                         }
@@ -69,13 +69,13 @@ struct betSelectorView: View {
 
                     HStack(spacing: 15) {
                         ButtonView(action: {
-                            if viewModel.currentBet > viewModel.minimumBet {
+                            if viewModel.currentBet > viewModel.level.minimumBet {
                                 viewModel.currentBet -= 5
                             }
                         }, text: "−", backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2), textColor: .white)
 
                         ButtonView(action: {
-                            if viewModel.currentBet < viewModel.chipsOwned {
+                            if viewModel.currentBet < viewModel.level.chipsOwned {
                                 viewModel.currentBet += 5
                             }
                         }, text: "+", backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3), textColor: .white)
@@ -85,8 +85,8 @@ struct betSelectorView: View {
                     Spacer()
 
                     ButtonView(action: {
+                        viewModel.placeBet()
                         betsPlaced = true
-                        viewModel.chipsOwned -= viewModel.currentBet
                     }, text: "PLACE BET", backgroundColor: Color(red: 0.2, green: 0.4, blue: 0.8), textColor: .white)
                     .padding(.horizontal, 30)
                     .padding(.bottom, 30)

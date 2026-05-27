@@ -8,48 +8,48 @@
 import SwiftUI
 
 struct LevelView: View {
-    let chipsOwned: Int
-    let requiredChips: Int
-    let minimumBet: Int
-    var levelPassed: Bool {
-        chipsOwned > requiredChips
+    @ObservedObject var level: Level
+    let startingChips: Int
+    @State var betsPlaced = false
+    @State var isOutofChips: Bool = false
+    @StateObject var viewModel: LevelViewModel
+    
+    init(level: Level) {
+        self.level = level
+        self.startingChips = level.chipsOwned
+        _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
     }
-    var outOfChips: Bool {
-        chipsOwned == 0
-    }
-    var levelOver: Bool {
-        levelPassed || chipsOwned == 0
-    }
-    @State private var betsPlaced = false
-    @StateObject private var viewModel: GameViewModel
-
-    init(chipsOwned: Int, requiredChips: Int, minimumBet: Int) {
-        self.chipsOwned = chipsOwned
-        self.requiredChips = requiredChips
-        self.minimumBet = minimumBet
-        _viewModel = StateObject(wrappedValue: GameViewModel(chipsOwned: chipsOwned, requiredChips: requiredChips, minimumBet: minimumBet, gameType: .level))
-    }
-
+    
     var body: some View {
-        if !levelOver {
-            if !betsPlaced {
-                betSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+        Group {
+            if !level.isCompleted && !isOutofChips {
+                if !betsPlaced {
+                    BetSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+                }
+                else {
+                    GameView(viewModel: viewModel) {
+                        betsPlaced = false
+                        if viewModel.checkLevelPass() {
+                            level.markCompleted()
+                        }
+                        isOutofChips = viewModel.checkOutOfChips()
+                    }
+                }
             }
-            else {
-                GameView(viewModel: viewModel, onPlayAgain: { betsPlaced = false })
+            else if isOutofChips {
+                LevelOutcomeOverlay(isWon: false)
+            }
+            else if level.isCompleted {
+                LevelOutcomeOverlay(isWon: true)
             }
         }
-        else {
-            if levelPassed {
-                //TODO: LevelPassedView()
-            }
-            if outOfChips {
-                LevelLostView()
-            }
+        .onDisappear {
+            viewModel.resetGame()
         }
+        
     }
 }
 
 #Preview {
-    LevelView(chipsOwned: 100, requiredChips: 200, minimumBet: 10)
+    LevelView(level: Level(id: 1, name: "1", startingChips: 100, requiredChips: 120, minimumBet: 10))
 }

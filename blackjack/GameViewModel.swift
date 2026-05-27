@@ -37,20 +37,11 @@ class GameViewModel: ObservableObject {
     var gameStage: GameStage = .betting
     var gameType: GameType
 
-    @Published var chipsOwned: Int
-    let requiredChips: Int
-    let minimumBet: Int
-    @Published var currentBet: Int
-
     @Published var isGameOver: Bool = true
     @Published var gameOverMessage: String = ""
     @Published var gameResult: GameResult?
 
-    init(chipsOwned: Int, requiredChips: Int, minimumBet: Int, gameType: GameType) {
-        self.chipsOwned = chipsOwned
-        self.requiredChips = requiredChips
-        self.minimumBet = minimumBet
-        self.currentBet = minimumBet
+    init(gameType: GameType) {
         self.gameType = gameType
     }
     
@@ -136,10 +127,7 @@ class GameViewModel: ObservableObject {
     }
     
     func startGame() async {
-        print("Game started — bet: \(currentBet), chips: \(chipsOwned)")
-        // Ensure fresh state
         resetGame()
-        // Deal sequence with delays: dealer closed card first
         giveCard(reciever: "dealer")
         try? await Task.sleep(for: .milliseconds(500))
         giveCard(reciever: "player")
@@ -148,7 +136,24 @@ class GameViewModel: ObservableObject {
         try? await Task.sleep(for: .milliseconds(500))
         giveCard(reciever: "player")
     }
-    
+    func hit() {
+        guard isGameOver == false else { return }
+        giveCard(reciever: "player")
+        calculatePlayersHand()
+    }
+    func stand() {
+        Task {
+            isGameOver = true
+            try? await Task.sleep(for: .milliseconds(500))
+            while dealersHandValue < 17 {
+                giveCard(reciever: "dealer")
+                calculateDealersHand()
+                try? await Task.sleep(for: .milliseconds(500))
+            }
+            
+            evaluateRoundResult()
+        }
+    }
     func evaluateRoundResult() {
         if dealersHandValue > 21 {
             dealerBust()
@@ -165,42 +170,30 @@ class GameViewModel: ObservableObject {
         withAnimation(.spring()) {
             gameResult = .playerWin
         }
-        handleChipGain()
-        logGameEndState()
     }
 
     func dealerWin() {
         withAnimation(.spring()) {
             gameResult = .dealerWin
         }
-        logGameEndState()
     }
 
     func push() {
         withAnimation(.spring()) {
             gameResult = .push
         }
-        handleChipPush()
-        logGameEndState()
     }
 
     func playerBust() {
         withAnimation(.spring()) {
             gameResult = .playerBust
         }
-        logGameEndState()
     }
 
     func dealerBust() {
         withAnimation(.spring()) {
             gameResult = .dealerBust
         }
-        handleChipGain()
-        logGameEndState()
-    }
-
-    private func logGameEndState() {
-        print("Game ended — bet: \(currentBet), chips: \(chipsOwned)")
     }
 
     private func triggerGameOver(message: String) {
@@ -217,18 +210,7 @@ class GameViewModel: ObservableObject {
         gameOverMessage = ""
         gameResult = nil
         createDeck()
-    }
     
-    func handleChipGain() {
-        if gameResult == .dealerBust || gameResult == .playerWin {
-            chipsOwned += currentBet*2
-        }
-    }
-        
-    func handleChipPush() {
-        if gameResult == .push {
-            chipsOwned += currentBet
-        }
     }
 }
 
