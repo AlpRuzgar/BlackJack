@@ -37,16 +37,24 @@ class LevelViewModel: GameViewModel {
         super.playerWin()
         chipGain()
     }
-
-    override func push() {
-        super.push()
-        chipPush()
-    }
-
+    
     func checkLevelPass() -> Bool {
         return level.chipsOwned >= level.requiredChips
     }
     func checkOutOfChips() -> Bool {
         return level.chipsOwned < level.minimumBet
+    }
+    
+    func doubleDown() {
+        if level.chipsOwned > currentBet*2 && playersHandArray.count == 2 {
+            level.chipsOwned -= currentBet
+            currentBet *= 2
+            hit()
+            if playersHandValue > 21 {
+                playerBust()
+            }
+            else { stand() }
+        }
+        else { return }
     }
 }

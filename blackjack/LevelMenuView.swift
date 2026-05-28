@@ -11,6 +11,8 @@ struct LevelMenuView: View {
     @State private var levels: [Level] = [
         Level(id: 1, name: "Level 1", startingChips: 100, requiredChips: 120, minimumBet: 10),
         Level(id: 2, name: "Level 2", startingChips: 100, requiredChips: 150, minimumBet: 10),
+        Level(id: 3, name: "Level 3", startingChips: 100, requiredChips: 1000, minimumBet: 10),
+
     ]
     var body: some View {
         ZStack{

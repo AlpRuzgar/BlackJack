@@ -25,29 +25,29 @@ struct GameView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
-
+            
             VStack(spacing: 20) {
                 // Chip & Bet status bar
-                chipBar()
+                chipBar
                 // Dealer Section
                 VStack(spacing: 12) {
                     Text("DEALER")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                         .tracking(2)
-
+                    
                     // Dealer hand value display
                     ZStack {
                         Capsule()
                             .fill(Color.black.opacity(0.3))
                             .frame(width: 80, height: 36)
-
+                        
                         Text(dealerFlipAngle >= 180 ? "\(viewModel.dealersHandValue)" : "?")
                             .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                     }
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-
+                    
                     HStack(spacing: -30) {
                         ForEach(Array(viewModel.dealersHandArray.enumerated()), id: \.element.id) { index, card in
                             dealerCardView(index: index, card: card)
@@ -55,9 +55,9 @@ struct GameView: View {
                     }
                     .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
                 }
-
+                
                 Spacer()
-
+                
                 // Player Section
                 VStack(spacing: 12) {
                     HStack(spacing: -30) {
@@ -66,26 +66,26 @@ struct GameView: View {
                         }
                     }
                     .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
-
+                    
                     // Player hand value display
                     ZStack {
                         Capsule()
                             .fill(Color.black.opacity(0.3))
                             .frame(width: 80, height: 36)
-
+                        
                         Text("\(viewModel.playersHandValue)")
                             .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(viewModel.playersHandValue > 21 ? .red : .white)
                     }
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-
+                    
                     Text("PLAYER")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white.opacity(0.8))
                         .tracking(2)
                 }
                 .padding(.bottom, 20)
-
+                
                 // Action Buttons with enhanced styling
                 VStack(spacing: 0) {
                     HStack(spacing: 15) {
@@ -100,7 +100,7 @@ struct GameView: View {
                             backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2),
                             textColor: .white
                         )
-
+                        
                         ButtonView(
                             action: {
                                 Task {
@@ -114,6 +114,22 @@ struct GameView: View {
                             backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3),
                             textColor: .white
                         )
+                        if let levelVM = viewModel as? LevelViewModel {
+                            ButtonView(action: {
+                                levelVM.doubleDown()
+                                Task {
+                                    withAnimation(.easeInOut(duration: 0.5)) {
+                                        dealerFlipAngle = 180
+                                    }
+                                }
+                            },
+                            text: "DOUBLE",
+                            backgroundColor: .purple,
+                            textColor: .white,
+                            isGradient: true)
+                        }
+                        
+                        
                     }
                     .padding(.horizontal, 30)
                 }
@@ -123,10 +139,10 @@ struct GameView: View {
                 Task{
                     await viewModel.startGame()
                     viewModel.isGameOver = false
-
+                    
                 }
             }
-
+            
             // Game Over Overlay
             if let result = viewModel.gameResult {
                 GameOverOverlay(result: result) {
@@ -148,8 +164,8 @@ struct GameView: View {
             }
         }
     }
-
-
+    
+    
     @ViewBuilder
     private func dealerCardView(index: Int, card: Card) -> some View {
         if index == 0 {
@@ -163,7 +179,7 @@ struct GameView: View {
                     .frame(width: 90, height: 135)
                     .scaleEffect(x: -1, y: 1)
                     .opacity(dealerFlipAngle > 90 ? 1 : 0)
-
+                
                 // Back of card
                 Image(card.backImage)
                     .resizable()
@@ -188,7 +204,7 @@ struct GameView: View {
             cardImageView(card: card)
         }
     }
-
+    
     private func cardImageView(card: Card) -> some View {
         Image(card.frontImage)
             .resizable()
@@ -204,9 +220,9 @@ struct GameView: View {
                 }
             }
     }
-
+    
     @ViewBuilder
-    private func chipBar() -> some View {
+    private var chipBar: some View {
         if let levelVM = viewModel as? LevelViewModel {
             HStack {
                 HStack(spacing: 6) {
@@ -220,9 +236,9 @@ struct GameView: View {
                 .padding(.horizontal, 14)
                 .padding(.vertical, 8)
                 .background(Capsule().fill(Color.black.opacity(0.3)))
-
+                
                 Spacer()
-
+                
                 HStack(spacing: 6) {
                     Text("BET")
                         .font(.system(size: 12, weight: .bold, design: .rounded))
@@ -239,7 +255,7 @@ struct GameView: View {
             .padding(.horizontal, 20)
             .padding(.top, 10)
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-
+            
         }
     }
 }
