@@ -13,43 +13,46 @@ struct LevelView: View {
     @State var betsPlaced = false
     @State var isOutofChips: Bool = false
     @StateObject var viewModel: LevelViewModel
-    
+
     init(level: Level) {
         self.level = level
         self.startingChips = level.chipsOwned
         _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
     }
-    
+
+    var showOutcomeOverlay: Bool {
+        isOutofChips || level.isCompleted
+    }
+
     var body: some View {
-        Group {
-            if !level.isCompleted && !isOutofChips {
-                if !betsPlaced {
-                    BetSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
-                }
-                else {
-                    GameView(viewModel: viewModel) {
-                        betsPlaced = false
-                        if viewModel.checkLevelPass() {
-                            level.markCompleted()
-                        }
-                        isOutofChips = viewModel.checkOutOfChips()
+        ZStack {
+            if !betsPlaced {
+                BetSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+            } else {
+                GameView(viewModel: viewModel) {
+                    betsPlaced = false
+                    if viewModel.checkLevelPass() {
+                        level.markCompleted()
                     }
+                    isOutofChips = viewModel.checkOutOfChips()
                 }
             }
-            else if isOutofChips {
-                LevelOutcomeOverlay(isWon: false)
-            }
-            else if level.isCompleted {
-                LevelOutcomeOverlay(isWon: true)
+
+            if showOutcomeOverlay {
+                LevelOutcomeOverlay(isWon: level.isCompleted)
+                    .transition(.opacity)
+                    .zIndex(1)
             }
         }
+        .animation(.easeInOut(duration: 0.2), value: showOutcomeOverlay)
         .onDisappear {
             viewModel.resetGame()
         }
-        
     }
 }
 
 #Preview {
-    LevelView(level: Level(id: 1, name: "1", startingChips: 100, requiredChips: 120, minimumBet: 10))
+    NavigationStack {
+        LevelView(level: Level(id: 1, name: "1", startingChips: 100, requiredChips: 120, minimumBet: 10))
+    }
 }
