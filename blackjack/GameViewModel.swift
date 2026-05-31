@@ -22,62 +22,66 @@ enum GameType {
     case endless
 }
 
-
-
-class GameViewModel: ObservableObject {    
+class GameViewModel: ObservableObject {
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
-    
-    @Published var dealersHandArray: [Card] = []
-    @Published var playersHandArray: [Card] = []
+
+    @Published var targetHandIndex: Int = 0
+    @Published var hands: [Hand] = []
+
+    @Published var dealersHand = Hand()
+    @Published var playersHand = Hand()
     @Published var dealersHandValue: Int = 0
     @Published var playersHandValue: Int = 0
-        
+
     var gameStage: GameStage = .betting
     var gameType: GameType
 
     @Published var isGameOver: Bool = true
     @Published var gameOverMessage: String = ""
-    @Published var gameResult: GameResult?
+    @Published var isRoundComplete: Bool = false
 
     init(gameType: GameType) {
         self.gameType = gameType
+        self.hands = [playersHand]
     }
-    
+
     func createDeck() -> Void {
-        for value in cardValueArray{
-            for suit in suitsArray
-            {
+        for value in cardValueArray {
+            for suit in suitsArray {
                 let card = Card(value: value, suit: suit)
                 card.frontImage = "\(value)\(suit)"
                 cardsArray.append(card)
             }
         }
     }
-    
-    func giveCard(reciever: String)
-    {
+
+    #if DEBUG
+    var debugForcePairs: Bool = true
+    #endif
+
+    func giveCard(to hand: Hand) {
         guard !cardsArray.isEmpty else { return }
+        #if DEBUG
+        if debugForcePairs && hand === playersHand && hand.cards.count == 1,
+           let matchIndex = cardsArray.firstIndex(where: { $0.value == hand.cards[0].value }) {
+            let selectedCard = cardsArray.remove(at: matchIndex)
+            hand.cards.append(selectedCard)
+            calculateHand(hand)
+            return
+        }
+        #endif
         let randomIndex = Int.random(in: 0..<cardsArray.count)
         let selectedCard = cardsArray.remove(at: randomIndex)
-        switch reciever{
-        case "dealer":
-            dealersHandArray.append(selectedCard)
-            calculateDealersHand()
-        case "player":
-            playersHandArray.append(selectedCard)
-            calculatePlayersHand()
-            // Check for player bust
-        default:
-            break
-        }
+        hand.cards.append(selectedCard)
+        calculateHand(hand)
     }
-    
-    func calculateDealersHand() {
+
+    func calculateHand(_ hand: Hand) {
         var base = 0
         var aceCount = 0
-        for card in dealersHandArray {
+        for card in hand.cards {
             switch card.value {
             case "2","3","4","5","6","7","8","9","10":
                 base += Int(card.value) ?? 0
@@ -89,33 +93,15 @@ class GameViewModel: ObservableObject {
                 break
             }
         }
-        dealersHandValue = calculateAces(base: base, aceCount: aceCount)
-        if dealersHandValue > 21 {
-            triggerGameOver(message: "Dealer busted! You win.")
+        let total = calculateAces(base: base, aceCount: aceCount)
+        hand.value = total
+        if hand === dealersHand {
+            dealersHandValue = total
+        } else {
+            playersHandValue = total
         }
     }
-    
-    func calculatePlayersHand() {
-        var base = 0
-        var aceCount = 0
-        for card in playersHandArray {
-            switch card.value {
-            case "2","3","4","5","6","7","8","9","10":
-                base += Int(card.value) ?? 0
-            case "J","Q","K":
-                base += 10
-            case "A":
-                aceCount += 1
-            default:
-                break
-            }
-        }
-        playersHandValue = calculateAces(base: base, aceCount: aceCount)
-        if playersHandValue > 21 {
-            triggerGameOver(message: "You busted! Dealer wins.")
-        }
-    }
-    
+
     func calculateAces(base: Int, aceCount: Int) -> Int {
         var total = base + aceCount * 11
         var remainingAces = aceCount
@@ -125,74 +111,59 @@ class GameViewModel: ObservableObject {
         }
         return total
     }
-    
-    func startGame() async {
+
+    func startGame(for hand: Hand) async {
         resetGame()
-        giveCard(reciever: "dealer")
+        giveCard(to: dealersHand)
         try? await Task.sleep(for: .milliseconds(500))
-        giveCard(reciever: "player")
+        giveCard(to: playersHand)
         try? await Task.sleep(for: .milliseconds(500))
-        giveCard(reciever: "dealer")
+        giveCard(to: dealersHand)
         try? await Task.sleep(for: .milliseconds(500))
-        giveCard(reciever: "player")
+        giveCard(to: playersHand)
     }
+
     func hit() {
         guard isGameOver == false else { return }
-        giveCard(reciever: "player")
-        calculatePlayersHand()
+        giveCard(to: hands[targetHandIndex])
     }
+
     func stand() {
         Task {
             isGameOver = true
             try? await Task.sleep(for: .milliseconds(500))
             while dealersHandValue < 17 {
-                giveCard(reciever: "dealer")
-                calculateDealersHand()
+                giveCard(to: dealersHand)
                 try? await Task.sleep(for: .milliseconds(500))
             }
-            
             evaluateRoundResult()
         }
     }
+
     func evaluateRoundResult() {
-        if dealersHandValue > 21 {
-            dealerBust()
-        } else if playersHandValue > dealersHandValue {
-            playerWin()
-        } else if playersHandValue < dealersHandValue {
-            dealerWin()
-        } else {
-            push()
+        for hand in hands {
+            if hand.value > 21 {
+                hand.result = .playerBust
+            } else if dealersHandValue > 21 {
+                hand.result = .dealerBust
+            } else if hand.value > dealersHandValue {
+                hand.result = .playerWin
+            } else if hand.value < dealersHandValue {
+                hand.result = .dealerWin
+            } else {
+                hand.result = .push
+            }
         }
-    }
-
-    func playerWin() {
         withAnimation(.spring()) {
-            gameResult = .playerWin
-        }
-    }
-
-    func dealerWin() {
-        withAnimation(.spring()) {
-            gameResult = .dealerWin
-        }
-    }
-
-    func push() {
-        withAnimation(.spring()) {
-            gameResult = .push
+            isRoundComplete = true
         }
     }
 
     func playerBust() {
+        hands[targetHandIndex].result = .playerBust
+        isGameOver = true
         withAnimation(.spring()) {
-            gameResult = .playerBust
-        }
-    }
-
-    func dealerBust() {
-        withAnimation(.spring()) {
-            gameResult = .dealerBust
+            isRoundComplete = true
         }
     }
 
@@ -200,17 +171,19 @@ class GameViewModel: ObservableObject {
         gameOverMessage = message
         isGameOver = true
     }
-    
+
     func resetGame() {
         cardsArray.removeAll()
-        dealersHandArray.removeAll()
-        playersHandArray.removeAll()
+        dealersHand.cards.removeAll()
+        playersHand.cards.removeAll()
+        playersHand.value = 0
+        playersHand.result = nil
         dealersHandValue = 0
         playersHandValue = 0
         gameOverMessage = ""
-        gameResult = nil
+        isRoundComplete = false
+        hands = [playersHand]
+        targetHandIndex = 0
         createDeck()
-    
     }
 }
-
