@@ -49,7 +49,7 @@ struct GameView: View {
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                     
                     HStack(spacing: -30) {
-                        ForEach(Array(viewModel.dealersHandArray.enumerated()), id: \.element.id) { index, card in
+                        ForEach(Array(viewModel.dealersHand.cards.enumerated()), id: \.element.id) { index, card in
                             dealerCardView(index: index, card: card)
                         }
                     }
@@ -58,31 +58,23 @@ struct GameView: View {
                 
                 Spacer()
                 
-                // Player Section
-                VStack(spacing: 12) {
-                    HStack(spacing: -30) {
-                        ForEach(viewModel.playersHandArray) { card in
-                            cardImageView(card: card)
-                        }
+                // Player Section - all hands
+                ZStack {
+                    ForEach(Array(viewModel.hands.enumerated()), id: \.offset) { index, hand in
+                        PlayerHandView(
+                            cards: hand.cards,
+                            handValue: hand.value,
+                            label: viewModel.hands.count > 1 ? "HAND \(index + 1)" : "PLAYER",
+                            isActive: index == viewModel.targetHandIndex,
+                            handResult: hand.result,
+                            dealtCardIDs: $dealtCardIDs
+                        )
+                        .scaleEffect(index == viewModel.targetHandIndex ? 1.0 : 0.75)
+                        .offset(x: CGFloat(index - viewModel.targetHandIndex) * 160)
+                        .opacity(index == viewModel.targetHandIndex ? 1.0 : 0.65)
+                        .zIndex(index == viewModel.targetHandIndex ? 1 : 0)
+                        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.targetHandIndex)
                     }
-                    .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
-                    
-                    // Player hand value display
-                    ZStack {
-                        Capsule()
-                            .fill(Color.black.opacity(0.3))
-                            .frame(width: 80, height: 36)
-                        
-                        Text("\(viewModel.playersHandValue)")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(viewModel.playersHandValue > 21 ? .red : .white)
-                    }
-                    .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
-                    
-                    Text("PLAYER")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white.opacity(0.8))
-                        .tracking(2)
                 }
                 .padding(.bottom, 20)
                 
@@ -93,43 +85,82 @@ struct GameView: View {
                             action: {
                                 viewModel.hit()
                                 if viewModel.playersHandValue > 21 {
-                                    viewModel.playerBust()
+                                    if let levelVM = viewModel as? LevelViewModel {
+                                        let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
+                                        let hasStoodPriorHands = levelVM.targetHandIndex > 0 && levelVM.hands[0..<levelVM.targetHandIndex].contains { $0.result == nil }
+                                        levelVM.playerBust()
+                                        if isLastHand && hasStoodPriorHands {
+                                            Task {
+                                                withAnimation(.easeInOut(duration: 0.5)) {
+                                                    dealerFlipAngle = 180
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        viewModel.playerBust()
+                                    }
                                 }
                             },
                             text: "HIT",
                             backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2),
                             textColor: .white
                         )
-                        
-                        ButtonView(
-                            action: {
-                                Task {
-                                    withAnimation(.easeInOut(duration: 0.5)) {
-                                        dealerFlipAngle = 180
+                            ButtonView(
+                                action: {
+                                    if let levelVM = viewModel as? LevelViewModel {
+                                        let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
+                                        levelVM.stand()
+                                        if isLastHand {
+                                            Task {
+                                                withAnimation(.easeInOut(duration: 0.5)) {
+                                                    dealerFlipAngle = 180
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        viewModel.stand()
+                                        Task {
+                                            withAnimation(.easeInOut(duration: 0.5)) {
+                                                dealerFlipAngle = 180
+                                            }
+                                        }
                                     }
-                                    viewModel.stand()
-                                }
-                            },
-                            text: "STAND",
-                            backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3),
-                            textColor: .white
-                        )
+                                },
+                                text: "STAND",
+                                backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3),
+                                textColor: .white
+                            )
+        
                         if let levelVM = viewModel as? LevelViewModel {
-                            ButtonView(action: {
-                                levelVM.doubleDown()
-                                Task {
-                                    withAnimation(.easeInOut(duration: 0.5)) {
-                                        dealerFlipAngle = 180
+                            if levelVM.hands.count == 1 && levelVM.currentHand.cards.count == 2 {
+                                ButtonView(action: {
+                                    if levelVM.canDoubleDown {
+                                        levelVM.doubleDown()
+                                        Task {
+                                            withAnimation(.easeInOut(duration: 0.5)) {
+                                                dealerFlipAngle = 180
+                                            }
+                                        }
                                     }
-                                }
-                            },
-                            text: "DOUBLE",
-                            backgroundColor: .purple,
-                            textColor: .white,
-                            isGradient: true)
+                                    else { return }
+                                },
+                                           text: "DOUBLE",
+                                           backgroundColor: .purple,
+                                           textColor: .white,
+                                           isGradient: true)
+                            }
                         }
-                        
-                        
+                        if let levelVM = viewModel as? LevelViewModel {
+                            if levelVM.canSplit {
+                                ButtonView(action: {
+                                    levelVM.split()
+                                },
+                                           text: "SPLIT",
+                                           backgroundColor: .yellow,
+                                           textColor: .white,
+                                           isGradient: true)
+                            }
+                        }
                     }
                     .padding(.horizontal, 30)
                 }
@@ -137,34 +168,27 @@ struct GameView: View {
             }
             .onAppear() {
                 Task{
-                    await viewModel.startGame()
+                    await viewModel.startGame(for: viewModel.playersHand)
                     viewModel.isGameOver = false
-                    
                 }
             }
-            
-            // Game Over Overlay
-            if let result = viewModel.gameResult {
-                GameOverOverlay(result: result) {
+            .onChange(of: viewModel.isRoundComplete) {
+                guard viewModel.isRoundComplete else { return }
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
                     dealtCardIDs.removeAll()
                     dealerFlipAngle = 0
                     if let onRestart {
                         onRestart()
                         viewModel.resetGame()
                     } else {
-                        // Endless mode: start a fresh round in place
-                        Task {
-                            await viewModel.startGame()
-                            viewModel.isGameOver = false
-                        }
+                        await viewModel.startGame(for: viewModel.playersHand)
+                        viewModel.isGameOver = false
                     }
                 }
-                .transition(.opacity)
-                .zIndex(1)
             }
         }
     }
-    
     
     @ViewBuilder
     private func dealerCardView(index: Int, card: Card) -> some View {

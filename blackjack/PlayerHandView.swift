@@ -11,6 +11,8 @@ struct PlayerHandView: View {
     let cards: [Card]
     let handValue: Int
     let label: String
+    var isActive: Bool = false
+    var handResult: GameResult? = nil
     @Binding var dealtCardIDs: Set<UUID>
 
     var body: some View {
@@ -32,7 +34,7 @@ struct PlayerHandView: View {
                         }
                 }
             }
-            .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
+            .shadow(color: isActive ? .black.opacity(0.6) : .black.opacity(0.4), radius: 5, x: 0, y: 5)
 
             ZStack {
                 Capsule()
@@ -44,10 +46,26 @@ struct PlayerHandView: View {
             }
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
 
+            if let result = handResult {
+                Text(result.shortLabel)
+                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 4)
+                    .background(Capsule().fill(result.color))
+            }
+
             Text(label)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundColor(.white.opacity(0.8))
+                .foregroundColor(isActive ? .yellow : .white.opacity(0.8))
                 .tracking(2)
         }
+        .padding(8)
+//        .background(isActive ? Color.yellow.opacity(0.08) : Color.clear)
+        .cornerRadius(12)
+//        .overlay(
+//            RoundedRectangle(cornerRadius: 12)
+//                .stroke(isActive ? Color.yellow.opacity(0.6) : Color.clear, lineWidth: 2)
+//        )
     }
 }

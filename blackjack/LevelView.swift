@@ -53,6 +53,6 @@ struct LevelView: View {
 
 #Preview {
     NavigationStack {
-        LevelView(level: Level(id: 3, name: "1", startingChips: 100, requiredChips: 1000, minimumBet: 10))
+        LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 10))
     }
 }

@@ -6,3 +6,14 @@
 //
 
 import Foundation
+import Combine
+
+class Hand {
+    var cards: [Card] = []
+    var value: Int = 0
+    var result: GameResult? = nil
+    var splitable: Bool {
+        cards.count == 2 && cards[1].value == cards[0].value
+    }
+
+}
