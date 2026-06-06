@@ -13,6 +13,7 @@ struct GameView: View {
     var onRestart: (() -> Void)?
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
+    @Namespace private var splitNamespace
     var body: some View {
         ZStack {
             // Enhanced gradient background
@@ -67,7 +68,8 @@ struct GameView: View {
                             label: viewModel.hands.count > 1 ? "HAND \(index + 1)" : "PLAYER",
                             isActive: index == viewModel.targetHandIndex,
                             handResult: hand.result,
-                            dealtCardIDs: $dealtCardIDs
+                            dealtCardIDs: $dealtCardIDs,
+                            splitNamespace: splitNamespace
                         )
                         .scaleEffect(index == viewModel.targetHandIndex ? 1.0 : 0.75)
                         .offset(x: CGFloat(index - viewModel.targetHandIndex) * 160)
@@ -151,9 +153,11 @@ struct GameView: View {
                             }
                         }
                         if let levelVM = viewModel as? LevelViewModel {
-                            if levelVM.canSplit {
+                            if levelVM.canSplit() {
                                 ButtonView(action: {
-                                    levelVM.split()
+                                    withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                                        levelVM.split()
+                                    }
                                 },
                                            text: "SPLIT",
                                            backgroundColor: .yellow,

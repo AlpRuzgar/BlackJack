@@ -58,13 +58,13 @@ class GameViewModel: ObservableObject {
     }
 
     #if DEBUG
-    var debugForcePairs: Bool = true
+    var debugForcePairs: Bool = false
     #endif
 
     func giveCard(to hand: Hand) {
         guard !cardsArray.isEmpty else { return }
         #if DEBUG
-        if debugForcePairs && hand === playersHand && hand.cards.count == 1,
+        if debugForcePairs && hands.contains(where: { $0 === hand }) && hand.cards.count == 1,
            let matchIndex = cardsArray.firstIndex(where: { $0.value == hand.cards[0].value }) {
             let selectedCard = cardsArray.remove(at: matchIndex)
             hand.cards.append(selectedCard)

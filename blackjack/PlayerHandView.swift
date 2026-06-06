@@ -14,6 +14,7 @@ struct PlayerHandView: View {
     var isActive: Bool = false
     var handResult: GameResult? = nil
     @Binding var dealtCardIDs: Set<UUID>
+    var splitNamespace: Namespace.ID
 
     var body: some View {
         VStack(spacing: 12) {
@@ -26,6 +27,7 @@ struct PlayerHandView: View {
                         .scaledToFit()
                         .frame(width: 90, height: 135)
                         .cornerRadius(8)
+                        .matchedGeometryEffect(id: card.id, in: splitNamespace)
                         .offset(y: dealtCardIDs.contains(card.id) ? 0 : -1000)
                         .onAppear {
                             withAnimation(.easeOut(duration: 0.4)) {

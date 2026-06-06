@@ -20,12 +20,16 @@ class LevelViewModel: GameViewModel {
     @Published var currentBet: Int
     
     var canDoubleDown: Bool {
-        level.chipsOwned > startingBet * 2 && playersHand.cards.count == 2
+        level.chipsOwned >= startingBet && playersHand.cards.count == 2
     }
     
-    var canSplit: Bool {
-        playersHand.cards.count == 2 && playersHand.cards.first?.value == playersHand.cards.last?.value && level.chipsOwned > startingBet
+    func canSplit() -> Bool {
+        return level.chipsOwned >= startingBet && currentHand.splitable
     }
+    
+    var doubledDown: Bool = false
+    var splitted: Bool = false
+    var splitCount: Int = 0
     
     init(level: Level) {
         self.level = level
@@ -35,15 +39,26 @@ class LevelViewModel: GameViewModel {
     }
     
     func placeBet() {
-        level.chipsOwned -= currentBet
+        currentBet = startingBet
+        level.chipsOwned -= startingBet
     }
     
-    func chipGain() {
-        level.chipsOwned += currentBet * 2
+    func winChips() {
+        if !splitted {
+            level.chipsOwned += currentBet * 2
+        }
+        else {
+            level.chipsOwned += startingBet * 2
+        }
     }
     
     func chipPush() {
-        level.chipsOwned += currentBet
+        if !splitted {
+            level.chipsOwned += currentBet
+        }
+        else {
+            level.chipsOwned += startingBet
+        }
     }
     
     func checkLevelPass() -> Bool {
@@ -55,6 +70,7 @@ class LevelViewModel: GameViewModel {
     }
     
     func doubleDown() {
+        doubledDown = true
         level.chipsOwned -= startingBet
         currentBet = startingBet * 2
         hit()
@@ -95,9 +111,9 @@ class LevelViewModel: GameViewModel {
         for hand in hands {
             switch hand.result {
             case .playerWin, .dealerBust:
-                level.chipsOwned += currentBet * 2
+                winChips()
             case .push:
-                level.chipsOwned += currentBet
+                chipPush()
             default:
                 break
             }
@@ -105,7 +121,9 @@ class LevelViewModel: GameViewModel {
     }
     
     func split() {
-        guard currentHand.splitable else { return }
+        guard canSplit() else { return }
+        splitted = true
+        splitCount += 1
         let newHand = Hand()
         let splitCard = currentHand.cards.removeLast()
         newHand.cards.append(splitCard)
@@ -116,5 +134,4 @@ class LevelViewModel: GameViewModel {
         calculateHand(newHand)
     }
 }
-//FIXME: 10s and face cards can't be splitted
 ///Maybe add a animation to split, like a slide
