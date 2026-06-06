@@ -24,14 +24,14 @@ struct BetSelectorView: View {
                     endPoint: .bottomTrailing
                 )
                 .ignoresSafeArea()
-
+                
                 VStack(spacing: 30) {
                     VStack(spacing: 10) {
                         Text("CHIPS")
                             .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.white.opacity(0.7))
                             .tracking(2)
-
+                        
                         HStack(spacing: 10) {
                             Image(systemName: "dollarsign.circle.fill")
                                 .font(.system(size: 26))
@@ -46,44 +46,44 @@ struct BetSelectorView: View {
                         .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                     }
                     .padding(.top, 40)
-
+                    
                     Spacer()
-
+                    
                     VStack(spacing: 16) {
                         Text("PLACE YOUR BET")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(.white.opacity(0.8))
                             .tracking(3)
-
+                        
                         ZStack {
                             Capsule()
                                 .fill(Color.black.opacity(0.3))
                                 .frame(width: 200, height: 80)
-
-                            Text("\(viewModel.currentBet)")
+                            
+                            Text("\(viewModel.startingBet)")
                                 .font(.system(size: 48, weight: .black, design: .rounded))
                                 .foregroundColor(.white)
                         }
                         .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
                     }
-
+                    
                     HStack(spacing: 15) {
                         ButtonView(action: {
-                            if viewModel.currentBet > viewModel.level.minimumBet {
-                                viewModel.currentBet -= 5
+                            if viewModel.startingBet > viewModel.level.minimumBet {
+                                viewModel.startingBet -= 5
                             }
                         }, text: "−", backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2), textColor: .white)
-
+                        
                         ButtonView(action: {
-                            if viewModel.currentBet < viewModel.level.chipsOwned {
-                                viewModel.currentBet += 5
+                            if viewModel.startingBet < viewModel.level.chipsOwned {
+                                viewModel.startingBet += 5
                             }
                         }, text: "+", backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3), textColor: .white)
                     }
                     .padding(.horizontal, 30)
-
+                    
                     Spacer()
-
+                    
                     ButtonView(action: {
                         viewModel.placeBet()
                         betsPlaced = true
@@ -91,6 +91,10 @@ struct BetSelectorView: View {
                     .padding(.horizontal, 30)
                     .padding(.bottom, 30)
                 }
+            }
+            
+            .onAppear{
+                viewModel.currentBet = viewModel.startingBet
             }
         }
     }

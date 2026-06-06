@@ -10,7 +10,7 @@ import SwiftUI
 struct LevelView: View {
     @ObservedObject var level: Level
     let startingChips: Int
-    @State var betsPlaced = false
+    @State var betsPlaced = true
     @State var isOutofChips: Bool = false
     @StateObject var viewModel: LevelViewModel
 
@@ -53,6 +53,6 @@ struct LevelView: View {
 
 #Preview {
     NavigationStack {
-        LevelView(level: Level(id: 3, name: "1", startingChips: 100, requiredChips: 1000, minimumBet: 10))
+        LevelView(level: Level(id: 4, name: "1", startingChips: 20, requiredChips: 10000, minimumBet: 5))
     }
 }

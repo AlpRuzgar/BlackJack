@@ -43,4 +43,13 @@ extension GameResult {
         case .push: return "equal.circle.fill"
         }
     }
+
+    var shortLabel: String {
+        switch self {
+        case .playerWin, .dealerBust: return "WIN"
+        case .dealerWin: return "LOSE"
+        case .push: return "PUSH"
+        case .playerBust: return "BUST"
+        }
+    }
 }
