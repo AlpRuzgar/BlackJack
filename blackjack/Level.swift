@@ -16,14 +16,16 @@ class Level: Identifiable, ObservableObject {
     let requiredChips: Int
     let minimumBet: Int
     @Published private(set) var isCompleted: Bool
+    @Published var isUnlocked: Bool
 
-    init(id: Int, name: String, startingChips: Int, requiredChips: Int, minimumBet: Int) {
+    init(id: Int, name: String, startingChips: Int, requiredChips: Int, minimumBet: Int, isUnlocked: Bool = false) {
         self.id = id
         self.name = name
         self.startingChips = startingChips
         self.chipsOwned = startingChips
         self.requiredChips = requiredChips
         self.minimumBet = minimumBet
+        self.isUnlocked = isUnlocked
         self.isCompleted = UserDefaults.standard.bool(forKey: Self.completionDefaultsKey(for: id))
     }
 

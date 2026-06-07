@@ -9,11 +9,12 @@ import SwiftUI
 
 struct LevelMenuView: View {
     @State private var levels: [Level] = [
-        Level(id: 1, name: "Level 1", startingChips: 100, requiredChips: 120, minimumBet: 10),
+        Level(id: 1, name: "Level 1", startingChips: 100, requiredChips: 120, minimumBet: 10, isUnlocked: true),
         Level(id: 2, name: "Level 2", startingChips: 100, requiredChips: 150, minimumBet: 10),
         Level(id: 3, name: "Level 3", startingChips: 100, requiredChips: 1000, minimumBet: 10),
-
+        
     ]
+    
     var body: some View {
         ZStack{
             LinearGradient(
@@ -35,19 +36,19 @@ struct LevelMenuView: View {
                         .padding(.top, 40)
                         .padding(.bottom, 30)
                     LazyVGrid(
-                        columns: [GridItem(.adaptive(minimum: 160), spacing: 20)],
+                        columns: [GridItem(.adaptive(minimum: 270), spacing: 20)],
                         spacing: 20
                     ) {
-                        ForEach(levels) { level in
-                            LevelButton(level: level)
+                        ForEach(levels.indices, id: \.self) { index in
+                            NewLevelButton(tableIndex: index % 6, level: levels[index])
+                                .padding()
                         }
                     }
-                    .padding(.horizontal, 20)
                     Spacer()
                 }
             }
         }
-        //MARK: DEV SPEC - DELETE BEFORE PUBLISH
+        #if DEBUG
         .toolbar {
             ToolbarItem{
                 Button("Reset Levels") {
@@ -57,6 +58,10 @@ struct LevelMenuView: View {
                 }
             }
         }
+        #endif
+    }
+    func unlockNextLevel() {
+        //TODO
     }
 }
 
