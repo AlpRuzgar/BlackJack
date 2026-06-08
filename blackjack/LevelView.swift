@@ -27,7 +27,7 @@ struct LevelView: View {
     var body: some View {
         ZStack {
             if !betsPlaced {
-                BetSelectorView(viewModel: viewModel, betsPlaced: $betsPlaced)
+                NewBetSelectionView(viewModel: viewModel, betsPlaced: $betsPlaced)
             } else {
                 GameView(viewModel: viewModel) {
                     betsPlaced = false
@@ -53,6 +53,6 @@ struct LevelView: View {
 
 #Preview {
     NavigationStack {
-        LevelView(level: Level(id: 4, name: "1", startingChips: 20, requiredChips: 10000, minimumBet: 5))
+        LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 30))
     }
 }
