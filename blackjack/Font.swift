@@ -9,11 +9,19 @@ import Foundation
 import SwiftUI
 
 extension Font {
-    static func playfairdisplay(_ size: CGFloat) -> Font {
-        .custom("PlayfairDisplay-Regular", size: size)
+    static func anton(_ size: CGFloat) -> Font {
+        .custom("Anton-Regular", size: size)
     }
     
-    static func playfairdisplayBold(_ size: CGFloat) -> Font {
-        .custom("PlayfairDisplay-Bold", size: size)
+    static func libreCaslon(_ size: CGFloat) -> Font {
+        .custom("LibreCaslonText-Regular", size: size)
     }
+    
+    static func libreCaslonBold(_ size: CGFloat) -> Font {
+        .custom("LibreCaslonText-Bold", size: size)
+    }
+    static func libreCaslonItalic(_ size: CGFloat) -> Font {
+        .custom("LibreCaslonText-Italic", size: size)
+    }
+
 }

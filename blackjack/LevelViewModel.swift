@@ -120,6 +120,13 @@ class LevelViewModel: GameViewModel {
         }
     }
     
+    override func resetGame() {
+        super.resetGame()
+        doubledDown = false
+        splitted = false
+        splitCount = 0
+    }
+
     func split() {
         guard canSplit() else { return }
         splitted = true

@@ -9,28 +9,23 @@ import SwiftUI
 
 struct LevelMenuView: View {
     @State private var levels: [Level] = [
-        Level(id: 1, name: "Level 1", startingChips: 100, requiredChips: 120, minimumBet: 10, isUnlocked: true),
-        Level(id: 2, name: "Level 2", startingChips: 100, requiredChips: 150, minimumBet: 10),
-        Level(id: 3, name: "Level 3", startingChips: 100, requiredChips: 1000, minimumBet: 10),
-        
+        Level(id: 1, name: "Garage Game", startingChips: 1000, requiredChips: 2000, minimumBet: 10),
+        Level(id: 2, name: "Local Casino", startingChips: 1500, requiredChips: 4000, minimumBet: 25),
+        Level(id: 3, name: "The Mainfloor", startingChips: 2500, requiredChips: 8000, minimumBet: 50),
+        Level(id: 4, name: "Members Only", startingChips: 4000, requiredChips: 15000, minimumBet: 100),
+        Level(id: 5, name: "VIP Lounge", startingChips: 6000, requiredChips: 30000, minimumBet: 250),
+        Level(id: 6, name: "Monte Carlo", startingChips: 10000, requiredChips: 60000, minimumBet: 500)
     ]
     
     var body: some View {
         ZStack{
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 0.0, green: 0.3, blue: 0.2),
-                    Color(red: 0.0, green: 0.5, blue: 0.3)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            Color.casinogreen
+                .ignoresSafeArea()
             ScrollView {
                 VStack {
                     Text("Select Level")
-                        .font(.system(size: 32, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
+                        .font(.libreCaslonBold(40))
+                        .foregroundStyle(.whiteish)
                         .tracking(2)
                         .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
                         .padding(.top, 40)

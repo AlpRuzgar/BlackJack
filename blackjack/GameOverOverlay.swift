@@ -40,11 +40,11 @@ struct GameOverOverlay: View {
                 VStack(spacing: 12) {
                     Text(result.title)
                         .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(.whiteish)
                     
                     Text(result.message)
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.9))
+                        .foregroundColor(.whiteish.opacity(0.9))
                         .multilineTextAlignment(.center)
                 }
                 
@@ -54,7 +54,7 @@ struct GameOverOverlay: View {
                         Text("PLAY AGAIN")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.whiteish)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 16)
                     .background(

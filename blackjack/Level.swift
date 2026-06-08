@@ -16,7 +16,6 @@ class Level: Identifiable, ObservableObject {
     let requiredChips: Int
     let minimumBet: Int
     @Published private(set) var isCompleted: Bool
-    @Published var isUnlocked: Bool
 
     init(id: Int, name: String, startingChips: Int, requiredChips: Int, minimumBet: Int, isUnlocked: Bool = false) {
         self.id = id
@@ -25,7 +24,6 @@ class Level: Identifiable, ObservableObject {
         self.chipsOwned = startingChips
         self.requiredChips = requiredChips
         self.minimumBet = minimumBet
-        self.isUnlocked = isUnlocked
         self.isCompleted = UserDefaults.standard.bool(forKey: Self.completionDefaultsKey(for: id))
     }
 
@@ -37,6 +35,10 @@ class Level: Identifiable, ObservableObject {
     func resetCompletion() {
         isCompleted = false
         UserDefaults.standard.removeObject(forKey: Self.completionDefaultsKey(for: id))
+    }
+
+    func resetChips() {
+        chipsOwned = startingChips
     }
 
     func reset() {

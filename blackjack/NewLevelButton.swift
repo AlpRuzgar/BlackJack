@@ -10,57 +10,71 @@ import SwiftUI
 struct NewLevelButton: View {
     let tableImages: [Image] = [Image(.orangeTable), Image(.greenTable), Image(.blueTable), Image(.redTable), Image(.purpleTable), Image(.goldTable)]
     var tableIndex: Int
-    var level: Level
+    @ObservedObject var level: Level
     var body: some View {
         NavigationLink(destination: LevelView(level: level)) {
             ZStack {
-                    tableImages[tableIndex]
-                        .resizable()
-                    
+                tableImages[tableIndex]
+                    .resizable()
+                
                 VStack {
                     Text(level.name)
-                            .font(.playfairdisplayBold(30))
-                            .foregroundStyle(.white)
-                            .offset(y: 20)
+                        .font(.libreCaslonBold(25))
+                        .foregroundStyle(.whiteish)
+                        .offset(y: 20)
                     
                     //Diamond divider
                     HStack {
                         Rectangle()
                             .frame(width: 100, height: 1)
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(.gold.gradient)
                         Image(systemName: "square.fill")
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(.gold.gradient)
                             .rotationEffect(Angle(degrees: 45))
                         Rectangle()
                             .frame(width: 100, height: 1)
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(.gold.gradient)
                     }
                     //level info
                     HStack(spacing: 0) {
                         Text("Start \(level.startingChips)")
-                            .font(.playfairdisplay(15))
-                            .foregroundStyle(.white)
+                            .font(.libreCaslon(15))
+                            .foregroundStyle(.whiteish)
                             .padding(5)
                             .frame(maxWidth: .infinity)
-                            .offset(x: 45)
+                            .offset(x: 20)
                         Rectangle()
                             .frame(width: 1, height: 50)
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(.gold.gradient)
                         Text("Target \(level.requiredChips)")
-                            .font(.playfairdisplay(15))
-                            .foregroundStyle(.white)
+                            .font(.libreCaslon(15))
+                            .foregroundStyle(.whiteish)
                             .padding(5)
                             .frame(maxWidth: .infinity)
-                            .offset(x: -45)
+                            .offset(x: -10)
                     }
                     Text("Min \(level.minimumBet)")
-                        .font(.playfairdisplay(15))
+                        .font(.libreCaslon(15))
                         .offset(y: -5)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.whiteish)
+                }
+                
+                if level.isCompleted {
+                    VStack {
+                        HStack {
+                            Spacer()
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 28, weight: .bold))
+                                .foregroundStyle(.green)
+                                .padding(12)
+                        }
+                        Spacer()
+                    }
                 }
             }
         }
-        .frame(width: 400, height: 290)
+        .frame(width: 300, height: 200)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 
 }

@@ -11,17 +11,14 @@ struct LevelView: View {
     @ObservedObject var level: Level
     let startingChips: Int
     @State var betsPlaced = false
-    @State var isOutofChips: Bool = false
+    @State var showOutcomeOverlay = false
+    @State var levelWon = false
     @StateObject var viewModel: LevelViewModel
 
     init(level: Level) {
         self.level = level
         self.startingChips = level.chipsOwned
         _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
-    }
-
-    var showOutcomeOverlay: Bool {
-        isOutofChips || level.isCompleted
     }
 
     var body: some View {
@@ -33,15 +30,24 @@ struct LevelView: View {
                     betsPlaced = false
                     if viewModel.checkLevelPass() {
                         level.markCompleted()
+                        levelWon = true
+                        showOutcomeOverlay = true
+                    } else if viewModel.checkOutOfChips() {
+                        levelWon = false
+                        showOutcomeOverlay = true
                     }
-                    isOutofChips = viewModel.checkOutOfChips()
                 }
             }
 
             if showOutcomeOverlay {
-                LevelOutcomeOverlay(isWon: level.isCompleted)
-                    .transition(.opacity)
-                    .zIndex(1)
+                LevelOutcomeOverlay(isWon: levelWon) {
+                    level.resetChips()
+                    viewModel.resetGame()
+                    showOutcomeOverlay = false
+                    betsPlaced = false
+                }
+                .transition(.opacity)
+                .zIndex(1)
             }
         }
         .animation(.easeInOut(duration: 0.2), value: showOutcomeOverlay)

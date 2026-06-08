@@ -17,15 +17,8 @@ struct GameView: View {
     var body: some View {
         ZStack {
             // Enhanced gradient background
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 0.0, green: 0.3, blue: 0.2),
-                    Color(red: 0.0, green: 0.5, blue: 0.3)
-                ]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            Color.casinogreen
+                .ignoresSafeArea()
             
             VStack(spacing: 20) {
                 // Chip & Bet status bar
@@ -34,7 +27,7 @@ struct GameView: View {
                 VStack(spacing: 12) {
                     Text("DEALER")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white.opacity(0.8))
+                        .foregroundColor(.whiteish.opacity(0.8))
                         .tracking(2)
                     
                     // Dealer hand value display
@@ -45,7 +38,7 @@ struct GameView: View {
                         
                         Text(dealerFlipAngle >= 180 ? "\(viewModel.dealersHandValue)" : "?")
                             .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(.whiteish)
                     }
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                     
@@ -81,7 +74,7 @@ struct GameView: View {
                 .padding(.bottom, 20)
                 
                 // Action Buttons with enhanced styling
-                VStack(spacing: 0) {
+                VStack(spacing: 12) {
                     HStack(spacing: 15) {
                         ButtonView(
                             action: {
@@ -104,35 +97,38 @@ struct GameView: View {
                                 }
                             },
                             text: "HIT",
-                            backgroundColor: Color(red: 0.9, green: 0.2, blue: 0.2),
-                            textColor: .white
+                            backgroundColor: .crimson,
+                            textColor: .whiteish
                         )
-                            ButtonView(
-                                action: {
-                                    if let levelVM = viewModel as? LevelViewModel {
-                                        let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
-                                        levelVM.stand()
-                                        if isLastHand {
-                                            Task {
-                                                withAnimation(.easeInOut(duration: 0.5)) {
-                                                    dealerFlipAngle = 180
-                                                }
-                                            }
-                                        }
-                                    } else {
-                                        viewModel.stand()
+                        ButtonView(
+                            action: {
+                                if let levelVM = viewModel as? LevelViewModel {
+                                    let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
+                                    levelVM.stand()
+                                    if isLastHand {
                                         Task {
                                             withAnimation(.easeInOut(duration: 0.5)) {
                                                 dealerFlipAngle = 180
                                             }
                                         }
                                     }
-                                },
-                                text: "STAND",
-                                backgroundColor: Color(red: 0.2, green: 0.6, blue: 0.3),
-                                textColor: .white
-                            )
-        
+                                } else {
+                                    viewModel.stand()
+                                    Task {
+                                        withAnimation(.easeInOut(duration: 0.5)) {
+                                            dealerFlipAngle = 180
+                                        }
+                                    }
+                                }
+                            },
+                            text: "STAND",
+                            backgroundColor: .greenish,
+                            textColor: .whiteish
+                        )
+                    }
+                    .padding(.horizontal, 30)
+
+                    HStack(spacing: 15) {
                         if let levelVM = viewModel as? LevelViewModel {
                             if levelVM.hands.count == 1 && levelVM.currentHand.cards.count == 2 {
                                 ButtonView(action: {
@@ -147,8 +143,8 @@ struct GameView: View {
                                     else { return }
                                 },
                                            text: "DOUBLE",
-                                           backgroundColor: .purple,
-                                           textColor: .white,
+                                           backgroundColor: .plum,
+                                           textColor: .whiteish,
                                            isGradient: true)
                             }
                         }
@@ -160,8 +156,8 @@ struct GameView: View {
                                     }
                                 },
                                            text: "SPLIT",
-                                           backgroundColor: .yellow,
-                                           textColor: .white,
+                                           backgroundColor: .amber,
+                                           textColor: .whiteish,
                                            isGradient: true)
                             }
                         }
@@ -255,30 +251,29 @@ struct GameView: View {
             HStack {
                 HStack(spacing: 6) {
                     Image(systemName: "dollarsign.circle.fill")
-                        .font(.system(size: 18))
-                        .foregroundColor(.yellow)
+                        .foregroundStyle(.gold)
                     Text("\(levelVM.level.chipsOwned)")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(.libreCaslonBold(18))
+                        .foregroundStyle(.gold)
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(Capsule().fill(Color.black.opacity(0.3)))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
+                .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                 
                 Spacer()
                 
                 HStack(spacing: 6) {
                     Text("BET")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                        .foregroundColor(.white.opacity(0.7))
+                        .font(.libreCaslon(12))
+                        .foregroundStyle(.gold.opacity(0.7))
                         .tracking(1.5)
                     Text("\(levelVM.currentBet)")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                        .font(.libreCaslonBold(18))
+                        .foregroundStyle(.gold)
                 }
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(Capsule().fill(Color.black.opacity(0.3)))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
+                .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
             }
             .padding(.horizontal, 20)
             .padding(.top, 10)

@@ -10,6 +10,7 @@ import SwiftUI
 struct LevelOutcomeOverlay: View {
     @Environment(\.dismiss) var dismiss
     let isWon: Bool
+    let onPlayAgain: () -> Void
     @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0
 
@@ -40,12 +41,25 @@ struct LevelOutcomeOverlay: View {
                 VStack(spacing: 12) {
                     Text(title)
                         .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(.white)
+                        .foregroundColor(.whiteish)
                     Text(subtitle)
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.white.opacity(0.9))
+                        .foregroundColor(.whiteish.opacity(0.9))
                         .multilineTextAlignment(.center)
                 }
+
+                Button(action: onPlayAgain) {
+                    HStack {
+                        Image(systemName: "arrow.counterclockwise")
+                        Text("PLAY AGAIN")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.whiteish)
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 16)
+                    .background(Capsule().fill(accentColor))
+                }
+                .shadow(color: accentColor.opacity(0.5), radius: 10, x: 0, y: 5)
 
                 Button(action: { dismiss() }) {
                     HStack {
@@ -53,12 +67,12 @@ struct LevelOutcomeOverlay: View {
                         Text("MAIN MENU")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(.white)
+                    .foregroundColor(.whiteish)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 16)
-                    .background(Capsule().fill(accentColor))
+                    .background(Capsule().fill(.gray.opacity(0.6)))
                 }
-                .shadow(color: accentColor.opacity(0.5), radius: 10, x: 0, y: 5)
+                .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
             }
             .padding(40)
             .background(
@@ -81,7 +95,7 @@ struct LevelOutcomeOverlay: View {
     NavigationStack {
         ZStack {
             Color(red: 0.0, green: 0.4, blue: 0.25).ignoresSafeArea()
-            LevelOutcomeOverlay(isWon: true)
+            LevelOutcomeOverlay(isWon: true, onPlayAgain: {})
         }
     }
 }

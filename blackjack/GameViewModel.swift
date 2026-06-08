@@ -58,7 +58,7 @@ class GameViewModel: ObservableObject {
     }
 
     #if DEBUG
-    var debugForcePairs: Bool = false
+    var debugForcePairs: Bool = true
     #endif
 
     func giveCard(to hand: Hand) {

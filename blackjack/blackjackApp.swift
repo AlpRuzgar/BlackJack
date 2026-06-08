@@ -22,18 +22,10 @@ struct blackjackApp: App {
 
     private func registerFonts() {
         let fontFileNames = [
-            "PlayfairDisplay-Black",
-            "PlayfairDisplay-BlackItalic",
-            "PlayfairDisplay-Bold",
-            "PlayfairDisplay-BoldItalic",
-            "PlayfairDisplay-ExtraBold",
-            "PlayfairDisplay-ExtraBoldItalic",
-            "PlayfairDisplay-Italic",
-            "PlayfairDisplay-Medium",
-            "PlayfairDisplay-MediumItalic",
-            "PlayfairDisplay-Regular",
-            "PlayfairDisplay-SemiBold",
-            "PlayfairDisplay-SemiBoldItalic"
+            "Anton-Regular",
+            "LibreCaslonText-Regular",
+            "LibreCaslonText-Bold",
+            "LibreCaslonText-Italic"
         ]
         for name in fontFileNames {
             guard let url = Bundle.main.url(forResource: name, withExtension: "ttf") else { continue }
