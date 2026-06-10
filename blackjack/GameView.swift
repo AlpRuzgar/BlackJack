@@ -266,19 +266,6 @@ struct GameView: View {
         if let levelVM = viewModel as? LevelViewModel {
             HStack {
                 HStack(spacing: 6) {
-                    Image(systemName: "dollarsign.circle.fill")
-                        .foregroundStyle(.gold)
-                    Text("\(levelVM.level.chipsOwned)")
-                        .font(.libreCaslonBold(18))
-                        .foregroundStyle(.gold)
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 6)
-                .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
-                
-                Spacer()
-                
-                HStack(spacing: 6) {
                     Text("BET")
                         .font(.libreCaslon(12))
                         .foregroundStyle(.gold.opacity(0.7))
@@ -290,10 +277,25 @@ struct GameView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 6)
                 .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
+                
+                Spacer()
+                
+                HStack(spacing: 6) {
+                    Image(systemName: "dollarsign.circle.fill")
+                        .foregroundStyle(.gold)
+                    Text("\(levelVM.level.chipsOwned)")
+                        .font(.libreCaslonBold(18))
+                        .foregroundStyle(.gold)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
+                .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
+
             }
             .padding(.horizontal, 20)
             .padding(.top, 10)
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+
             
         }
     }
