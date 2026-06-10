@@ -14,6 +14,10 @@ struct GameView: View {
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
     @Namespace private var splitNamespace
+    @State private var chipBarOpacity: Double = 0
+    @State private var chipBarOffset: CGFloat = -50
+    @State private var buttonsOpacity: Double = 0
+    @State private var buttonsOffset: CGFloat = 50
     var body: some View {
         ZStack {
             // Enhanced gradient background
@@ -23,6 +27,8 @@ struct GameView: View {
             VStack(spacing: 20) {
                 // Chip & Bet status bar
                 chipBar
+                    .opacity(chipBarOpacity)
+                    .offset(y: chipBarOffset)
                 // Dealer Section
                 VStack(spacing: 12) {
                     Text("DEALER")
@@ -165,11 +171,21 @@ struct GameView: View {
                     .padding(.horizontal, 30)
                 }
                 .padding(.bottom, 30)
+                .opacity(buttonsOpacity)
+                .offset(y: buttonsOffset)
             }
             .onAppear() {
                 Task{
                     await viewModel.startGame(for: viewModel.playersHand)
                     viewModel.isGameOver = false
+                }
+                withAnimation(.easeOut(duration: 0.5)) {
+                    chipBarOpacity = 1
+                    chipBarOffset = 0
+                }
+                withAnimation(.easeOut(duration: 0.5).delay(0.2)) {
+                    buttonsOpacity = 1
+                    buttonsOffset = 0
                 }
             }
             .onChange(of: viewModel.isRoundComplete) {
