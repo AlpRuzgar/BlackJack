@@ -192,7 +192,7 @@ struct GameView: View {
     
     @ViewBuilder
     private func dealerCardView(index: Int, card: Card) -> some View {
-        if index == 0 {
+        if index == 1 {
             ZStack {
                 // Front of card
                 Image(card.frontImage)

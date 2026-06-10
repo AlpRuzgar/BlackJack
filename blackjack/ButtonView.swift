@@ -20,7 +20,7 @@ struct ButtonView: View {
             action()
         }label: {
             Text(text)
-                .font(.system(size: 18, weight: .bold, design: .default))
+                .font(.system(size: 22, weight: .bold, design: .default))
                 .tracking(1.5)
                 .foregroundStyle(textColor)
                 .frame(height: 55)
@@ -31,6 +31,7 @@ struct ButtonView: View {
                 )            
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
+        .shadow(color: .black,radius: 2, x: -5, y:5)
     }
     init( action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color, isGradient: Bool = false) {
         self.text = text
@@ -53,6 +54,7 @@ struct PressableButtonStyle: ButtonStyle {
 
 #Preview {
     ButtonView(action: {}, text: "Test", backgroundColor: .blue, textColor: .whiteish, isGradient: true)
+        .padding(20)
 }
 
 //TODO: needs rework, looks like shit

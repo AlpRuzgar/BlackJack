@@ -9,8 +9,6 @@ import Foundation
 import SwiftUI
 
 struct StartView: View {
-    @State private var isAnimating = false
-    
     var body: some View {
         NavigationStack{
             ZStack{
@@ -20,29 +18,25 @@ struct StartView: View {
                 
                 VStack{
                     Text("Double on 17")
-                        .font(.libreCaslonBold(40))
+                        .font(.libreCaslonBold(50))
                         .foregroundStyle(.whiteish)
                         .padding()
+
                     VStack(spacing: 20){
                         // Enhanced Play button using ButtonView
                         NavigationLink(destination: LevelMenuView()) {
-                            StartViewButton(text: "LEVELS", textColor: .whiteish, backgroundColor: .crimson)
+                            StartViewButton(text: "TABLES", textColor: .whiteish, backgroundColor: .crimson)
                         }
                         NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless))) {
                             StartViewButton(text: "ENDLESS MODE", textColor: .whiteish, backgroundColor: .gold)
                         }
-                        
                     }
                     .padding()
                 }
             }
         }
-        .onAppear {
-            isAnimating = true
-        }
     }
 }
-
 struct StartViewButton: View {
     let text: String
     let textColor: Color
@@ -59,6 +53,7 @@ struct StartViewButton: View {
                     .fill(backgroundColor)
             )
             .clipShape(RoundedRectangle(cornerRadius: 10))
+            .shadow(color: .black,radius: 2, x: -5, y:5)
     }
 }
 

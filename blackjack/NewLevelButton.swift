@@ -21,7 +21,7 @@ struct NewLevelButton: View {
                     Text(level.name)
                         .font(.libreCaslonBold(25))
                         .foregroundStyle(.whiteish)
-                        .offset(y: 20)
+                        .offset(y: 15)
                     
                     //Diamond divider
                     HStack {
@@ -46,6 +46,7 @@ struct NewLevelButton: View {
                         Rectangle()
                             .frame(width: 1, height: 50)
                             .foregroundStyle(.gold.gradient)
+                            .offset(x: -0.3)
                         Text("Target \(level.requiredChips)")
                             .font(.libreCaslon(15))
                             .foregroundStyle(.whiteish)

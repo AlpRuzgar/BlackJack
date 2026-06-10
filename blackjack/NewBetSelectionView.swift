@@ -58,8 +58,8 @@ struct NewBetSelectionView: View {
             Color.casinogreen
                 .ignoresSafeArea()
             
-            VStack(spacing: 8) {
-                VStack(spacing: 4) {
+            VStack {
+                VStack {
                     // Player's chip count display
                     HStack {
                         Image(systemName: "dollarsign.circle.fill")
@@ -82,6 +82,8 @@ struct NewBetSelectionView: View {
                     Text("BET: \(viewModel.startingBet)")
                         .font(.libreCaslon(18))
                         .foregroundStyle(.gold)
+                        .shadow(color: .black,radius: 5, x: -5, y:8)
+
                     ZStack {
                         RoundedRectangle(cornerRadius: 10)
                             .foregroundStyle(.black.opacity(0.6))
@@ -125,8 +127,12 @@ struct NewBetSelectionView: View {
                                 .opacity(chip500BetAmount > 0 ? 1 : 0)
                                 .allowsHitTesting(chip500BetAmount > 0)
                                 chipAmountDisplay(chip500BetAmount)
-                                
                             }
+                            Text("TAP CHIPS HERE TO DECREASE BET")
+                                .font(.system(size: 15,weight: .bold))
+                                .foregroundStyle(.casinogreen)
+                                .padding(2)
+
                         }
                         .padding()
                     }
@@ -159,26 +165,33 @@ struct NewBetSelectionView: View {
                         }, image: Image(.chip500))
                         .capturePosition(key: "increase_500")
                     }
+                    Text("TAP CHIPS HERE TO INCREASE BET")
+                        .font(.system(size: 15,weight: .bold))
+                        .foregroundStyle(.whiteish)
+                        .padding(2)
                 }
                 
                 //MARK: action buttons
-                VStack(spacing: 8) {
+                VStack {
                     HStack {
                         ButtonView(action: {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.minimumBet)
                             increaseBet(by: viewModel.level.minimumBet)
                         }, text: "MIN BET", backgroundColor: .greenish, textColor: .whiteish)
+                        .padding(5)
                         ButtonView(action: {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.chipsOwned)
                             increaseBet(by: viewModel.level.chipsOwned)
                         }, text: "MAX BET", backgroundColor: .crimson, textColor: .whiteish)
+                        .padding(5)
                     }
                     ButtonView(action: {
                         viewModel.placeBet()
                         betsPlaced = true
                     }, text: "PLACE BET", backgroundColor: .navy, textColor: .whiteish)
+                    .padding(5)
                     
                 }
                 .padding()
