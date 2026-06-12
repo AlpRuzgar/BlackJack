@@ -22,7 +22,7 @@ enum GameType {
     case endless
 }
 
-class GameViewModel: ObservableObject {
+class GameViewModel: ObservableObject {    
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
@@ -58,7 +58,7 @@ class GameViewModel: ObservableObject {
     }
 
     #if DEBUG
-    var debugForcePairs: Bool = false
+    var debugForcePairs: Bool = true
     #endif
 
     func giveCard(to hand: Hand) {
@@ -75,6 +75,7 @@ class GameViewModel: ObservableObject {
         let randomIndex = Int.random(in: 0..<cardsArray.count)
         let selectedCard = cardsArray.remove(at: randomIndex)
         hand.cards.append(selectedCard)
+        SoundManager.shared.playImportedEffect(named: "cardPlacingSound")
         calculateHand(hand)
     }
 

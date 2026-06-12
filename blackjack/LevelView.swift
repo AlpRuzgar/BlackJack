@@ -32,9 +32,11 @@ struct LevelView: View {
                         level.markCompleted()
                         levelWon = true
                         showOutcomeOverlay = true
+                        SoundManager.shared.playImportedEffect(named: "levelWon")
                     } else if viewModel.checkOutOfChips() {
                         levelWon = false
                         showOutcomeOverlay = true
+                        SoundManager.shared.playImportedEffect(named: "levelLost")
                     }
                 }
             }

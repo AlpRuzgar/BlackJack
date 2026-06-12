@@ -236,6 +236,7 @@ struct NewBetSelectionView: View {
             buttonPositions = positions
         }
         .onAppear {
+            SoundManager.shared.playImportedEffect(named: "cashRegister")
             viewModel.startingBet = viewModel.level.minimumBet
             calculateBetinChips(bet: viewModel.level.minimumBet)
             withAnimation(.easeOut(duration: 0.4)) {
@@ -278,6 +279,7 @@ struct NewBetSelectionView: View {
     func doIncrease(value: Int) -> Bool {
         guard viewModel.level.chipsOwned >= viewModel.startingBet + value else { showError("You don't have enough chips"); return false }
         increaseBet(by: value)
+        SoundManager.shared.playImportedEffect(named: "chipPlacingSound")
         return true
     }
     

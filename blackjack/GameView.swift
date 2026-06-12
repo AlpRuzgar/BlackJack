@@ -18,6 +18,18 @@ struct GameView: View {
     @State private var chipBarOffset: CGFloat = -50
     @State private var buttonsOpacity: Double = 0
     @State private var buttonsOffset: CGFloat = 50
+    @State private var showAllHands: Bool = false
+
+    private var allHandsScale: CGFloat {
+        switch viewModel.hands.count {
+        case 1:  return 1.0
+        case 2:  return 0.85
+        case 3:  return 0.65
+        default: return 0.50
+        }
+    }
+    private var allHandsSpacing: CGFloat { 170 * allHandsScale + 8 }
+
     var body: some View {
         ZStack {
             // Enhanced gradient background
@@ -61,19 +73,26 @@ struct GameView: View {
                 // Player Section - all hands
                 ZStack {
                     ForEach(Array(viewModel.hands.enumerated()), id: \.offset) { index, hand in
+                        let handCount = viewModel.hands.count
+                        let isActive = index == viewModel.targetHandIndex
+                        let spacing = allHandsSpacing
                         PlayerHandView(
                             cards: hand.cards,
                             handValue: hand.value,
-                            label: viewModel.hands.count > 1 ? "HAND \(index + 1)" : "PLAYER",
-                            isActive: index == viewModel.targetHandIndex,
+                            label: handCount > 1 ? "HAND \(index + 1)" : "PLAYER",
+                            isActive: !showAllHands && isActive,
                             handResult: hand.result,
                             dealtCardIDs: $dealtCardIDs,
                             splitNamespace: splitNamespace
                         )
-                        .scaleEffect(index == viewModel.targetHandIndex ? 1.0 : 0.75)
-                        .offset(x: CGFloat(index - viewModel.targetHandIndex) * 160)
-                        .opacity(index == viewModel.targetHandIndex ? 1.0 : 0.65)
-                        .zIndex(index == viewModel.targetHandIndex ? 1 : 0)
+                        .scaleEffect(showAllHands ? allHandsScale : (isActive ? 1.0 : 0.75))
+                        .offset(x: showAllHands
+                            ? CGFloat(index) * spacing - CGFloat(handCount - 1) * spacing / 2
+                            : CGFloat(index - viewModel.targetHandIndex) * 160
+                        )
+                        .opacity(showAllHands ? 1.0 : (isActive ? 1.0 : 0.65))
+                        .zIndex(isActive ? 1 : 0)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.75), value: showAllHands)
                         .animation(.spring(response: 0.4, dampingFraction: 0.7), value: viewModel.targetHandIndex)
                     }
                 }
@@ -91,7 +110,9 @@ struct GameView: View {
                                         let hasStoodPriorHands = levelVM.targetHandIndex > 0 && levelVM.hands[0..<levelVM.targetHandIndex].contains { $0.result == nil }
                                         levelVM.playerBust()
                                         if isLastHand && hasStoodPriorHands {
+                                            showAllHands = true
                                             Task {
+                                                try? await Task.sleep(for: .milliseconds(400))
                                                 withAnimation(.easeInOut(duration: 0.5)) {
                                                     dealerFlipAngle = 180
                                                 }
@@ -112,7 +133,11 @@ struct GameView: View {
                                     let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
                                     levelVM.stand()
                                     if isLastHand {
+                                        if levelVM.hands.count > 1 { showAllHands = true }
                                         Task {
+                                            if levelVM.hands.count > 1 {
+                                                try? await Task.sleep(for: .milliseconds(400))
+                                            }
                                             withAnimation(.easeInOut(duration: 0.5)) {
                                                 dealerFlipAngle = 180
                                             }
@@ -190,10 +215,13 @@ struct GameView: View {
             }
             .onChange(of: viewModel.isRoundComplete) {
                 guard viewModel.isRoundComplete else { return }
+                // Ensure all hands are visible when results appear (covers the all-bust case)
+                if viewModel.hands.count > 1 { showAllHands = true }
                 Task {
                     try? await Task.sleep(for: .seconds(2))
                     dealtCardIDs.removeAll()
                     dealerFlipAngle = 0
+                    showAllHands = false
                     if let onRestart {
                         onRestart()
                         viewModel.resetGame()
