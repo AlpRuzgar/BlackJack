@@ -9,40 +9,56 @@ import Foundation
 import SwiftUI
 
 struct StartView: View {
+    @Environment(ThemeManager.self) var themeManager
+    
     @State private var titleOpacity: Double = 0
     @State private var titleOffset: CGFloat = -30
     @State private var button1Opacity: Double = 0
     @State private var button1Offset: CGFloat = 40
     @State private var button2Opacity: Double = 0
     @State private var button2Offset: CGFloat = 40
-
+    
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.casinogreen
+                themeManager.current.background
                     .ignoresSafeArea()
-
+                
                 VStack {
+                    Spacer()
                     Text("Double on 17")
                         .font(.libreCaslonBold(50))
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                         .padding()
                         .opacity(titleOpacity)
                         .offset(y: titleOffset)
-
+                    
                     VStack(spacing: 20) {
                         NavigationLink(destination: LevelMenuView()) {
-                            StartViewButton(text: "TABLES", textColor: .whiteish, backgroundColor: .crimson)
+                            StartViewButton(text: "TABLES", textColor: .ivory, backgroundColor: themeManager.current.colors.primary)
                         }
                         .opacity(button1Opacity)
                         .offset(y: button1Offset)
-
-                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless))) {
-                            StartViewButton(text: "ENDLESS MODE", textColor: .whiteish, backgroundColor: .gold)
+                        
+                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless, themeManager: themeManager))) {
+                            StartViewButton(text: "ENDLESS MODE", textColor: .ivory, backgroundColor: themeManager.current.colors.alert)
                         }
                         .opacity(button2Opacity)
                         .offset(y: button2Offset)
                     }
+                    .padding()
+                    
+                    Spacer()
+                    NavigationLink(destination: ThemeStoreView()) {
+                        Image(systemName: "cart")
+                            .font(.system(size: 70))
+                            .foregroundStyle(.white)
+                            .frame(width: 110, height: 110)
+                            .background(themeManager.current.colors.secondary)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .shadow(color: themeManager.current.colors.primary, radius: 5)
+                    }
+                    
                     .padding()
                 }
             }
@@ -80,10 +96,11 @@ struct StartViewButton: View {
                     .fill(backgroundColor)
             )
             .clipShape(RoundedRectangle(cornerRadius: 10))
-            .shadow(color: .black, radius: 2, x: -5, y: 5)
+            .shadow(color: backgroundColor, radius: 5)
     }
 }
 
 #Preview {
     StartView()
+        .environment(ThemeManager())
 }

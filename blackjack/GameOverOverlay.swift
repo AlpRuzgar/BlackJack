@@ -10,6 +10,7 @@ import SwiftUI
 struct GameOverOverlay: View {
     let result: GameResult
     let onRestart: () -> Void
+    @Environment(ThemeManager.self) var themeManager
     @State private var scale: CGFloat = 0.5
     @State private var opacity: Double = 0
 
@@ -40,11 +41,11 @@ struct GameOverOverlay: View {
                 VStack(spacing: 12) {
                     Text(result.title)
                         .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(.whiteish)
+                        .foregroundColor(.ivory)
                     
                     Text(result.message)
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.whiteish.opacity(0.9))
+                        .foregroundColor(.ivory.opacity(0.9))
                         .multilineTextAlignment(.center)
                 }
                 
@@ -54,7 +55,7 @@ struct GameOverOverlay: View {
                         Text("PLAY AGAIN")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(.whiteish)
+                    .foregroundColor(.ivory)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 16)
                     .background(

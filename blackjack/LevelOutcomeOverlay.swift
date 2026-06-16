@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LevelOutcomeOverlay: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(ThemeManager.self) var themeManager
     let isWon: Bool
     let onPlayAgain: () -> Void
     @State private var scale: CGFloat = 0.5
@@ -41,10 +42,10 @@ struct LevelOutcomeOverlay: View {
                 VStack(spacing: 12) {
                     Text(title)
                         .font(.system(size: 36, weight: .black, design: .rounded))
-                        .foregroundColor(.whiteish)
+                        .foregroundColor(.ivory)
                     Text(subtitle)
                         .font(.system(size: 18, weight: .medium, design: .rounded))
-                        .foregroundColor(.whiteish.opacity(0.9))
+                        .foregroundColor(.ivory.opacity(0.9))
                         .multilineTextAlignment(.center)
                 }
 
@@ -54,7 +55,7 @@ struct LevelOutcomeOverlay: View {
                         Text("PLAY AGAIN")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(.whiteish)
+                    .foregroundColor(.ivory)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 16)
                     .background(Capsule().fill(accentColor))
@@ -67,7 +68,7 @@ struct LevelOutcomeOverlay: View {
                         Text("MAIN MENU")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(.whiteish)
+                    .foregroundColor(.ivory)
                     .padding(.horizontal, 40)
                     .padding(.vertical, 16)
                     .background(Capsule().fill(.gray.opacity(0.6)))
@@ -98,4 +99,5 @@ struct LevelOutcomeOverlay: View {
             LevelOutcomeOverlay(isWon: true, onPlayAgain: {})
         }
     }
+    .environment(ThemeManager())
 }

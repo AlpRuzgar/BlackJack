@@ -14,9 +14,12 @@ struct blackjackApp: App {
         registerFonts()
     }
 
+    @State private var themeManager = ThemeManager()
+    
     var body: some Scene {
         WindowGroup {
             StartView()
+                .environment(themeManager)
         }
     }
 

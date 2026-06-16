@@ -41,6 +41,7 @@ extension View {
 struct NewBetSelectionView: View {
     @ObservedObject var viewModel: LevelViewModel
     @Binding var betsPlaced: Bool
+    @Environment(ThemeManager.self) var themeManager
     @State var errorMessage = ""
     @State private var errorVisible = false
     
@@ -62,7 +63,7 @@ struct NewBetSelectionView: View {
     
     var body: some View {
         ZStack {
-            Color.casinogreen
+            themeManager.current.background
                 .ignoresSafeArea()
             
             VStack(spacing: 12) {
@@ -85,13 +86,13 @@ struct NewBetSelectionView: View {
                     
                     Text("PLACE YOUR BET")
                         .font(.libreCaslonBold(26))
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                         .padding(.vertical, 6)
                         .opacity(titleOpacity)
                         .offset(y: titleOffset)
                     
                     Text("BET: \(viewModel.startingBet)")
-                        .font(.libreCaslon(18))
+                        .font(.libreCaslonBold(18))
                         .foregroundStyle(.gold)
                         .shadow(color: .black, radius: 5, x: -5, y: 8)
                         .opacity(titleOpacity)
@@ -180,30 +181,30 @@ struct NewBetSelectionView: View {
                     }
                     Text("TAP CHIPS HERE TO INCREASE BET")
                         .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                         .padding(2)
                 }
                 
-                //MARK: action buttons
+                //MARK: Action buttons
                 VStack {
                     HStack {
                         ButtonView(action: {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.minimumBet)
                             increaseBet(by: viewModel.level.minimumBet)
-                        }, text: "MIN BET", backgroundColor: .greenish, textColor: .whiteish)
+                        }, text: "MIN BET", backgroundColor: themeManager.current.colors.primary, textColor: .ivory)
                         .padding(4)
                         ButtonView(action: {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.chipsOwned)
                             increaseBet(by: viewModel.level.chipsOwned)
-                        }, text: "MAX BET", backgroundColor: .crimson, textColor: .whiteish)
+                        }, text: "MAX BET", backgroundColor: themeManager.current.colors.alert, textColor: .ivory)
                         .padding(4)
                     }
                     ButtonView(action: {
                         viewModel.placeBet()
                         betsPlaced = true
-                    }, text: "PLACE BET", backgroundColor: .navy, textColor: .whiteish)
+                    }, text: "PLACE BET", backgroundColor: themeManager.current.colors.secondary, textColor: .ivory)
                     .padding(4)
                 }
                 .padding(.horizontal, 12)
@@ -214,7 +215,7 @@ struct NewBetSelectionView: View {
             
             Text(errorMessage)
                 .font(.libreCaslon(16))
-                .foregroundStyle(.whiteish)
+                .foregroundStyle(.ivory)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
                 .background(Color(red: 0.7, green: 0.05, blue: 0.05), in: RoundedRectangle(cornerRadius: 10))
@@ -290,7 +291,7 @@ struct NewBetSelectionView: View {
     func chipAmountDisplay(_ amount: Int) -> some View {
         Text("\(amount)")
             .font(.libreCaslon(16))
-            .foregroundStyle(.whiteish)
+            .foregroundStyle(.ivory)
             .opacity(amount > 0 ? 1 : 0)
     }
     
@@ -337,6 +338,14 @@ struct FlyingChipView: View {
                 }
             }
     }
+}
+
+#Preview {
+    NewBetSelectionView(
+        viewModel: LevelViewModel(level: Level(id: 1, name: "Preview", startingChips: 1000, requiredChips: 2000, minimumBet: 10), themeManager: ThemeManager()),
+        betsPlaced: .constant(false)
+    )
+    .environment(ThemeManager())
 }
 
 struct ChipButton: View {

@@ -11,8 +11,9 @@ struct NewLevelButton: View {
     let tableImages: [Image] = [Image(.orangeTable), Image(.greenTable), Image(.blueTable), Image(.redTable), Image(.purpleTable), Image(.goldTable)]
     var tableIndex: Int
     @ObservedObject var level: Level
+    @Environment(ThemeManager.self) var themeManager
     var body: some View {
-        NavigationLink(destination: LevelView(level: level)) {
+        NavigationLink(destination: LevelView(level: level, themeManager: themeManager)) {
             ZStack {
                 tableImages[tableIndex]
                     .resizable()
@@ -20,7 +21,7 @@ struct NewLevelButton: View {
                 VStack {
                     Text(level.name)
                         .font(.libreCaslonBold(25))
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                         .offset(y: 15)
                     
                     //Diamond divider
@@ -39,7 +40,7 @@ struct NewLevelButton: View {
                     HStack(spacing: 0) {
                         Text("Start \(level.startingChips)")
                             .font(.libreCaslon(15))
-                            .foregroundStyle(.whiteish)
+                            .foregroundStyle(.ivory)
                             .padding(5)
                             .frame(maxWidth: .infinity)
                             .offset(x: 20)
@@ -49,7 +50,7 @@ struct NewLevelButton: View {
                             .offset(x: -0.3)
                         Text("Target \(level.requiredChips)")
                             .font(.libreCaslon(15))
-                            .foregroundStyle(.whiteish)
+                            .foregroundStyle(.ivory)
                             .padding(5)
                             .frame(maxWidth: .infinity)
                             .offset(x: -10)
@@ -57,7 +58,7 @@ struct NewLevelButton: View {
                     Text("Min \(level.minimumBet)")
                         .font(.libreCaslon(15))
                         .offset(y: -5)
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                 }
                 
                 if level.isCompleted {
@@ -82,4 +83,5 @@ struct NewLevelButton: View {
 
 #Preview {
     NewLevelButton(tableIndex: 0, level: Level(id: 99, name: "Level 1", startingChips: 1000, requiredChips: 10000, minimumBet: 500))
+        .environment(ThemeManager())
 }

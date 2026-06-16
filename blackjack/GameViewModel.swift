@@ -23,6 +23,7 @@ enum GameType {
 }
 
 class GameViewModel: ObservableObject {
+    var themeManager: ThemeManager
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
@@ -42,8 +43,9 @@ class GameViewModel: ObservableObject {
     @Published var gameOverMessage: String = ""
     @Published var isRoundComplete: Bool = false
 
-    init(gameType: GameType) {
+    init(gameType: GameType, themeManager: ThemeManager) {
         self.gameType = gameType
+        self.themeManager = themeManager
         self.hands = [playersHand]
     }
 
@@ -51,7 +53,7 @@ class GameViewModel: ObservableObject {
         for value in cardValueArray {
             for suit in suitsArray {
                 let card = Card(value: value, suit: suit)
-                card.frontImage = "\(value)\(suit)"
+                card.frontImage = "\(value)\(suit)-\(themeManager.current.id)"
                 cardsArray.append(card)
             }
         }

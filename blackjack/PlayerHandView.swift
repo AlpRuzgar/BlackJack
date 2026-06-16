@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct PlayerHandView: View {
+    @Environment(ThemeManager.self) var themeManager
     let cards: [Card]
     let handValue: Int
     let label: String
@@ -44,14 +45,14 @@ struct PlayerHandView: View {
                     .frame(width: 80, height: 36)
                 Text("\(handValue)")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundColor(handValue > 21 ? .red : .whiteish)
+                    .foregroundColor(handValue > 21 ? .red : .ivory)
             }
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
 
             if let result = handResult {
                 Text(result.shortLabel)
                     .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .foregroundColor(.whiteish)
+                    .foregroundColor(.ivory)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 4)
                     .background(Capsule().fill(result.color))
@@ -59,7 +60,7 @@ struct PlayerHandView: View {
 
             Text(label)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(isActive ? AnyShapeStyle(Color.gold.gradient) : AnyShapeStyle(Color.whiteish.opacity(0.8)))
+                .foregroundStyle(isActive ? AnyShapeStyle(Color.gold.gradient) : AnyShapeStyle(Color.ivory.opacity(0.8)))
                 .tracking(2)
         }
         .padding(8)

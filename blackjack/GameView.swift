@@ -11,6 +11,7 @@ import SwiftUI
 struct GameView: View {
     @StateObject var viewModel: GameViewModel
     var onRestart: (() -> Void)?
+    @Environment(ThemeManager.self) var themeManager
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
     @Namespace private var splitNamespace
@@ -21,7 +22,7 @@ struct GameView: View {
     var body: some View {
         ZStack {
             // Enhanced gradient background
-            Color.casinogreen
+            themeManager.current.background
                 .ignoresSafeArea()
             
             VStack(spacing: 20) {
@@ -33,7 +34,7 @@ struct GameView: View {
                 VStack(spacing: 12) {
                     Text("DEALER")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.whiteish.opacity(0.8))
+                        .foregroundColor(.ivory.opacity(0.8))
                         .tracking(2)
                     
                     // Dealer hand value display
@@ -44,7 +45,7 @@ struct GameView: View {
                         
                         Text(dealerFlipAngle >= 180 ? "\(viewModel.dealersHandValue)" : "?")
                             .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.whiteish)
+                            .foregroundColor(.ivory)
                     }
                     .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                     
@@ -103,8 +104,8 @@ struct GameView: View {
                                 }
                             },
                             text: "HIT",
-                            backgroundColor: .crimson,
-                            textColor: .whiteish
+                            backgroundColor: themeManager.current.colors.alert,
+                            textColor: .ivory
                         )
                         ButtonView(
                             action: {
@@ -128,8 +129,8 @@ struct GameView: View {
                                 }
                             },
                             text: "STAND",
-                            backgroundColor: .greenish,
-                            textColor: .whiteish
+                            backgroundColor: themeManager.current.colors.primary,
+                            textColor: .ivory
                         )
                     }
                     .padding(.horizontal, 30)
@@ -149,9 +150,8 @@ struct GameView: View {
                                     else { return }
                                 },
                                            text: "DOUBLE",
-                                           backgroundColor: .plum,
-                                           textColor: .whiteish,
-                                           isGradient: true)
+                                           backgroundColor: themeManager.current.colors.extra,
+                                           textColor: .ivory)
                             }
                         }
                         if let levelVM = viewModel as? LevelViewModel {
@@ -162,9 +162,8 @@ struct GameView: View {
                                     }
                                 },
                                            text: "SPLIT",
-                                           backgroundColor: .amber,
-                                           textColor: .whiteish,
-                                           isGradient: true)
+                                           backgroundColor: themeManager.current.colors.secondary,
+                                           textColor: .ivory)
                             }
                         }
                     }
@@ -303,5 +302,7 @@ struct GameView: View {
 
 
 #Preview {
-    GameView(viewModel: GameViewModel(gameType: .endless))
+    let tm = ThemeManager()
+    GameView(viewModel: GameViewModel(gameType: .endless, themeManager: tm))
+        .environment(tm)
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LevelMenuView: View {
+    @Environment(ThemeManager.self) var themeManager
     @State private var levels: [Level] = [
         Level(id: 1, name: "Garage Game", startingChips: 1000, requiredChips: 2000, minimumBet: 10),
         Level(id: 2, name: "Local Casino", startingChips: 1500, requiredChips: 4000, minimumBet: 25),
@@ -22,13 +23,13 @@ struct LevelMenuView: View {
     
     var body: some View {
         ZStack{
-            Color.casinogreen
+            themeManager.current.background
                 .ignoresSafeArea()
             ScrollView {
                 VStack {
                     Text("Select Level")
                         .font(.libreCaslonBold(40))
-                        .foregroundStyle(.whiteish)
+                        .foregroundStyle(.ivory)
                         .tracking(2)
                         .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
                         .padding(.top, 40)
@@ -79,4 +80,5 @@ struct LevelMenuView: View {
     NavigationStack {
         LevelMenuView()
     }
+    .environment(ThemeManager())
 }

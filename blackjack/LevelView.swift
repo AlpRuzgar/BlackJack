@@ -14,11 +14,13 @@ struct LevelView: View {
     @State var showOutcomeOverlay = false
     @State var levelWon = false
     @StateObject var viewModel: LevelViewModel
+    let themeManager: ThemeManager
 
-    init(level: Level) {
+    init(level: Level, themeManager: ThemeManager) {
         self.level = level
         self.startingChips = level.chipsOwned
-        _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
+        self.themeManager = themeManager
+        _viewModel = StateObject(wrappedValue: LevelViewModel(level: level, themeManager: themeManager))
     }
 
     var body: some View {
@@ -59,6 +61,7 @@ struct LevelView: View {
 
 #Preview {
     NavigationStack {
-        LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 30))
+        LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 30), themeManager: ThemeManager())
     }
+    .environment(ThemeManager())
 }

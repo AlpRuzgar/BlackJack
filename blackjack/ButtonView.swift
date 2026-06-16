@@ -13,7 +13,7 @@ struct ButtonView: View {
     var action: () -> Void
     var backgroundColor: Color
     var textColor: Color
-    var isGradient: Bool = false
+    @Environment(ThemeManager.self) var themeManager
     
     var body: some View {
         Button{
@@ -25,20 +25,20 @@ struct ButtonView: View {
                 .foregroundStyle(textColor)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
+                .buttonStyle(PressableButtonStyle())
                 .background(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(backgroundColor)
                 )            
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .shadow(color: .black,radius: 2, x: -5, y:5)
+        .shadow(color: backgroundColor, radius: 5)
     }
-    init( action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color, isGradient: Bool = false) {
+    init( action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color) {
         self.text = text
         self.action = action
         self.backgroundColor = backgroundColor
         self.textColor = textColor
-        self.isGradient = isGradient
     }
 }
 
@@ -53,8 +53,9 @@ struct PressableButtonStyle: ButtonStyle {
 }
 
 #Preview {
-    ButtonView(action: {}, text: "Test", backgroundColor: .blue, textColor: .whiteish, isGradient: true)
+    ButtonView(action: {}, text: "Test", backgroundColor: .blue, textColor: .ivory)
         .padding(20)
+        .environment(ThemeManager())
 }
 
 //TODO: needs rework, looks like shit
