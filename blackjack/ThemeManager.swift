@@ -10,16 +10,37 @@ import SwiftUI
 
 @Observable
 class ThemeManager {
-    var themes: [Theme] = [ ///colors function by order: 1- alert, 2- primary, 3- secondary, 4- third
-        Theme(isUnlocked: true, price: 0, id: "default", background: .color(.casinogreen),
-              colors: ThemeColors(primary: .greenish, secondary: .gold, alert: .crimson, extra: .plum),
-              chipImages: []),
-        Theme(isUnlocked: true, price: 1000, id: "future", background: .color(.black),
-              colors: ThemeColors(primary: .futureGreen, secondary: .futureYellow, alert: .futurePink, extra: .futureBlue),
-              chipImages: []),
-    Theme(isUnlocked: true, price: 1500, id: "medieval", background: .color(.cyan),
-              colors: ThemeColors(primary: .gold, secondary: .crimson, alert: .plum, extra: .greenish),
-              chipImages: [])
+    var themes: [Theme] = [
+        Theme(isUnlocked: true, price: 0, id: "default",
+              background: .color(.casinogreen),
+              colors: ThemeColors(primary: .greenish, secondary: .gold, alert: .crimson, extra: .plum, text: .ivory)),
+                
+        Theme(isUnlocked: false, price: 1000, id: "greece",
+              background: .image(Image("background-greece")),
+              colors: ThemeColors(primary: .greekAegean, secondary: .greekGold, alert: .greekOlive, extra: .greekSky, text: .greekMarble)),
+
+        Theme(isUnlocked: false, price: 2000, id: "egypt",
+              background: .image(Image("background-egypt")),
+              colors: ThemeColors(primary: .egyptLapis, secondary: .egyptGold, alert: .egyptCarnelian, extra: .egyptTurquoise, text: .egyptSandstone),
+              cardTint: .white),
+        
+        Theme(isUnlocked: false, price: 3000, id: "norse",
+              background: .image(Image("background-norse")),
+              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
+              cardTint: .white),
+        Theme(isUnlocked: false, price: 3000, id: "norse",
+              background: .image(Image("background-norse")),
+              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
+              cardTint: .white),
+        Theme(isUnlocked: false, price: 3000, id: "norse",
+              background: .image(Image("background-norse")),
+              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
+              cardTint: .white),
+        Theme(isUnlocked: false, price: 3000, id: "norse",
+              background: .image(Image("background-norse")),
+              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
+              cardTint: .white),
+
     ]
     
     var selectedThemeId: String {
@@ -33,10 +54,18 @@ class ThemeManager {
     }
     
     init() {
-        self.selectedThemeId = UserDefaults.standard.string(forKey: "selectedTheme") ?? "classic"
+        self.selectedThemeId = UserDefaults.standard.string(forKey: "selectedTheme") ?? "default"
     }
     
     func select(_ theme: Theme) {
         selectedThemeId = theme.id
+    }
+    
+    func reset() {
+        UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+        for theme in themes where theme.id != "default" {
+            theme.isUnlocked = false
+        }
+        selectedThemeId = "default"
     }
 }

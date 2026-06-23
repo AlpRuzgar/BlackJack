@@ -20,35 +20,55 @@ struct LevelMenuView: View {
 
     @State private var titleVisible = false
     @State private var levelsVisible = false
-    
+
     var body: some View {
-        ZStack{
+        ZStack {
             themeManager.current.background
                 .ignoresSafeArea()
             ScrollView {
-                VStack {
-                    Text("Select Level")
-                        .font(.libreCaslonBold(40))
-                        .foregroundStyle(.ivory)
-                        .tracking(2)
-                        .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
-                        .padding(.top, 40)
-                        .padding(.bottom, 30)
-                        .opacity(titleVisible ? 1 : 0)
-                        .offset(y: titleVisible ? 0 : -25)
-                        .animation(.easeOut(duration: 0.5), value: titleVisible)
+                VStack(spacing: 0) {
+                    // Title + gold divider
+                    VStack(spacing: 10) {
+                        Text("Select Level")
+                            .font(.libreCaslonBold(40))
+                            .foregroundStyle(themeManager.current.colors.text)
+                            .tracking(2)
+                            .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
+
+                        HStack {
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(.gold.gradient)
+                            Image(systemName: "square.fill")
+                                .font(.system(size: 7))
+                                .foregroundStyle(.gold.gradient)
+                                .rotationEffect(.degrees(45))
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(.gold.gradient)
+                        }
+                        .padding(.horizontal, 50)
+                    }
+                    .padding(.top, 40)
+                    .padding(.bottom, 28)
+                    .opacity(titleVisible ? 1 : 0)
+                    .offset(y: titleVisible ? 0 : -25)
+                    .animation(.easeOut(duration: 0.5), value: titleVisible)
+
                     LazyVGrid(
                         columns: [GridItem(.adaptive(minimum: 270), spacing: 20)],
                         spacing: 20
                     ) {
                         ForEach(levels.indices, id: \.self) { index in
-                            NewLevelButton(tableIndex: index % 6, level: levels[index])
-                                .padding()
+                            LevelButton(level: levels[index])
+                                .padding(.horizontal, 8)
                                 .opacity(levelsVisible ? 1 : 0)
                                 .offset(y: levelsVisible ? 0 : 40)
                                 .animation(.easeOut(duration: 0.45).delay(0.15 + Double(index) * 0.09), value: levelsVisible)
                         }
                     }
+                    .padding(.bottom, 30)
+
                     Spacer()
                 }
             }
@@ -59,7 +79,7 @@ struct LevelMenuView: View {
         }
         #if DEBUG
         .toolbar {
-            ToolbarItem{
+            ToolbarItem {
                 Button("Reset Levels") {
                     for level in levels {
                         level.reset()
@@ -69,12 +89,11 @@ struct LevelMenuView: View {
         }
         #endif
     }
+
     func unlockNextLevel() {
         //TODO
     }
 }
-
-
 
 #Preview {
     NavigationStack {

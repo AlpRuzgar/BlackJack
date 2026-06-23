@@ -17,9 +17,28 @@ extension ThemeBackground: View {
     var body: some View {
         switch self {
         case .color(let color):
+            color.ignoresSafeArea()
+        case .image(let image):
+            GeometryReader { geometry in
+                    image
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: geometry.size.width, height: geometry.size.height)
+                    .clipped()
+            }
+            .ignoresSafeArea()
+        }
+    }
+
+    @ViewBuilder
+    var preview: some View {
+        switch self {
+        case .color(let color):
             color
         case .image(let image):
-            image.resizable().scaledToFill()
+            image
+                .resizable()
+                .frame(width: 170, height: 200)
         }
     }
 }
@@ -29,13 +48,34 @@ struct ThemeColors: Equatable {
     let secondary: Color
     let alert: Color
     let extra: Color
+    let text: Color
 }
 
-struct Theme: Identifiable, Equatable {
+@Observable
+class Theme: Identifiable {
     var isUnlocked: Bool
     let price: Int
     let id: String
     let background: ThemeBackground
     let colors: ThemeColors
-    let chipImages: [Image]
+    let cardTint: Color?
+    
+    init(isUnlocked: Bool, price: Int, id: String, background: ThemeBackground, colors: ThemeColors, cardTint: Color? = nil) {
+        self.isUnlocked = UserDefaults.standard.bool(forKey: "theme_Unlocked-\(id)")
+        self.price = price
+        self.id = id
+        self.background = background
+        self.colors = colors
+        self.cardTint = cardTint
+    }
+    
+    func unlock() {
+        isUnlocked = true
+        UserDefaults.standard.set(true, forKey: "theme_Unlocked-\(id)")
+    }
+    
+    func lock(){
+        isUnlocked = false
+        UserDefaults.standard.set(false, forKey: "theme_locked-\(id)")
+    }
 }

@@ -19,15 +19,16 @@ struct PlayerHandView: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            HStack(spacing: -30) {
+            HStack(spacing: -35) {
                 ForEach(cards) { card in
                     Image(card.frontImage)
                         .resizable()
                         .interpolation(.high)
                         .antialiased(true)
                         .scaledToFit()
-                        .frame(width: 90, height: 135)
-                        .cornerRadius(8)
+                        .frame(width: 110, height: 165)
+                        .colorMultiply(themeManager.current.cardTint ?? .white)
+                        .cornerRadius(10)
                         .matchedGeometryEffect(id: card.id, in: splitNamespace)
                         .offset(y: dealtCardIDs.contains(card.id) ? 0 : -1000)
                         .onAppear {
@@ -45,14 +46,14 @@ struct PlayerHandView: View {
                     .frame(width: 80, height: 36)
                 Text("\(handValue)")
                     .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundColor(handValue > 21 ? .red : .ivory)
+                    .foregroundColor(handValue > 21 ? .red : themeManager.current.colors.text)
             }
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
 
             if let result = handResult {
                 Text(result.shortLabel)
                     .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .foregroundColor(.ivory)
+                    .foregroundColor(themeManager.current.colors.text)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 4)
                     .background(Capsule().fill(result.color))
@@ -60,7 +61,7 @@ struct PlayerHandView: View {
 
             Text(label)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(isActive ? AnyShapeStyle(Color.gold.gradient) : AnyShapeStyle(Color.ivory.opacity(0.8)))
+                .foregroundStyle(isActive ? AnyShapeStyle(Color.gold.gradient) : AnyShapeStyle(themeManager.current.colors.text.opacity(0.8)))
                 .tracking(2)
         }
         .padding(8)

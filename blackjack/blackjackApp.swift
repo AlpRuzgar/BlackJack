@@ -15,11 +15,13 @@ struct blackjackApp: App {
     }
 
     @State private var themeManager = ThemeManager()
-    
+    @State private var user = User()
+
     var body: some Scene {
         WindowGroup {
             StartView()
                 .environment(themeManager)
+                .environment(user)
         }
     }
 

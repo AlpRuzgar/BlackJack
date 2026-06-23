@@ -8,23 +8,41 @@
 import SwiftUI
 
 struct ThemeStoreView: View {
+    @Environment(User.self) var user
     @Environment(ThemeManager.self) var themeManager
     @State private var selectedTheme: Theme?
     @State private var titleVisible = false
     @State private var cardsVisible = false
-
+    @State private var errorMessage = ""
+    @State private var errorVisible = false
+    
     var body: some View {
         ZStack {
-            themeManager.current.background.ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 0) {
+                    // Coin display — fixed top-right
+                    HStack{
+                        Spacer()
+                        HStack(spacing: 6) {
+                            Image(systemName: "dollarsign.circle.fill")
+                                .foregroundStyle(.gold)
+                            Text("\(user.coins)")
+                                .font(.libreCaslonBold(18))
+                                .foregroundStyle(.gold)
+                        }
+                        
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                        .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
+                        .padding(.trailing)
+                    }
                     VStack(spacing: 10) {
                         Text("Themes")
                             .font(.libreCaslonBold(40))
-                            .foregroundStyle(.ivory)
+                            .foregroundStyle(themeManager.current.colors.text)
                             .tracking(2)
                             .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
-
+                        
                         HStack {
                             Rectangle()
                                 .frame(height: 1)
@@ -44,13 +62,13 @@ struct ThemeStoreView: View {
                     .opacity(titleVisible ? 1 : 0)
                     .offset(y: titleVisible ? 0 : -25)
                     .animation(.easeOut(duration: 0.5), value: titleVisible)
-
+                    
                     LazyVGrid(
                         columns: [GridItem(.adaptive(minimum: 160), spacing: 16)],
                         spacing: 16
                     ) {
                         ForEach(Array(themeManager.themes.enumerated()), id: \.element.id) { index, theme in
-                            ThemeButton(theme: theme, textColor: .ivory, selectedTheme: $selectedTheme)
+                            ThemeButton(theme: theme, textColor: .ivory, selectedTheme: $selectedTheme, showError: showError)
                                 .opacity(cardsVisible ? 1 : 0)
                                 .offset(y: cardsVisible ? 0 : 40)
                                 .animation(.easeOut(duration: 0.45).delay(0.1 + Double(index) * 0.1), value: cardsVisible)
@@ -58,57 +76,83 @@ struct ThemeStoreView: View {
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 30)
+                    
                 }
             }
+            .background(themeManager.current.background)
+            .onAppear {
+                titleVisible = true
+                cardsVisible = true
+            }
+            
+            // Error toast — overlay outside ScrollView so it's always visible
+            Text(errorMessage)
+                .font(.libreCaslon(16))
+                .foregroundStyle(themeManager.current.colors.text)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(Color(red: 0.7, green: 0.05, blue: 0.05), in: RoundedRectangle(cornerRadius: 10))
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(.red.opacity(0.4), lineWidth: 1))
+                .opacity(errorVisible ? 1 : 0)
+                .animation(.easeOut(duration: 0.6), value: errorVisible)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom, 20)
+                .allowsHitTesting(false)
         }
-        .onAppear {
-            titleVisible = true
-            cardsVisible = true
+    }
+
+    func showError(_ message: String) {
+        errorMessage = message
+        errorVisible = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            errorVisible = false
         }
     }
 }
 
 struct ThemeButton: View {
     @Environment(ThemeManager.self) var themeManager
+    @Environment(User.self) var user
+    
     var theme: Theme
     let textColor: Color
     @Binding var selectedTheme: Theme?
-
+    var showError: (String) -> Void
+    
     var isSelected: Bool { selectedTheme?.id == theme.id }
     var isActive: Bool { themeManager.selectedThemeId == theme.id }
-
+    
     var borderColor: Color {
         if isActive { .green }
         else if isSelected { .blue }
         else { .black }
     }
-
+    
     var body: some View {
         Button {
             selectedTheme = theme
         } label: {
             VStack(spacing: 0) {
-                // Theme background preview with sample card
                 ZStack {
-                    theme.background
-                        .frame(height: 200)
-                        .clipped()
-
+                    theme.background.preview
+                    // Theme background preview with sample card
                     Image("AS-\(theme.id)")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 85)
+                        .colorMultiply(theme.cardTint ?? .white)
                         .shadow(color: .black.opacity(0.5), radius: 6, x: 2, y: 3)
+                        .background(theme.background)
                 }
                 .frame(height: 200)
-
+                
                 // Name + status strip
                 VStack(spacing: 3) {
                     Text(theme.id.uppercased())
                         .font(.libreCaslonBold(15))
-                        .foregroundStyle(.ivory)
+                        .foregroundStyle(themeManager.current.colors.text)
                         .tracking(1.5)
-
+                    
                     if isActive {
                         Text("ACTIVE")
                             .font(.libreCaslon(12))
@@ -120,13 +164,13 @@ struct ThemeButton: View {
                     } else {
                         Text("UNLOCKED")
                             .font(.libreCaslon(12))
-                            .foregroundStyle(.ivory.opacity(0.55))
+                            .foregroundStyle(themeManager.current.colors.text.opacity(0.55))
                     }
                 }
                 .padding(.vertical, 10)
                 .frame(maxWidth: .infinity)
                 .background(.black.opacity(0.45))
-
+                
                 // Action row — only visible when expanded
                 if isSelected {
                     Group {
@@ -144,19 +188,26 @@ struct ThemeButton: View {
                                 Text("SELECT")
                                     .font(.system(size: 15, weight: .bold))
                                     .tracking(1.5)
-                                    .foregroundStyle(.ivory)
+                                    .foregroundStyle(themeManager.current.colors.text)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 10)
                                     .background(themeManager.current.colors.secondary)
                             }
                         } else {
                             Button {
-                                // TODO: purchase flow
+                                if user.coins >= selectedTheme!.price {
+                                    print("Bought \(theme.id)")
+                                    selectedTheme?.unlock()
+                                    user.coins -= selectedTheme!.price
+                                }
+                                else {
+                                    showError("Not enough coins")
+                                }
                             } label: {
                                 Text("BUY — \(theme.price)")
                                     .font(.system(size: 15, weight: .bold))
                                     .tracking(1.5)
-                                    .foregroundStyle(.ivory)
+                                    .foregroundStyle(themeManager.current.colors.text)
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 10)
                                     .background(themeManager.current.colors.primary)
@@ -185,4 +236,5 @@ struct ThemeButton: View {
 #Preview {
     ThemeStoreView()
         .environment(ThemeManager())
+        .environment(User())
 }

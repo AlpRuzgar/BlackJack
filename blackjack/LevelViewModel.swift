@@ -31,11 +31,11 @@ class LevelViewModel: GameViewModel {
     var splitted: Bool = false
     var splitCount: Int = 0
     
-    init(level: Level, themeManager: ThemeManager) {
+    init(level: Level) {
         self.level = level
         self.startingBet = level.minimumBet
         self.currentBet = level.minimumBet
-        super.init(gameType: .level, themeManager: themeManager)
+        super.init(gameType: .level)
     }
     
     func placeBet() {

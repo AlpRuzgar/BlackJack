@@ -11,92 +11,149 @@ import SwiftUI
 struct StartView: View {
     @Environment(ThemeManager.self) var themeManager
     
-    @State private var titleOpacity: Double = 0
-    @State private var titleOffset: CGFloat = -30
-    @State private var button1Opacity: Double = 0
-    @State private var button1Offset: CGFloat = 40
-    @State private var button2Opacity: Double = 0
-    @State private var button2Offset: CGFloat = 40
+    @State private var titleVisible = false
+    @State private var buttonsVisible = false
+    @State private var storeVisible = false
+    @State private var showResetAlert = false
     
     var body: some View {
         NavigationStack {
             ZStack {
                 themeManager.current.background
-                    .ignoresSafeArea()
-                
-                VStack {
+                VStack(spacing: 0) {
                     Spacer()
-                    Text("Double on 17")
-                        .font(.libreCaslonBold(50))
-                        .foregroundStyle(.ivory)
-                        .padding()
-                        .opacity(titleOpacity)
-                        .offset(y: titleOffset)
                     
-                    VStack(spacing: 20) {
-                        NavigationLink(destination: LevelMenuView()) {
-                            StartViewButton(text: "TABLES", textColor: .ivory, backgroundColor: themeManager.current.colors.primary)
-                        }
-                        .opacity(button1Opacity)
-                        .offset(y: button1Offset)
+                    // Title + gold divider
+                    VStack(spacing: 14) {
+                        Text("Double on 17")
+                            .font(.libreCaslonBold(52))
+                            .foregroundStyle(themeManager.current.colors.text)
+                            .tracking(1)
+                            .shadow(color: .black.opacity(0.6), radius: 6, x: 2, y: 3)
                         
-                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless, themeManager: themeManager))) {
-                            StartViewButton(text: "ENDLESS MODE", textColor: .ivory, backgroundColor: themeManager.current.colors.alert)
+                        HStack {
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(.gold.gradient)
+                            Image(systemName: "square.fill")
+                                .font(.system(size: 7))
+                                .foregroundStyle(.gold.gradient)
+                                .rotationEffect(.degrees(45))
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(.gold.gradient)
                         }
-                        .opacity(button2Opacity)
-                        .offset(y: button2Offset)
+                        .padding(.horizontal, 40)
                     }
-                    .padding()
+                    .opacity(titleVisible ? 1 : 0)
+                    .offset(y: titleVisible ? 0 : -30)
+                    .animation(.easeOut(duration: 0.6), value: titleVisible)
                     
                     Spacer()
-                    NavigationLink(destination: ThemeStoreView()) {
-                        Image(systemName: "cart")
-                            .font(.system(size: 70))
-                            .foregroundStyle(.white)
-                            .frame(width: 110, height: 110)
-                            .background(themeManager.current.colors.secondary)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .shadow(color: themeManager.current.colors.primary, radius: 5)
-                    }
                     
-                    .padding()
+                    // Main navigation buttons
+                    VStack(spacing: 16) {
+                        NavigationLink(destination: LevelMenuView()) {
+                            StartViewButton(
+                                text: "TABLES",
+                                icon: "rectangle.stack.fill",
+                                backgroundColor: themeManager.current.colors.primary
+                            )
+                        }
+                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless))) {
+                            StartViewButton(
+                                text: "ENDLESS MODE",
+                                icon: "infinity",
+                                backgroundColor: themeManager.current.colors.alert
+                            )
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .opacity(buttonsVisible ? 1 : 0)
+                    .offset(y: buttonsVisible ? 0 : 40)
+                    .animation(.easeOut(duration: 0.5).delay(0.3), value: buttonsVisible)
+                    
+                    Spacer()
+                    
+                    // Theme store link
+                    NavigationLink(destination: ThemeStoreView()) {
+                        HStack(spacing: 10) {
+                            Image(systemName: "paintpalette.fill")
+                                .font(.system(size: 17, weight: .bold))
+                            Text("THEMES")
+                                .font(.libreCaslonBold(16))
+                                .tracking(2)
+                        }
+                        .foregroundStyle(themeManager.current.colors.text)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 14)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(themeManager.current.colors.secondary)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(.gold.opacity(0.5), lineWidth: 1)
+                        )
+                        .shadow(color: themeManager.current.colors.secondary.opacity(0.6), radius: 8)
+                    }
+                    .opacity(storeVisible ? 1 : 0)
+                    .offset(y: storeVisible ? 0 : 20)
+                    .animation(.easeOut(duration: 0.4).delay(0.55), value: storeVisible)
+                    .padding(.bottom, 48)
+                    
                 }
             }
             .onAppear {
-                withAnimation(.easeOut(duration: 0.6)) {
-                    titleOpacity = 1
-                    titleOffset = 0
+                titleVisible = true
+                buttonsVisible = true
+                storeVisible = true
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showResetAlert = true
+                    } label: {
+                        Image(systemName: "trash.fill")
+                            .foregroundStyle(.red)
+                    }
                 }
-                withAnimation(.easeOut(duration: 0.5).delay(0.3)) {
-                    button1Opacity = 1
-                    button1Offset = 0
+            }
+            .alert("Reset All Data", isPresented: $showResetAlert) {
+                Button("Reset", role: .destructive) {
+                    themeManager.reset()
                 }
-                withAnimation(.easeOut(duration: 0.5).delay(0.5)) {
-                    button2Opacity = 1
-                    button2Offset = 0
-                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This will wipe all progress, chips, and unlocked themes.")
             }
         }
     }
 }
 
 struct StartViewButton: View {
+    @Environment(ThemeManager.self) var themeManager
     let text: String
-    let textColor: Color
+    let icon: String
     let backgroundColor: Color
+    
     var body: some View {
-        Text(text)
-            .font(.system(size: 18, weight: .bold, design: .default))
-            .tracking(1.5)
-            .foregroundStyle(textColor)
-            .frame(height: 55)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(backgroundColor)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-            .shadow(color: backgroundColor, radius: 5)
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.system(size: 18, weight: .bold))
+            Text(text)
+                .font(.libreCaslonBold(20))
+                .tracking(1.5)
+        }
+        .foregroundStyle(themeManager.current.colors.text)
+        .frame(height: 62)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(backgroundColor)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .shadow(color: backgroundColor.opacity(0.7), radius: 8)
     }
 }
 
