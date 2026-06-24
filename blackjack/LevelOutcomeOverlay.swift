@@ -51,14 +51,14 @@ struct LevelOutcomeOverlay: View {
                     HStack {
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                         Image(systemName: "square.fill")
                             .font(.system(size: 7))
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                             .rotationEffect(.degrees(45))
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                     }
                     .padding(.horizontal, 16)
 
@@ -93,7 +93,7 @@ struct LevelOutcomeOverlay: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(.gold.opacity(0.3), lineWidth: 1)
+                    .stroke(themeManager.current.colors.secondary.opacity(0.3), lineWidth: 1)
             )
             .padding(.horizontal, 32)
             .scaleEffect(scale)

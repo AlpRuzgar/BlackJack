@@ -38,14 +38,14 @@ struct LevelMenuView: View {
                         HStack {
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                             Image(systemName: "square.fill")
                                 .font(.system(size: 7))
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                                 .rotationEffect(.degrees(45))
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                         }
                         .padding(.horizontal, 50)
                     }

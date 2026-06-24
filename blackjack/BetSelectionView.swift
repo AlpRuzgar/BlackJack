@@ -68,10 +68,10 @@ struct BetSelectionView: View {
                         Spacer()
                         HStack(spacing: 6) {
                             Image(systemName: "dollarsign.circle.fill")
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                             Text("\(viewModel.level.chipsOwned)")
                                 .font(.libreCaslonBold(17))
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 6)
@@ -88,20 +88,20 @@ struct BetSelectionView: View {
                     HStack {
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                         Image(systemName: "square.fill")
                             .font(.system(size: 7))
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                             .rotationEffect(.degrees(45))
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary.gradient)
                     }
                     .padding(.horizontal, 50)
 
                     Text("BET: \(viewModel.startingBet)")
                         .font(.libreCaslonBold(22))
-                        .foregroundStyle(.gold)
+                        .foregroundStyle(themeManager.current.colors.secondary)
                         .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
                 }
                 .opacity(headerVisible ? 1 : 0)
@@ -112,7 +112,7 @@ struct BetSelectionView: View {
                     HStack {
                         Text("YOUR BET")
                             .font(.libreCaslonBold(11))
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                             .tracking(2)
                         Spacer()
                         Text("TAP TO REMOVE")
@@ -126,7 +126,7 @@ struct BetSelectionView: View {
 
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(.gold.opacity(0.3))
+                        .foregroundStyle(themeManager.current.colors.secondary.opacity(0.3))
                         .padding(.horizontal, 14)
 
                     VStack(spacing: 4) {
@@ -178,7 +178,7 @@ struct BetSelectionView: View {
                 .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(.gold.opacity(0.2), lineWidth: 1)
+                        .stroke(themeManager.current.colors.secondary.opacity(0.2), lineWidth: 1)
                 )
                 .padding(.horizontal, 12)
                 .opacity(chipsVisible ? 1 : 0)
@@ -189,7 +189,7 @@ struct BetSelectionView: View {
                     HStack {
                         Text("CHIP TRAY")
                             .font(.libreCaslonBold(11))
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                             .tracking(2)
                         Spacer()
                         Text("TAP TO ADD")
@@ -203,7 +203,7 @@ struct BetSelectionView: View {
 
                     Rectangle()
                         .frame(height: 1)
-                        .foregroundStyle(.gold.opacity(0.3))
+                        .foregroundStyle(themeManager.current.colors.secondary.opacity(0.3))
                         .padding(.horizontal, 14)
 
                     VStack(spacing: 4) {
@@ -237,7 +237,7 @@ struct BetSelectionView: View {
                 .background(.black.opacity(0.35), in: RoundedRectangle(cornerRadius: 12))
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(.gold.opacity(0.15), lineWidth: 1)
+                        .stroke(themeManager.current.colors.secondary.opacity(0.15), lineWidth: 1)
                 )
                 .padding(.horizontal, 12)
                 .opacity(chipsVisible ? 1 : 0)
@@ -246,36 +246,42 @@ struct BetSelectionView: View {
                 // Action buttons
                 VStack(spacing: 6) {
                     HStack(spacing: 8) {
-                        StartViewButton(
-                            text: "MIN BET",
-                            icon: "arrow.down.circle.fill",
-                            backgroundColor: themeManager.current.colors.primary
-                        )
-                        .onTapGesture {
+                        Button {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.minimumBet)
                             increaseBet(by: viewModel.level.minimumBet)
+                        } label: {
+                            StartViewButton(
+                                text: "MIN BET",
+                                icon: "arrow.down.circle.fill",
+                                backgroundColor: themeManager.current.colors.primary
+                            )
                         }
-                        StartViewButton(
-                            text: "MAX BET",
-                            icon: "arrow.up.circle.fill",
-                            backgroundColor: themeManager.current.colors.alert
-                        )
-                        .onTapGesture {
+                        .buttonStyle(PressableButtonStyle())
+                        Button {
                             decreaseBet(by: viewModel.startingBet)
                             calculateBetinChips(bet: viewModel.level.chipsOwned)
                             increaseBet(by: viewModel.level.chipsOwned)
+                        } label: {
+                            StartViewButton(
+                                text: "MAX BET",
+                                icon: "arrow.up.circle.fill",
+                                backgroundColor: themeManager.current.colors.alert
+                            )
                         }
+                        .buttonStyle(PressableButtonStyle())
                     }
-                    StartViewButton(
-                        text: "PLACE BET",
-                        icon: "checkmark.circle.fill",
-                        backgroundColor: themeManager.current.colors.secondary
-                    )
-                    .onTapGesture {
+                    Button {
                         viewModel.placeBet()
                         betsPlaced = true
+                    } label: {
+                        StartViewButton(
+                            text: "PLACE BET",
+                            icon: "checkmark.circle.fill",
+                            backgroundColor: themeManager.current.colors.secondary
+                        )
                     }
+                    .buttonStyle(PressableButtonStyle())
                 }
                 .padding(.horizontal, 12)
                 .padding(.bottom, 8)
@@ -313,27 +319,7 @@ struct BetSelectionView: View {
         .onPreferenceChange(ChipPositionPreferenceKey.self) { positions in
             buttonPositions = positions
         }
-        .navigationBarBackButtonHidden(true)
         .toolbarBackground(.hidden, for: .navigationBar)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 14, weight: .bold))
-                        Text("EXIT")
-                            .font(.libreCaslonBold(14))
-                            .tracking(1)
-                    }
-                    .foregroundStyle(themeManager.current.colors.text)
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 6)
-                    .background(.black.opacity(0.4), in: Capsule())
-                }
-            }
-        }
         .onAppear {
             viewModel.startingBet = viewModel.level.minimumBet
             calculateBetinChips(bet: viewModel.level.minimumBet)

@@ -39,14 +39,14 @@ struct LevelButton: View {
                     HStack {
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                         Image(systemName: "square.fill")
                             .font(.system(size: 7))
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                             .rotationEffect(.degrees(45))
                         Rectangle()
                             .frame(height: 1)
-                            .foregroundStyle(.gold.gradient)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 8)
@@ -56,7 +56,7 @@ struct LevelButton: View {
                         VStack(spacing: 2) {
                             Text("START")
                                 .font(.libreCaslonBold(10))
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.startingChips)")
                                 .font(.libreCaslon(15))
@@ -66,12 +66,12 @@ struct LevelButton: View {
                         
                         Rectangle()
                             .frame(width: 1, height: 40)
-                            .foregroundStyle(.gold.opacity(0.6))
+                            .foregroundStyle(themeManager.current.colors.secondary.opacity(0.6))
                         
                         VStack(spacing: 2) {
                             Text("TARGET")
                                 .font(.libreCaslonBold(10))
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.requiredChips)")
                                 .font(.libreCaslon(15))
@@ -81,12 +81,12 @@ struct LevelButton: View {
                         
                         Rectangle()
                             .frame(width: 1, height: 40)
-                            .foregroundStyle(.gold.opacity(0.6))
+                            .foregroundStyle(themeManager.current.colors.secondary.opacity(0.6))
                         
                         VStack(spacing: 2) {
                             Text("MIN BET")
                                 .font(.libreCaslonBold(10))
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.minimumBet)")
                                 .font(.libreCaslon(15))
@@ -103,11 +103,12 @@ struct LevelButton: View {
                 )
             }
         }
+        .buttonStyle(PressableButtonStyle())
         .frame(width: 360, height: 240)
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(level.isCompleted ? Color.green.opacity(0.6) : Color.gold.opacity(0.25), lineWidth: 2)
+                .stroke(level.isCompleted ? Color.green.opacity(0.6) : themeManager.current.colors.secondary.opacity(0.25), lineWidth: 2)
         )
         .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
     }

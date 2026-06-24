@@ -61,7 +61,7 @@ struct PlayerHandView: View {
 
             Text(label)
                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(isActive ? AnyShapeStyle(Color.gold.gradient) : AnyShapeStyle(themeManager.current.colors.text.opacity(0.8)))
+                .foregroundStyle(isActive ? AnyShapeStyle(themeManager.current.colors.secondary.gradient) : AnyShapeStyle(themeManager.current.colors.text.opacity(0.8)))
                 .tracking(2)
         }
         .padding(8)

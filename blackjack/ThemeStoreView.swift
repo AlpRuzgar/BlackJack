@@ -25,10 +25,10 @@ struct ThemeStoreView: View {
                         Spacer()
                         HStack(spacing: 6) {
                             Image(systemName: "dollarsign.circle.fill")
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                             Text("\(user.coins)")
                                 .font(.libreCaslonBold(18))
-                                .foregroundStyle(.gold)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                         }
                         
                         .padding(.horizontal, 16)
@@ -46,14 +46,14 @@ struct ThemeStoreView: View {
                         HStack {
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                             Image(systemName: "square.fill")
                                 .font(.system(size: 7))
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                                 .rotationEffect(.degrees(45))
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary.gradient)
                         }
                         .padding(.horizontal, 50)
                     }
@@ -160,7 +160,7 @@ struct ThemeButton: View {
                     } else if !theme.isUnlocked {
                         Text("\(theme.price) coins")
                             .font(.libreCaslon(12))
-                            .foregroundStyle(.gold)
+                            .foregroundStyle(themeManager.current.colors.secondary)
                     } else {
                         Text("UNLOCKED")
                             .font(.libreCaslon(12))

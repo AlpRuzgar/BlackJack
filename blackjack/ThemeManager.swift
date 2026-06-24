@@ -15,32 +15,23 @@ class ThemeManager {
               background: .color(.casinogreen),
               colors: ThemeColors(primary: .greenish, secondary: .gold, alert: .crimson, extra: .plum, text: .ivory)),
                 
-        Theme(isUnlocked: false, price: 1000, id: "greece",
-              background: .image(Image("background-greece")),
-              colors: ThemeColors(primary: .greekAegean, secondary: .greekGold, alert: .greekOlive, extra: .greekSky, text: .greekMarble)),
+        Theme(isUnlocked: false, price: 1000, id: "norse",
+              background: .image(Image("background-norse")),
+              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
+              cardTint: .white),
 
         Theme(isUnlocked: false, price: 2000, id: "egypt",
               background: .image(Image("background-egypt")),
               colors: ThemeColors(primary: .egyptLapis, secondary: .egyptGold, alert: .egyptCarnelian, extra: .egyptTurquoise, text: .egyptSandstone),
               cardTint: .white),
-        
-        Theme(isUnlocked: false, price: 3000, id: "norse",
-              background: .image(Image("background-norse")),
-              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
-              cardTint: .white),
-        Theme(isUnlocked: false, price: 3000, id: "norse",
-              background: .image(Image("background-norse")),
-              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
-              cardTint: .white),
-        Theme(isUnlocked: false, price: 3000, id: "norse",
-              background: .image(Image("background-norse")),
-              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
-              cardTint: .white),
-        Theme(isUnlocked: false, price: 3000, id: "norse",
-              background: .image(Image("background-norse")),
-              colors: ThemeColors(primary: .norseSteel, secondary: .norseBronze, alert: .norseBlood, extra: .norseIce, text: .norseFrost),
-              cardTint: .white),
 
+        Theme(isUnlocked: false, price: 3000, id: "greece",
+              background: .image(Image("background-greece")),
+              colors: ThemeColors(primary: .greekAegean, secondary: .greekGold, alert: .greekOlive, extra: .greekSky, text: .greekMarble)),
+        
+        Theme(isUnlocked: false, price: 4000, id: "cyberpunk",
+              background: .image(Image("background-cyberpunk")),
+              colors: ThemeColors(primary: .neonCyan, secondary: .neonLime, alert: .neonMagenta, extra: .neonViolet, text: .neonGhost))
     ]
     
     var selectedThemeId: String {

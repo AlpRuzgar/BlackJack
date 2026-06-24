@@ -34,14 +34,14 @@ struct StartView: View {
                         HStack {
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                             Image(systemName: "square.fill")
                                 .font(.system(size: 7))
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                                 .rotationEffect(.degrees(45))
                             Rectangle()
                                 .frame(height: 1)
-                                .foregroundStyle(.gold.gradient)
+                                .foregroundStyle(themeManager.current.colors.secondary)
                         }
                         .padding(.horizontal, 40)
                     }
@@ -60,6 +60,7 @@ struct StartView: View {
                                 backgroundColor: themeManager.current.colors.primary
                             )
                         }
+                        .buttonStyle(PressableButtonStyle())
                         NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless))) {
                             StartViewButton(
                                 text: "ENDLESS MODE",
@@ -67,6 +68,7 @@ struct StartView: View {
                                 backgroundColor: themeManager.current.colors.alert
                             )
                         }
+                        .buttonStyle(PressableButtonStyle())
                     }
                     .padding(.horizontal, 24)
                     .opacity(buttonsVisible ? 1 : 0)
@@ -93,10 +95,11 @@ struct StartView: View {
                         )
                         .overlay(
                             RoundedRectangle(cornerRadius: 14)
-                                .stroke(.gold.opacity(0.5), lineWidth: 1)
+                                .stroke(themeManager.current.colors.secondary.opacity(0.5), lineWidth: 1)
                         )
                         .shadow(color: themeManager.current.colors.secondary.opacity(0.6), radius: 8)
                     }
+                    .buttonStyle(PressableButtonStyle())
                     .opacity(storeVisible ? 1 : 0)
                     .offset(y: storeVisible ? 0 : 20)
                     .animation(.easeOut(duration: 0.4).delay(0.55), value: storeVisible)
