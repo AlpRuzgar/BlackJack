@@ -10,10 +10,6 @@ import CoreText
 
 @main
 struct blackjackApp: App {
-    init() {
-        registerFonts()
-    }
-
     @State private var themeManager = ThemeManager()
     @State private var user = User()
 
@@ -22,19 +18,6 @@ struct blackjackApp: App {
             StartView()
                 .environment(themeManager)
                 .environment(user)
-        }
-    }
-
-    private func registerFonts() {
-        let fontFileNames = [
-            "Anton-Regular",
-            "LibreCaslonText-Regular",
-            "LibreCaslonText-Bold",
-            "LibreCaslonText-Italic"
-        ]
-        for name in fontFileNames {
-            guard let url = Bundle.main.url(forResource: name, withExtension: "ttf") else { continue }
-            CTFontManagerRegisterFontsForURL(url as CFURL, .process, nil)
         }
     }
 }

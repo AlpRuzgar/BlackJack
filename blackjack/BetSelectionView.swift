@@ -70,7 +70,7 @@ struct BetSelectionView: View {
                             Image(systemName: "dollarsign.circle.fill")
                                 .foregroundStyle(themeManager.current.colors.secondary)
                             Text("\(viewModel.level.chipsOwned)")
-                                .font(.libreCaslonBold(17))
+                                .font(.system(size: 17, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                         }
                         .padding(.horizontal, 14)
@@ -80,7 +80,7 @@ struct BetSelectionView: View {
                     .padding(.horizontal, 16)
 
                     Text("PLACE YOUR BET")
-                        .font(.libreCaslonBold(28))
+                        .font(.system(size: 28, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.text)
                         .tracking(1)
                         .shadow(color: .black.opacity(0.5), radius: 4, x: 1, y: 2)
@@ -100,7 +100,7 @@ struct BetSelectionView: View {
                     .padding(.horizontal, 50)
 
                     Text("BET: \(viewModel.startingBet)")
-                        .font(.libreCaslonBold(22))
+                        .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.secondary)
                         .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
                 }
@@ -111,12 +111,12 @@ struct BetSelectionView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("YOUR BET")
-                            .font(.libreCaslonBold(11))
+                            .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.secondary)
                             .tracking(2)
                         Spacer()
                         Text("TAP TO REMOVE")
-                            .font(.libreCaslon(11))
+                            .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.text.opacity(0.5))
                             .tracking(1)
                     }
@@ -188,12 +188,12 @@ struct BetSelectionView: View {
                 VStack(spacing: 0) {
                     HStack {
                         Text("CHIP TRAY")
-                            .font(.libreCaslonBold(11))
+                            .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.secondary)
                             .tracking(2)
                         Spacer()
                         Text("TAP TO ADD")
-                            .font(.libreCaslon(11))
+                            .font(.system(size: 11, weight: .bold))
                             .foregroundStyle(.ivory.opacity(0.5))
                             .tracking(1)
                     }
@@ -292,7 +292,7 @@ struct BetSelectionView: View {
 
             // Error toast
             Text(errorMessage)
-                .font(.libreCaslon(16))
+                .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(themeManager.current.colors.text)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
@@ -371,7 +371,7 @@ struct BetSelectionView: View {
 
     func chipAmountDisplay(_ amount: Int) -> some View {
         Text("\(amount)")
-            .font(.libreCaslonBold(15))
+            .font(.system(size: 15, weight: .bold))
             .foregroundStyle(themeManager.current.colors.text)
             .frame(width: 20)
             .opacity(amount > 0 ? 1 : 0)

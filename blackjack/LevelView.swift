@@ -27,7 +27,7 @@ struct LevelView: View {
             if !betsPlaced {
                 BetSelectionView(viewModel: viewModel, betsPlaced: $betsPlaced)
             } else {
-                GameView(viewModel: viewModel) {
+                GameView(viewModel: viewModel, onRestart: {
                     betsPlaced = false
                     if viewModel.checkLevelPass() {
                         level.markCompleted()
@@ -38,7 +38,7 @@ struct LevelView: View {
                         levelWon = false
                         showOutcomeOverlay = true
                     }
-                }
+                }, isBackButtonHidden: true)
             }
 
             if showOutcomeOverlay {

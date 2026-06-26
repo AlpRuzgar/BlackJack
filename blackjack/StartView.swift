@@ -26,7 +26,7 @@ struct StartView: View {
                     // Title + gold divider
                     VStack(spacing: 14) {
                         Text("Double on 17")
-                            .font(.libreCaslonBold(52))
+                            .font(.system(size: 52, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.text)
                             .tracking(1)
                             .shadow(color: .black.opacity(0.6), radius: 6, x: 2, y: 3)
@@ -61,7 +61,7 @@ struct StartView: View {
                             )
                         }
                         .buttonStyle(PressableButtonStyle())
-                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless))) {
+                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)) {
                             StartViewButton(
                                 text: "ENDLESS MODE",
                                 icon: "infinity",
@@ -83,7 +83,7 @@ struct StartView: View {
                             Image(systemName: "paintpalette.fill")
                                 .font(.system(size: 17, weight: .bold))
                             Text("THEMES")
-                                .font(.libreCaslonBold(16))
+                                .font(.system(size: 16, weight: .bold))
                                 .tracking(2)
                         }
                         .foregroundStyle(themeManager.current.colors.text)
@@ -145,7 +145,7 @@ struct StartViewButton: View {
             Image(systemName: icon)
                 .font(.system(size: 18, weight: .bold))
             Text(text)
-                .font(.libreCaslonBold(20))
+                .font(.system(size: 20, weight: .bold))
                 .tracking(1.5)
         }
         .foregroundStyle(themeManager.current.colors.text)

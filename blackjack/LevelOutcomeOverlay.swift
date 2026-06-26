@@ -43,7 +43,7 @@ struct LevelOutcomeOverlay: View {
                 // Title + gold divider + subtitle
                 VStack(spacing: 10) {
                     Text(title)
-                        .font(.libreCaslonBold(30))
+                        .font(.system(size: 30, weight: .bold))
                         .tracking(1.5)
                         .foregroundStyle(themeManager.current.colors.text)
                         .shadow(color: .black.opacity(0.5), radius: 4, x: 1, y: 2)
@@ -63,7 +63,7 @@ struct LevelOutcomeOverlay: View {
                     .padding(.horizontal, 16)
 
                     Text(subtitle)
-                        .font(.libreCaslonItalic(17))
+                        .font(.system(size: 17, weight: .bold, design: .serif))
                         .foregroundStyle(themeManager.current.colors.text.opacity(0.75))
                         .multilineTextAlignment(.center)
                 }
@@ -121,7 +121,7 @@ private struct OutcomeButton: View {
                 Image(systemName: icon)
                     .font(.system(size: 16, weight: .bold))
                 Text(text)
-                    .font(.libreCaslonBold(18))
+                    .font(.system(size: 18, weight: .bold))
                     .tracking(1.5)
             }
             .foregroundStyle(textColor)

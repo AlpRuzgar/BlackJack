@@ -30,7 +30,7 @@ struct LevelMenuView: View {
                     // Title + gold divider
                     VStack(spacing: 10) {
                         Text("Select Level")
-                            .font(.libreCaslonBold(40))
+                            .font(.system(size: 40, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.text)
                             .tracking(2)
                             .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)

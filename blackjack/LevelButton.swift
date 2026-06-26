@@ -30,7 +30,7 @@ struct LevelButton: View {
                 
                 VStack(spacing: -5) {
                     Text(level.name)
-                        .font(.libreCaslonBold(25))
+                        .font(.system(size: 35, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.text)
                         .shadow(color: .black.opacity(0.5), radius: 3, x: 1, y: 1)
                         .padding(.top, 18)
@@ -55,11 +55,11 @@ struct LevelButton: View {
                     HStack(spacing: -20) {
                         VStack(spacing: 2) {
                             Text("START")
-                                .font(.libreCaslonBold(10))
+                                .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.startingChips)")
-                                .font(.libreCaslon(15))
+                                .font(.system(size: 15, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.text)
                         }
                         .frame(maxWidth: .infinity)
@@ -70,11 +70,11 @@ struct LevelButton: View {
                         
                         VStack(spacing: 2) {
                             Text("TARGET")
-                                .font(.libreCaslonBold(10))
+                                .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.requiredChips)")
-                                .font(.libreCaslon(15))
+                                .font(.system(size: 15, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.text)
                         }
                         .frame(maxWidth: .infinity)
@@ -85,11 +85,11 @@ struct LevelButton: View {
                         
                         VStack(spacing: 2) {
                             Text("MIN BET")
-                                .font(.libreCaslonBold(10))
+                                .font(.system(size: 10, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                                 .tracking(1)
                             Text("\(level.minimumBet)")
-                                .font(.libreCaslon(15))
+                                .font(.system(size: 15, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.text)
                         }
                         .frame(maxWidth: .infinity)

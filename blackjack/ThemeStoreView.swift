@@ -27,7 +27,7 @@ struct ThemeStoreView: View {
                             Image(systemName: "dollarsign.circle.fill")
                                 .foregroundStyle(themeManager.current.colors.secondary)
                             Text("\(user.coins)")
-                                .font(.libreCaslonBold(18))
+                                .font(.system(size: 18, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                         }
                         
@@ -38,7 +38,7 @@ struct ThemeStoreView: View {
                     }
                     VStack(spacing: 10) {
                         Text("Themes")
-                            .font(.libreCaslonBold(40))
+                            .font(.system(size: 40, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.text)
                             .tracking(2)
                             .shadow(color: .black.opacity(0.5), radius: 4, x: 2, y: 2)
@@ -87,7 +87,7 @@ struct ThemeStoreView: View {
             
             // Error toast — overlay outside ScrollView so it's always visible
             Text(errorMessage)
-                .font(.libreCaslon(16))
+                .font(.system(size: 16, weight: .bold))
                 .foregroundStyle(themeManager.current.colors.text)
                 .padding(.horizontal, 14)
                 .padding(.vertical, 10)
@@ -149,21 +149,21 @@ struct ThemeButton: View {
                 // Name + status strip
                 VStack(spacing: 3) {
                     Text(theme.id.uppercased())
-                        .font(.libreCaslonBold(15))
+                        .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.text)
                         .tracking(1.5)
                     
                     if isActive {
                         Text("ACTIVE")
-                            .font(.libreCaslon(12))
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(.green)
                     } else if !theme.isUnlocked {
                         Text("\(theme.price) coins")
-                            .font(.libreCaslon(12))
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.secondary)
                     } else {
                         Text("UNLOCKED")
-                            .font(.libreCaslon(12))
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundStyle(themeManager.current.colors.text.opacity(0.55))
                     }
                 }
@@ -176,7 +176,7 @@ struct ThemeButton: View {
                     Group {
                         if isActive {
                             Text("Currently Active")
-                                .font(.libreCaslon(13))
+                                .font(.system(size: 13, weight: .bold))
                                 .foregroundStyle(.green)
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
