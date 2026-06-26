@@ -12,9 +12,9 @@ class Card: Identifiable {
     let value: String
     let suit: String
     var frontImage: String = ""
-    let backImage: String = "BACK"
+    var backImage: String = ""
     var isClosed: Bool = false
-    
+
     init(value: String, suit: String) {
         self.value = value
         self.suit = suit

@@ -23,6 +23,7 @@ enum GameType {
 }
 
 class GameViewModel: ObservableObject {
+    var themeManager: ThemeManager = ThemeManager()
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
@@ -51,7 +52,12 @@ class GameViewModel: ObservableObject {
         for value in cardValueArray {
             for suit in suitsArray {
                 let card = Card(value: value, suit: suit)
-                card.frontImage = "\(value)\(suit)"
+                if card.value == "J"||card.value == "Q"||card.value == "K"||card.value == "A" {
+                    card.frontImage = "\(value)\(suit)-\(themeManager.current.id)"
+                } else {
+                    card.frontImage = "\(value)\(suit)"
+                }
+                card.backImage = "Back-\(themeManager.current.id)"
                 cardsArray.append(card)
             }
         }

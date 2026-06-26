@@ -9,34 +9,36 @@ import SwiftUI
 
 struct LevelView: View {
     @ObservedObject var level: Level
-    let startingChips: Int
     @State var betsPlaced = false
     @State var showOutcomeOverlay = false
     @State var levelWon = false
     @StateObject var viewModel: LevelViewModel
+    @Environment(ThemeManager.self) var themeManager
+    @Environment(User.self) var user
 
     init(level: Level) {
         self.level = level
-        self.startingChips = level.chipsOwned
-        _viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
+        self._viewModel = StateObject(wrappedValue: LevelViewModel(level: level))
     }
-
+    
+    
     var body: some View {
         ZStack {
             if !betsPlaced {
-                NewBetSelectionView(viewModel: viewModel, betsPlaced: $betsPlaced)
+                BetSelectionView(viewModel: viewModel, betsPlaced: $betsPlaced)
             } else {
-                GameView(viewModel: viewModel) {
+                GameView(viewModel: viewModel, onRestart: {
                     betsPlaced = false
                     if viewModel.checkLevelPass() {
                         level.markCompleted()
                         levelWon = true
                         showOutcomeOverlay = true
+                        user.increaseCoins(by: level.requiredChips/10)
                     } else if viewModel.checkOutOfChips() {
                         levelWon = false
                         showOutcomeOverlay = true
                     }
-                }
+                }, isBackButtonHidden: true)
             }
 
             if showOutcomeOverlay {
@@ -61,4 +63,5 @@ struct LevelView: View {
     NavigationStack {
         LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 30))
     }
+    .environment(ThemeManager())
 }

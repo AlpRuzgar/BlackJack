@@ -13,7 +13,7 @@ struct ButtonView: View {
     var action: () -> Void
     var backgroundColor: Color
     var textColor: Color
-    var isGradient: Bool = false
+    @Environment(ThemeManager.self) var themeManager
     
     var body: some View {
         Button{
@@ -25,36 +25,40 @@ struct ButtonView: View {
                 .foregroundStyle(textColor)
                 .frame(height: 55)
                 .frame(maxWidth: .infinity)
+                .buttonStyle(PressableButtonStyle())
                 .background(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(backgroundColor)
                 )            
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .shadow(color: .black,radius: 2, x: -5, y:5)
+        .shadow(color: backgroundColor, radius: 5)
     }
-    init( action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color, isGradient: Bool = false) {
+    init( action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color) {
         self.text = text
         self.action = action
         self.backgroundColor = backgroundColor
         self.textColor = textColor
-        self.isGradient = isGradient
     }
 }
 
-// Custom button style for press animation
 struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .opacity(configuration.isPressed ? 0.9 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
+            .animation(
+                configuration.isPressed
+                    ? .easeIn(duration: 0.08)
+                    : .spring(response: 0.35, dampingFraction: 0.45),
+                value: configuration.isPressed
+            )
     }
 }
 
 #Preview {
-    ButtonView(action: {}, text: "Test", backgroundColor: .blue, textColor: .whiteish, isGradient: true)
+    ButtonView(action: {}, text: "Test", backgroundColor: .blue, textColor: .ivory)
         .padding(20)
+        .environment(ThemeManager())
 }
 
 //TODO: needs rework, looks like shit
