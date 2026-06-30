@@ -15,6 +15,7 @@ struct ThemeStoreView: View {
     @State private var cardsVisible = false
     @State private var errorMessage = ""
     @State private var errorVisible = false
+    @State private var isInfoShowing = false
     
     var body: some View {
         ZStack {
@@ -80,11 +81,28 @@ struct ThemeStoreView: View {
                 }
             }
             .background(themeManager.current.background)
+            .toolbar {
+                Button("", systemImage: "info") {
+                    isInfoShowing = true
+                }
+            }
+            .toolbarBackground(.hidden, for: .navigationBar)
             .onAppear {
                 titleVisible = true
                 cardsVisible = true
             }
             
+            if isInfoShowing {
+                InfoOverlay(isPresented: $isInfoShowing, title: "Theme Store") {
+                    VStack(spacing: 4) {
+                        ThemeInfoRow(icon: "dollarsign.circle.fill", color: themeManager.current.colors.secondary, text: "Buy locked themes with coins.")
+                        ThemeInfoRow(icon: "trophy.fill", color: themeManager.current.colors.secondary, text: "Earn coins by completing levels.")
+                    }
+                    .foregroundStyle(themeManager.current.colors.text)
+                    .font(.system(size: 16, weight: .medium))
+                }
+            }
+
             // Error toast — overlay outside ScrollView so it's always visible
             Text(errorMessage)
                 .font(.system(size: 16, weight: .bold))
@@ -233,8 +251,30 @@ struct ThemeButton: View {
     }
 }
 
+private struct ThemeInfoRow: View {
+    let icon: String
+    let color: Color
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(color)
+                .frame(width: 28)
+            Text(text)
+                .multilineTextAlignment(.leading)
+            Spacer()
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 4)
+    }
+}
+
 #Preview {
-    ThemeStoreView()
-        .environment(ThemeManager())
-        .environment(User())
+    NavigationStack {
+        ThemeStoreView()
+            .environment(ThemeManager())
+            .environment(User())
+    }
 }

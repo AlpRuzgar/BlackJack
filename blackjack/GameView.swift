@@ -20,6 +20,7 @@ struct GameView: View {
     @State private var buttonsOpacity: Double = 0
     @State private var buttonsOffset: CGFloat = 50
     
+    @State private var isHowToShowing = false
     let isBackButtonHidden: Bool
     
     var body: some View {
@@ -156,9 +157,30 @@ struct GameView: View {
                         .opacity(buttonsOpacity)
                         .offset(y: buttonsOffset)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .disabled(isHowToShowing)
                     }
                 }
                 .animation(.easeInOut(duration: 0.4), value: viewModel.isGameOver)
+                
+                if isHowToShowing {
+                    InfoOverlay(isPresented: $isHowToShowing, title: "How to Play?", overlayBody: {
+                        VStack(spacing: 4) {
+                            InfoRow(icon: "plus", color: themeManager.current.colors.alert, text: "Hit: draw a card.")
+                            InfoRow(icon: "hand.raised.fill", color: themeManager.current.colors.primary, text: "Stand: end your turn.")
+                            InfoRow(icon: "chevron.up.2", color: themeManager.current.colors.extra, text: "Double: double your bet, draw one card.")
+                            InfoRow(icon: "arrow.left.and.right", color: themeManager.current.colors.secondary, text: "Split: split a matching pair into two hands.")
+                        }
+                        .foregroundStyle(themeManager.current.colors.text)
+                        .font(.system(size: 20, weight: .medium))
+                    })
+                        .padding(10)
+                    
+                }
+            }
+            .toolbar {
+                Button("", systemImage: "info"){
+                    isHowToShowing = true
+                }
             }
         }
         .navigationBarBackButtonHidden(isBackButtonHidden)
@@ -179,6 +201,7 @@ struct GameView: View {
         }
         .onChange(of: viewModel.isRoundComplete) {
             guard viewModel.isRoundComplete else { return }
+            isHowToShowing = false
             Task {
                 try? await Task.sleep(for: .seconds(2))
                 dealtCardIDs.removeAll()
@@ -242,7 +265,7 @@ struct GameView: View {
             .antialiased(true)
             .scaledToFit()
             .frame(width: 110, height: 165)
-//            .colorMultiply(themeManager.current.cardTint ?? .white)
+        //            .colorMultiply(themeManager.current.cardTint ?? .white)
             .cornerRadius(10)
             .offset(y: dealtCardIDs.contains(card.id) ? 0 : -1000)
             .onAppear {
@@ -263,7 +286,7 @@ struct GameView: View {
         }
         .buttonStyle(PressableButtonStyle())
     }
-
+    
     @ViewBuilder
     private var chipBar: some View {
         if let levelVM = viewModel as? LevelViewModel {
@@ -311,6 +334,26 @@ struct GameView: View {
     }
 }
 
+
+private struct InfoRow: View {
+    let icon: String
+    let color: Color
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(color)
+                .frame(width: 28)
+            Text(text)
+                .multilineTextAlignment(.leading)
+            Spacer()
+        }
+        .padding(.vertical, 8)
+        .padding(.horizontal, 4)
+    }
+}
 
 #Preview {
     let tm = ThemeManager()

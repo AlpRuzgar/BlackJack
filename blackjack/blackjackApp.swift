@@ -21,3 +21,7 @@ struct blackjackApp: App {
         }
     }
 }
+
+//TODO: yeni temalar ekle
+//TODO: sesleri ekle
+//TODO: son oynanan elin iddiasını oyuna ekle
