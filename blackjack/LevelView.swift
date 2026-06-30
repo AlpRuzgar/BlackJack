@@ -25,7 +25,7 @@ struct LevelView: View {
     var body: some View {
         ZStack {
             if !betsPlaced {
-                BetSelectionView(viewModel: viewModel, betsPlaced: $betsPlaced)
+                BetSelectionView(vm: viewModel, betsPlaced: $betsPlaced)
             } else {
                 GameView(viewModel: viewModel, onRestart: {
                     betsPlaced = false

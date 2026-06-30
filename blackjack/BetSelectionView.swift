@@ -39,7 +39,7 @@ extension View {
 }
 
 struct BetSelectionView: View {
-    @ObservedObject var viewModel: LevelViewModel
+    @ObservedObject var vm: LevelViewModel
     @Binding var betsPlaced: Bool
     @Environment(ThemeManager.self) var themeManager
     @Environment(\.dismiss) private var dismiss
@@ -69,7 +69,7 @@ struct BetSelectionView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "dollarsign.circle.fill")
                                 .foregroundStyle(themeManager.current.colors.secondary)
-                            Text("\(viewModel.level.chipsOwned)")
+                            Text("\(vm.level.chipsOwned)")
                                 .font(.system(size: 17, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                         }
@@ -99,7 +99,7 @@ struct BetSelectionView: View {
                     }
                     .padding(.horizontal, 50)
 
-                    Text("BET: \(viewModel.startingBet)")
+                    Text("BET: \(vm.startingBet)")
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.secondary)
                         .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
@@ -247,9 +247,9 @@ struct BetSelectionView: View {
                 VStack(spacing: 6) {
                     HStack(spacing: 8) {
                         Button {
-                            decreaseBet(by: viewModel.startingBet)
-                            calculateBetinChips(bet: viewModel.level.minimumBet)
-                            increaseBet(by: viewModel.level.minimumBet)
+                            decreaseBet(by: vm.startingBet)
+                            calculateBetinChips(bet: vm.level.minimumBet)
+                            increaseBet(by: vm.level.minimumBet)
                         } label: {
                             StartViewButton(
                                 text: "MIN BET",
@@ -259,9 +259,9 @@ struct BetSelectionView: View {
                         }
                         .buttonStyle(PressableButtonStyle())
                         Button {
-                            decreaseBet(by: viewModel.startingBet)
-                            calculateBetinChips(bet: viewModel.level.chipsOwned)
-                            increaseBet(by: viewModel.level.chipsOwned)
+                            decreaseBet(by: vm.startingBet)
+                            calculateBetinChips(bet: vm.level.chipsOwned)
+                            increaseBet(by: vm.level.chipsOwned)
                         } label: {
                             StartViewButton(
                                 text: "MAX BET",
@@ -272,8 +272,9 @@ struct BetSelectionView: View {
                         .buttonStyle(PressableButtonStyle())
                     }
                     Button {
-                        viewModel.placeBet()
+                        vm.placeBet()
                         betsPlaced = true
+                        vm.startingBet = vm.currentBet
                     } label: {
                         StartViewButton(
                             text: "PLACE BET",
@@ -321,8 +322,15 @@ struct BetSelectionView: View {
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .onAppear {
-            viewModel.startingBet = viewModel.level.minimumBet
-            calculateBetinChips(bet: viewModel.level.minimumBet)
+//            viewModel.startingBet = viewModel.level.minimumBet
+            if vm.level.chipsOwned >= vm.startingBet {
+                vm.startingBet = vm.startingBet
+                calculateBetinChips(bet: vm.startingBet)
+            }
+            else {
+                vm.startingBet = vm.level.minimumBet
+                calculateBetinChips(bet: vm.level.minimumBet)
+            }
             withAnimation(.easeOut(duration: 0.4)) {
                 headerVisible = true
             }
@@ -350,21 +358,21 @@ struct BetSelectionView: View {
     }
 
     func increaseBet(by bet: Int) {
-        viewModel.startingBet += bet
+        vm.startingBet += bet
     }
     func decreaseBet(by bet: Int) {
-        viewModel.startingBet -= bet
+        vm.startingBet -= bet
     }
 
     @discardableResult
     func doIncrease(value: Int) -> Bool {
-        guard viewModel.level.chipsOwned >= viewModel.startingBet + value else { showError("You don't have enough chips"); return false }
+        guard vm.level.chipsOwned >= vm.startingBet + value else { showError("You don't have enough chips"); return false }
         increaseBet(by: value)
         return true
     }
 
     func doDecrease(chipAmount: inout Int, value: Int) {
-        guard viewModel.startingBet - value >= viewModel.level.minimumBet else { showError("You can't bet less than \(viewModel.level.minimumBet)"); return }
+        guard vm.startingBet - value >= vm.level.minimumBet else { showError("You can't bet less than \(vm.level.minimumBet)"); return }
         decreaseBet(by: value)
         chipAmount -= 1
     }
@@ -441,7 +449,7 @@ struct ChipButton: View {
 
 #Preview {
     BetSelectionView(
-        viewModel: LevelViewModel(level: Level(id: 1, name: "Preview", startingChips: 1000, requiredChips: 2000, minimumBet: 10)),
+        vm: LevelViewModel(level: Level(id: 1, name: "Preview", startingChips: 1000, requiredChips: 2000, minimumBet: 10)),
         betsPlaced: .constant(false)
     )
     .environment(ThemeManager())
