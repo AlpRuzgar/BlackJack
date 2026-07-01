@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct LevelView: View {
     @ObservedObject var level: Level
@@ -53,6 +54,9 @@ struct LevelView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: showOutcomeOverlay)
+        .onAppear{
+            AudioServicesPlaySystemSound(1306)
+        }
         .onDisappear {
             viewModel.resetGame()
         }
@@ -60,8 +64,8 @@ struct LevelView: View {
 }
 
 #Preview {
-    NavigationStack {
-        LevelView(level: Level(id: 4, name: "1", startingChips: 1000, requiredChips: 10000, minimumBet: 30))
+    LevelOutcomeOverlay(isWon: true) {
+        
     }
     .environment(ThemeManager())
 }

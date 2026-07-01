@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+/*
 struct ActiveFlyingChip: Identifiable {
     let id = UUID()
     let image: Image
@@ -37,11 +38,13 @@ extension View {
         )
     }
 }
+*/
 
 struct BetSelectionView: View {
     @ObservedObject var vm: LevelViewModel
     @Binding var betsPlaced: Bool
     @Environment(ThemeManager.self) var themeManager
+    @Environment(SoundManager.self) var soundManager
     @Environment(\.dismiss) private var dismiss
     @State var errorMessage = ""
     @State private var errorVisible = false
@@ -52,8 +55,8 @@ struct BetSelectionView: View {
     @State var chip100BetAmount = 0
     @State var chip500BetAmount = 0
 
-    @State private var buttonPositions: [String: CGPoint] = [:]
-    @State private var flyingChips: [ActiveFlyingChip] = []
+    // @State private var buttonPositions: [String: CGPoint] = [:]
+    // @State private var flyingChips: [ActiveFlyingChip] = []
 
     @State private var headerVisible = false
     @State private var chipsVisible = false
@@ -134,43 +137,48 @@ struct BetSelectionView: View {
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip1BetAmount, value: 1)
                             }, image: Image("1-\(themeManager.current.id)"))
-                            .capturePosition(key: "decrease_1")
                             .opacity(chip1BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip1BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip1BetAmount > 0)
                             .allowsHitTesting(chip1BetAmount > 0)
-                            chipAmountDisplay(chip1BetAmount)
+                            ChipCountDisplay(amount: chip1BetAmount)
 
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip5BetAmount, value: 5)
                             }, image: Image("5-\(themeManager.current.id)"))
-                            .capturePosition(key: "decrease_5")
                             .opacity(chip5BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip5BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip5BetAmount > 0)
                             .allowsHitTesting(chip5BetAmount > 0)
-                            chipAmountDisplay(chip5BetAmount)
+                            ChipCountDisplay(amount: chip5BetAmount)
 
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip25BetAmount, value: 25)
                             }, image: Image("25-\(themeManager.current.id)"))
-                            .capturePosition(key: "decrease_25")
                             .opacity(chip25BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip25BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip25BetAmount > 0)
                             .allowsHitTesting(chip25BetAmount > 0)
-                            chipAmountDisplay(chip25BetAmount)
+                            ChipCountDisplay(amount: chip25BetAmount)
                         }
                         HStack {
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip100BetAmount, value: 100)
                             }, image: Image("100-\(themeManager.current.id)"))
-                            .capturePosition(key: "decrease_100")
                             .opacity(chip100BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip100BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip100BetAmount > 0)
                             .allowsHitTesting(chip100BetAmount > 0)
-                            chipAmountDisplay(chip100BetAmount)
+                            ChipCountDisplay(amount: chip100BetAmount)
 
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip500BetAmount, value: 500)
                             }, image: Image("500-\(themeManager.current.id)"))
-                            .capturePosition(key: "decrease_500")
                             .opacity(chip500BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip500BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip500BetAmount > 0)
                             .allowsHitTesting(chip500BetAmount > 0)
-                            chipAmountDisplay(chip500BetAmount)
+                            ChipCountDisplay(amount: chip500BetAmount)
                         }
                     }
                     .padding(.vertical, 8)
@@ -209,27 +217,22 @@ struct BetSelectionView: View {
                     VStack(spacing: 4) {
                         HStack {
                             ChipButton(action: {
-                                if doIncrease(value: 1) { launchChip(value: 1, image: Image("1-\(themeManager.current.id)")) { chip1BetAmount += 1 } }
+                                if doIncrease(value: 1) { chip1BetAmount += 1 }
                             }, image: Image("1-\(themeManager.current.id)"))
-                            .capturePosition(key: "increase_1")
                             ChipButton(action: {
-                                if doIncrease(value: 5) { launchChip(value: 5, image: Image("5-\(themeManager.current.id)")) { chip5BetAmount += 1 } }
+                                if doIncrease(value: 5) { chip5BetAmount += 1 }
                             }, image: Image("5-\(themeManager.current.id)"))
-                            .capturePosition(key: "increase_5")
                             ChipButton(action: {
-                                if doIncrease(value: 25) { launchChip(value: 25, image: Image("25-\(themeManager.current.id)")) { chip25BetAmount += 1 } }
+                                if doIncrease(value: 25) { chip25BetAmount += 1 }
                             }, image: Image("25-\(themeManager.current.id)"))
-                            .capturePosition(key: "increase_25")
                         }
                         HStack {
                             ChipButton(action: {
-                                if doIncrease(value: 100) { launchChip(value: 100, image: Image("100-\(themeManager.current.id)")) { chip100BetAmount += 1 } }
+                                if doIncrease(value: 100) { chip100BetAmount += 1 }
                             }, image: Image("100-\(themeManager.current.id)"))
-                            .capturePosition(key: "increase_100")
                             ChipButton(action: {
-                                if doIncrease(value: 500) { launchChip(value: 500, image: Image("500-\(themeManager.current.id)")) { chip500BetAmount += 1 } }
+                                if doIncrease(value: 500) { chip500BetAmount += 1 }
                             }, image: Image("500-\(themeManager.current.id)"))
-                            .capturePosition(key: "increase_500")
                         }
                     }
                     .padding(.vertical, 8)
@@ -246,43 +249,45 @@ struct BetSelectionView: View {
                 // Action buttons
                 VStack(spacing: 6) {
                     HStack(spacing: 8) {
-                        Button {
-                            decreaseBet(by: vm.startingBet)
-                            calculateBetinChips(bet: vm.level.minimumBet)
-                            increaseBet(by: vm.level.minimumBet)
-                        } label: {
-                            StartViewButton(
-                                text: "MIN BET",
-                                icon: "arrow.down.circle.fill",
-                                backgroundColor: themeManager.current.colors.primary
-                            )
-                        }
-                        .buttonStyle(PressableButtonStyle())
-                        Button {
-                            decreaseBet(by: vm.startingBet)
-                            calculateBetinChips(bet: vm.level.chipsOwned)
-                            increaseBet(by: vm.level.chipsOwned)
-                        } label: {
-                            StartViewButton(
-                                text: "MAX BET",
-                                icon: "arrow.up.circle.fill",
-                                backgroundColor: themeManager.current.colors.alert
-                            )
-                        }
-                        .buttonStyle(PressableButtonStyle())
-                    }
-                    Button {
-                        vm.placeBet()
-                        betsPlaced = true
-                        vm.startingBet = vm.currentBet
-                    } label: {
-                        StartViewButton(
-                            text: "PLACE BET",
-                            icon: "checkmark.circle.fill",
-                            backgroundColor: themeManager.current.colors.secondary
+                        ActionButton(
+                            text: "MIN BET",
+                            icon: "arrow.down.circle.fill",
+                            backgroundColor: themeManager.current.colors.primary,
+                            foregroundColor: themeManager.current.colors.text,
+                            action: {
+                                decreaseBet(by: vm.startingBet)
+                                calculateBetinChips(bet: vm.level.minimumBet)
+                                increaseBet(by: vm.level.minimumBet)
+                                soundManager.play("chipPlacingSound.mp3")
+                            },
+                            doesPlaySound: false
+                        )
+                        ActionButton(
+                            text: "MAX BET",
+                            icon: "arrow.up.circle.fill",
+                            backgroundColor: themeManager.current.colors.alert,
+                            foregroundColor: themeManager.current.colors.text,
+                            action: {
+                                decreaseBet(by: vm.startingBet)
+                                calculateBetinChips(bet: vm.level.chipsOwned)
+                                increaseBet(by: vm.level.chipsOwned)
+                                soundManager.play("chipPlacingSound.mp3")
+                            },
+                            doesPlaySound: false
                         )
                     }
-                    .buttonStyle(PressableButtonStyle())
+                    ActionButton(
+                        text: "PLACE BET",
+                        icon: "checkmark.circle.fill",
+                        backgroundColor: themeManager.current.colors.secondary,
+                        foregroundColor: themeManager.current.colors.text,
+                        action: {
+                            vm.placeBet()
+                            betsPlaced = true
+                            vm.startingBet = vm.currentBet
+                        },
+                        doesPlaySound: true
+                    )
                 }
                 .padding(.horizontal, 12)
                 .padding(.bottom, 8)
@@ -308,21 +313,23 @@ struct BetSelectionView: View {
                 .padding(.bottom, 20)
                 .allowsHitTesting(false)
 
+            /*
             ForEach(flyingChips) { chip in
                 FlyingChipView(chip: chip) {
                     chip.onLand()
                     flyingChips.removeAll { $0.id == chip.id }
                 }
             }
+            */
         }
+        // .frame(maxWidth: .infinity, maxHeight: .infinity)
+        // .coordinateSpace(.named("betView"))
+        // .onPreferenceChange(ChipPositionPreferenceKey.self) { positions in
+        //     buttonPositions = positions
+        // }
         .background(themeManager.current.background)
-        .coordinateSpace(.named("betView"))
-        .onPreferenceChange(ChipPositionPreferenceKey.self) { positions in
-            buttonPositions = positions
-        }
         .toolbarBackground(.hidden, for: .navigationBar)
         .onAppear {
-//            viewModel.startingBet = viewModel.level.minimumBet
             if vm.level.chipsOwned >= vm.startingBet {
                 vm.startingBet = vm.startingBet
                 calculateBetinChips(bet: vm.startingBet)
@@ -343,11 +350,14 @@ struct BetSelectionView: View {
         }
     }
 
-    func launchChip(value: Int, image: Image, onLand: @escaping () -> Void) {
-        guard let from = buttonPositions["increase_\(value)"],
-              let to = buttonPositions["decrease_\(value)"] else { onLand(); return }
-        flyingChips.append(ActiveFlyingChip(image: image, from: from, to: to, onLand: onLand))
+    /*
+    func launchChip(value: Int, image: Image) {
+        guard flyingChips.count < 3,
+              let from = buttonPositions["increase_\(value)"],
+              let to = buttonPositions["decrease_\(value)"] else { return }
+        flyingChips.append(ActiveFlyingChip(image: image, from: from, to: to, onLand: {}))
     }
+    */
 
     func showError(_ message: String) {
         errorMessage = message
@@ -368,6 +378,7 @@ struct BetSelectionView: View {
     func doIncrease(value: Int) -> Bool {
         guard vm.level.chipsOwned >= vm.startingBet + value else { showError("You don't have enough chips"); return false }
         increaseBet(by: value)
+        soundManager.play("chipPlacingSound.mp3")
         return true
     }
 
@@ -375,14 +386,7 @@ struct BetSelectionView: View {
         guard vm.startingBet - value >= vm.level.minimumBet else { showError("You can't bet less than \(vm.level.minimumBet)"); return }
         decreaseBet(by: value)
         chipAmount -= 1
-    }
-
-    func chipAmountDisplay(_ amount: Int) -> some View {
-        Text("\(amount)")
-            .font(.system(size: 15, weight: .bold))
-            .foregroundStyle(themeManager.current.colors.text)
-            .frame(width: 20)
-            .opacity(amount > 0 ? 1 : 0)
+        soundManager.play("chipPlacingSound.mp3")
     }
 
     func calculateBetinChips(bet: Int) {
@@ -400,6 +404,7 @@ struct BetSelectionView: View {
     }
 }
 
+/*
 struct FlyingChipView: View {
     let chip: ActiveFlyingChip
     let onComplete: () -> Void
@@ -429,10 +434,33 @@ struct FlyingChipView: View {
             }
     }
 }
+*/
+
+struct ChipCountDisplay: View {
+    let amount: Int
+    @Environment(ThemeManager.self) var themeManager
+    @State private var scale: CGFloat = 1.0
+
+    var body: some View {
+        Text("\(amount)")
+            .font(.system(size: 15, weight: .bold))
+            .foregroundStyle(themeManager.current.colors.text)
+            .frame(width: 20)
+            .opacity(amount > 0 ? 1 : 0)
+            .scaleEffect(scale)
+            .onChange(of: amount) {
+                scale = 1.5
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.35)) {
+                    scale = 1.0
+                }
+            }
+    }
+}
 
 struct ChipButton: View {
     var action: () -> Void
     let image: Image?
+
     var body: some View {
         Button {
             action()
@@ -453,4 +481,5 @@ struct ChipButton: View {
         betsPlaced: .constant(false)
     )
     .environment(ThemeManager())
+    .environment(SoundManager())
 }

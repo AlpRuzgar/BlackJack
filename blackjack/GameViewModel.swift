@@ -24,6 +24,7 @@ enum GameType {
 
 class GameViewModel: ObservableObject {
     var themeManager: ThemeManager = ThemeManager()
+    var soundManager: SoundManager = SoundManager()
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
     var suitsArray = [String("S"),String("H"),String("C"),String("D")]
     @Published var cardsArray: [Card] = []
@@ -82,6 +83,7 @@ class GameViewModel: ObservableObject {
         let selectedCard = cardsArray.remove(at: randomIndex)
         hand.cards.append(selectedCard)
         calculateHand(hand)
+        soundManager.play("cardPlacingSound.mp3")
     }
 
     func calculateHand(_ hand: Hand) {

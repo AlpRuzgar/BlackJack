@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct LevelOutcomeOverlay: View {
     @Environment(\.dismiss) var dismiss
@@ -70,19 +71,24 @@ struct LevelOutcomeOverlay: View {
 
                 // Buttons
                 VStack(spacing: 10) {
-                    OutcomeButton(
+                    ActionButton(
                         text: "PLAY AGAIN",
                         icon: "arrow.counterclockwise",
                         backgroundColor: accentColor,
-                        textColor: themeManager.current.colors.text,
-                        action: onPlayAgain
+                        foregroundColor: themeManager.current.colors.text,
+                        action: onPlayAgain,
+                        doesPlaySound: true
                     )
-                    OutcomeButton(
+                    ActionButton(
                         text: "MAIN MENU",
                         icon: "house.fill",
                         backgroundColor: themeManager.current.colors.secondary,
-                        textColor: themeManager.current.colors.text,
-                        action: { dismiss() }
+                        foregroundColor: themeManager.current.colors.text,
+                        action: {
+                            onPlayAgain()
+                            dismiss()
+                        },
+                        doesPlaySound: true
                     )
                 }
             }
@@ -104,36 +110,8 @@ struct LevelOutcomeOverlay: View {
                 scale = 1.0
                 opacity = 1.0
             }
+            AudioServicesPlaySystemSound(isWon ? 1025: 1053)
         }
-    }
-}
-
-private struct OutcomeButton: View {
-    let text: String
-    let icon: String
-    let backgroundColor: Color
-    let textColor: Color
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: 10) {
-                Image(systemName: icon)
-                    .font(.system(size: 16, weight: .bold))
-                Text(text)
-                    .font(.system(size: 18, weight: .bold))
-                    .tracking(1.5)
-            }
-            .foregroundStyle(textColor)
-            .frame(height: 54)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(backgroundColor)
-            )
-            .shadow(color: backgroundColor.opacity(0.6), radius: 8)
-        }
-        .buttonStyle(PressableButtonStyle())
     }
 }
 
@@ -141,7 +119,7 @@ private struct OutcomeButton: View {
     NavigationStack {
         ZStack {
             Color(red: 0.0, green: 0.4, blue: 0.25).ignoresSafeArea()
-            LevelOutcomeOverlay(isWon: true, onPlayAgain: {})
+            LevelOutcomeOverlay(isWon: false, onPlayAgain: {})
         }
     }
     .environment(ThemeManager())

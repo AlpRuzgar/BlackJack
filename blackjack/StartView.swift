@@ -10,19 +10,22 @@ import SwiftUI
 
 struct StartView: View {
     @Environment(ThemeManager.self) var themeManager
-    
+
     @State private var titleVisible = false
     @State private var buttonsVisible = false
     @State private var storeVisible = false
     @State private var showResetAlert = false
-    
+    @State private var navigateToLevels = false
+    @State private var navigateToEndless = false
+    @State private var navigateToThemes = false
+
     var body: some View {
         NavigationStack {
             ZStack {
                 themeManager.current.background
                 VStack(spacing: 0) {
                     Spacer()
-                    
+
                     // Title + gold divider
                     VStack(spacing: 14) {
                         Text("Double on 17")
@@ -30,7 +33,7 @@ struct StartView: View {
                             .foregroundStyle(themeManager.current.colors.text)
                             .tracking(1)
                             .shadow(color: .black.opacity(0.6), radius: 6, x: 2, y: 3)
-                        
+
                         HStack {
                             Rectangle()
                                 .frame(height: 1)
@@ -48,64 +51,59 @@ struct StartView: View {
                     .opacity(titleVisible ? 1 : 0)
                     .offset(y: titleVisible ? 0 : -30)
                     .animation(.easeOut(duration: 0.6), value: titleVisible)
-                    
+
                     Spacer()
-                    
+
                     // Main navigation buttons
                     VStack(spacing: 16) {
-                        NavigationLink(destination: LevelMenuView()) {
-                            StartViewButton(
-                                text: "TABLES",
-                                icon: "rectangle.stack.fill",
-                                backgroundColor: themeManager.current.colors.primary
-                            )
-                        }
-                        .buttonStyle(PressableButtonStyle())
-                        NavigationLink(destination: GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)) {
-                            StartViewButton(
-                                text: "ENDLESS MODE",
-                                icon: "infinity",
-                                backgroundColor: themeManager.current.colors.alert
-                            )
-                        }
-                        .buttonStyle(PressableButtonStyle())
+                        ActionButton(
+                            text: "TABLES",
+                            icon: "rectangle.stack.fill",
+                            backgroundColor: themeManager.current.colors.primary,
+                            foregroundColor: themeManager.current.colors.text,
+                            action: { navigateToLevels = true },
+                            doesPlaySound: true
+                        )
+                        ActionButton(
+                            text: "ENDLESS MODE",
+                            icon: "infinity",
+                            backgroundColor: themeManager.current.colors.alert,
+                            foregroundColor: themeManager.current.colors.text,
+                            action: { navigateToEndless = true },
+                            doesPlaySound: true
+                        )
                     }
                     .padding(.horizontal, 24)
                     .opacity(buttonsVisible ? 1 : 0)
                     .offset(y: buttonsVisible ? 0 : 40)
                     .animation(.easeOut(duration: 0.5).delay(0.3), value: buttonsVisible)
-                    
+
                     Spacer()
-                    
+
                     // Theme store link
-                    NavigationLink(destination: ThemeStoreView()) {
-                        HStack(spacing: 10) {
-                            Image(systemName: "paintpalette.fill")
-                                .font(.system(size: 17, weight: .bold))
-                            Text("THEMES")
-                                .font(.system(size: 16, weight: .bold))
-                                .tracking(2)
-                        }
-                        .foregroundStyle(themeManager.current.colors.text)
-                        .padding(.horizontal, 32)
-                        .padding(.vertical, 14)
-                        .background(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .fill(themeManager.current.colors.secondary)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14)
-                                .stroke(themeManager.current.colors.secondary.opacity(0.5), lineWidth: 1)
-                        )
-                        .shadow(color: themeManager.current.colors.secondary.opacity(0.6), radius: 8)
-                    }
-                    .buttonStyle(PressableButtonStyle())
+                    ActionButton(
+                        text: "THEMES",
+                        icon: "paintpalette.fill",
+                        backgroundColor: themeManager.current.colors.secondary,
+                        foregroundColor: themeManager.current.colors.text,
+                        action: { navigateToThemes = true },
+                        doesPlaySound: true
+                    )
+                    .padding(.horizontal, 24)
                     .opacity(storeVisible ? 1 : 0)
                     .offset(y: storeVisible ? 0 : 20)
                     .animation(.easeOut(duration: 0.4).delay(0.55), value: storeVisible)
                     .padding(.bottom, 48)
-                    
                 }
+            }
+            .navigationDestination(isPresented: $navigateToLevels) {
+                LevelMenuView()
+            }
+            .navigationDestination(isPresented: $navigateToEndless) {
+                GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
+            }
+            .navigationDestination(isPresented: $navigateToThemes) {
+                ThemeStoreView()
             }
             .onAppear {
                 titleVisible = true
@@ -131,32 +129,6 @@ struct StartView: View {
                 Text("This will wipe all progress, chips, and unlocked themes.")
             }
         }
-    }
-}
-
-struct StartViewButton: View {
-    @Environment(ThemeManager.self) var themeManager
-    let text: String
-    let icon: String
-    let backgroundColor: Color
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.system(size: 18, weight: .bold))
-            Text(text)
-                .font(.system(size: 20, weight: .bold))
-                .tracking(1.5)
-        }
-        .foregroundStyle(themeManager.current.colors.text)
-        .frame(height: 62)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(backgroundColor)
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .shadow(color: backgroundColor.opacity(0.7), radius: 8)
     }
 }
 

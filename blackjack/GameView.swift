@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-
 struct GameView: View {
     @StateObject var viewModel: GameViewModel
     var onRestart: (() -> Void)?
     @Environment(ThemeManager.self) var themeManager
+    @Environment(SoundManager.self) var soundManager
     @State private var dealtCardIDs: Set<UUID> = []
     @State private var dealerFlipAngle: Double = 0
     @Namespace private var splitNamespace
@@ -91,7 +91,7 @@ struct GameView: View {
                     Spacer()
                     if !viewModel.isGameOver {
                         HStack(spacing: 20) {
-                            gameButton(systemName: "plus", color: themeManager.current.colors.alert) {
+                            ActionButton(icon: "plus", layout: .compact, backgroundColor: themeManager.current.colors.alert, action: {
                                 viewModel.hit()
                                 if viewModel.playersHandValue > 21 {
                                     if let levelVM = viewModel as? LevelViewModel {
@@ -109,8 +109,8 @@ struct GameView: View {
                                         viewModel.playerBust()
                                     }
                                 }
-                            }
-                            gameButton(systemName: "hand.raised.fill", color: themeManager.current.colors.primary) {
+                            }, doesPlaySound: false)
+                            ActionButton(icon: "hand.raised.fill", layout: .compact, backgroundColor: themeManager.current.colors.primary, action: {
                                 if let levelVM = viewModel as? LevelViewModel {
                                     let isLastHand = levelVM.targetHandIndex + 1 >= levelVM.hands.count
                                     levelVM.stand()
@@ -129,11 +129,11 @@ struct GameView: View {
                                         }
                                     }
                                 }
-                            }
-                            
+                            }, doesPlaySound: false)
+
                             if let levelVM = viewModel as? LevelViewModel,
                                levelVM.hands.count == 1 && levelVM.currentHand.cards.count == 2 {
-                                gameButton(systemName: "chevron.up.2", color: themeManager.current.colors.extra) {
+                                ActionButton(icon: "chevron.up.2", layout: .compact, backgroundColor: themeManager.current.colors.extra, action: {
                                     if levelVM.canDoubleDown {
                                         levelVM.doubleDown()
                                         Task {
@@ -142,14 +142,14 @@ struct GameView: View {
                                             }
                                         }
                                     }
-                                }
+                                }, doesPlaySound: false)
                             }
                             if let levelVM = viewModel as? LevelViewModel, levelVM.canSplit() {
-                                gameButton(systemName: "arrow.left.and.right", color: themeManager.current.colors.secondary) {
+                                ActionButton(icon: "arrow.left.and.right", layout: .compact, backgroundColor: themeManager.current.colors.secondary, action: {
                                     withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
                                         levelVM.split()
                                     }
-                                }
+                                }, doesPlaySound: false)
                             }
                         }
                         .padding(.horizontal, 30)
@@ -186,6 +186,7 @@ struct GameView: View {
         .navigationBarBackButtonHidden(isBackButtonHidden)
         .onAppear() {
             viewModel.themeManager = themeManager
+            viewModel.soundManager = soundManager
             Task{
                 await viewModel.startGame(for: viewModel.playersHand)
                 viewModel.isGameOver = false
@@ -275,18 +276,6 @@ struct GameView: View {
             }
     }
     
-    private func gameButton(systemName: String, color: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: systemName)
-                .font(.system(size: 24, weight: .bold))
-                .foregroundStyle(.ivory)
-                .frame(width: 70, height: 70)
-                .background(color, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                .shadow(color: color.opacity(0.6), radius: 8, x: 0, y: 4)
-        }
-        .buttonStyle(PressableButtonStyle())
-    }
-    
     @ViewBuilder
     private var chipBar: some View {
         if let levelVM = viewModel as? LevelViewModel {
@@ -356,8 +345,8 @@ private struct InfoRow: View {
 }
 
 #Preview {
-    let tm = ThemeManager()
     GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
-        .environment(tm)
+        .environment(ThemeManager())
         .environment(User())
+        .environment(SoundManager())
 }

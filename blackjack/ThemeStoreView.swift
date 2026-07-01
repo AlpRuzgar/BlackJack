@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct ThemeStoreView: View {
     @Environment(User.self) var user
@@ -79,6 +80,9 @@ struct ThemeStoreView: View {
                     .padding(.bottom, 30)
                     
                 }
+                Button("add money"){
+                    user.increaseCoins(by: 1000)
+                }
             }
             .background(themeManager.current.background)
             .toolbar {
@@ -146,9 +150,12 @@ struct ThemeButton: View {
         else { .black }
     }
     
+    @State var purchaseCount = 0
+    
     var body: some View {
         Button {
             selectedTheme = theme
+            AudioServicesPlaySystemSound(1519) // Subtle "peek" sound for selection
         } label: {
             VStack(spacing: 0) {
                 ZStack {
@@ -202,6 +209,7 @@ struct ThemeButton: View {
                         } else if theme.isUnlocked {
                             Button {
                                 themeManager.select(theme)
+                                AudioServicesPlaySystemSound(1103) // Success chime for activating
                             } label: {
                                 Text("SELECT")
                                     .font(.system(size: 15, weight: .bold))
@@ -211,15 +219,19 @@ struct ThemeButton: View {
                                     .padding(.vertical, 10)
                                     .background(themeManager.current.colors.secondary)
                             }
+                            .sensoryFeedback(.selection, trigger: themeManager.selectedThemeId)
                         } else {
                             Button {
                                 if user.coins >= selectedTheme!.price {
                                     print("Bought \(theme.id)")
                                     selectedTheme?.unlock()
                                     user.coins -= selectedTheme!.price
+                                    AudioServicesPlaySystemSound(1407)
+                                    purchaseCount += 1
                                 }
                                 else {
                                     showError("Not enough coins")
+                                    AudioServicesPlaySystemSound(1053)
                                 }
                             } label: {
                                 Text("BUY — \(theme.price)")
@@ -230,6 +242,7 @@ struct ThemeButton: View {
                                     .padding(.vertical, 10)
                                     .background(themeManager.current.colors.primary)
                             }
+                            .sensoryFeedback(.success, trigger: purchaseCount)
                         }
                     }
                     .transition(.opacity.combined(with: .move(edge: .bottom)))
