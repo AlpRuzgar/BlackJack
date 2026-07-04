@@ -11,7 +11,14 @@ import AVFoundation
 @Observable
 class SoundManager {
     private var players: [String: AVAudioPlayer] = [:]
-    
+    private var lastPlayTime: [String: TimeInterval] = [:]
+    private let throttleInterval: TimeInterval = 0.05
+
+    init() {
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, mode: .default)
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
+
     func load(_ filename: String) {
         let parts = filename.split(separator: ".")
         let name = String(parts[0])
@@ -33,6 +40,11 @@ class SoundManager {
     
     func play(_ filename: String) {
         guard let player = players[filename] else { return }
+        let now = Date().timeIntervalSinceReferenceDate
+        if let last = lastPlayTime[filename], now - last < throttleInterval {
+            return
+        }
+        lastPlayTime[filename] = now
         player.currentTime = 0
         player.play()
     }

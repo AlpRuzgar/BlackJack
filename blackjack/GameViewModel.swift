@@ -53,11 +53,7 @@ class GameViewModel: ObservableObject {
         for value in cardValueArray {
             for suit in suitsArray {
                 let card = Card(value: value, suit: suit)
-                if card.value == "J"||card.value == "Q"||card.value == "K"||card.value == "A" {
                     card.frontImage = "\(value)\(suit)-\(themeManager.current.id)"
-                } else {
-                    card.frontImage = "\(value)\(suit)"
-                }
                 card.backImage = "Back-\(themeManager.current.id)"
                 cardsArray.append(card)
             }

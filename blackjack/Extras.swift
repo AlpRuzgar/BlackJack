@@ -50,5 +50,13 @@ extension Color {
     static let moodyEmber    = Color(red: 0.78, green: 0.42, blue: 0.23)
     static let moodyAsh      = Color(red: 0.42, green: 0.44, blue: 0.47)
     static let moodyFog      = Color(red: 0.85, green: 0.85, blue: 0.87)
+    
+    // Ottoman — Iznik ceramic & imperial gold
+    static let ottomanTurquoise = Color(red: 0.11, green: 0.54, blue: 0.60)
+    static let ottomanCobalt    = Color(red: 0.12, green: 0.30, blue: 0.55)
+    static let ottomanCrimson   = Color(red: 0.78, green: 0.12, blue: 0.17)
+    static let ottomanGold      = Color(red: 0.79, green: 0.64, blue: 0.15)
+    static let ottomanIvory     = Color(red: 0.95, green: 0.93, blue: 0.86)
+    
 }
 

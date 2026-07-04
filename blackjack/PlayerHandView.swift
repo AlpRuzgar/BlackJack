@@ -27,7 +27,6 @@ struct PlayerHandView: View {
                         .antialiased(true)
                         .scaledToFit()
                         .frame(width: 110, height: 165)
-                        .colorMultiply(themeManager.current.cardTint ?? .white)
                         .cornerRadius(10)
                         .matchedGeometryEffect(id: card.id, in: splitNamespace)
                         .offset(y: dealtCardIDs.contains(card.id) ? 0 : -1000)

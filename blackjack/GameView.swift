@@ -26,7 +26,7 @@ struct GameView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                themeManager.current.background
+                themeManager.current.gameBG
                 VStack(spacing: 20) {
                     // Chip & Bet status bar
                     chipBar
@@ -230,7 +230,6 @@ struct GameView: View {
                     .antialiased(true)
                     .scaledToFit()
                     .frame(width: 110, height: 165)
-                    .colorMultiply(themeManager.current.cardTint ?? .white)
                     .scaleEffect(x: -1, y: 1)
                     .opacity(dealerFlipAngle > 90 ? 1 : 0)
                 

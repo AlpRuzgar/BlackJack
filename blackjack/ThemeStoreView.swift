@@ -165,7 +165,6 @@ struct ThemeButton: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 85)
-                        .colorMultiply(theme.cardTint ?? .white)
                         .shadow(color: .black.opacity(0.5), radius: 6, x: 2, y: 3)
                         .background(theme.background)
                 }

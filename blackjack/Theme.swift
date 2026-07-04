@@ -58,15 +58,15 @@ class Theme: Identifiable {
     let id: String
     let background: ThemeBackground
     let colors: ThemeColors
-    let cardTint: Color?
+    let gameBG: ThemeBackground
     
-    init(isUnlocked: Bool, price: Int, id: String, background: ThemeBackground, colors: ThemeColors, cardTint: Color? = nil) {
+    init(isUnlocked: Bool, price: Int, id: String, background: ThemeBackground, colors: ThemeColors, gameBG: ThemeBackground) {
         self.isUnlocked = UserDefaults.standard.bool(forKey: "theme_Unlocked-\(id)")
         self.price = price
         self.id = id
         self.background = background
         self.colors = colors
-        self.cardTint = cardTint
+        self.gameBG = gameBG
     }
     
     func unlock() {
