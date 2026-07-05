@@ -110,6 +110,7 @@ struct StartView: View {
                 buttonsVisible = true
                 storeVisible = true
             }
+            #if DEBUG
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -128,6 +129,7 @@ struct StartView: View {
             } message: {
                 Text("This will wipe all progress, chips, and unlocked themes.")
             }
+            #endif
         }
     }
 }

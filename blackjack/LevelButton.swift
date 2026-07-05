@@ -6,28 +6,16 @@
 //
 
 import SwiftUI
+import Combine
 
 struct LevelButton: View {
     @ObservedObject var level: Level
     @Environment(ThemeManager.self) var themeManager
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         NavigationLink(destination: LevelView(level: level)) {
             ZStack {
-                if level.isCompleted {
-                    VStack {
-                        HStack {
-                            Spacer()
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 28, weight: .bold))
-                                .foregroundStyle(.green)
-                                .shadow(color: .black.opacity(0.4), radius: 3)
-                                .padding(12)
-                        }
-                        Spacer()
-                    }
-                }
-                
                 VStack(spacing: -5) {
                     Text(level.name)
                         .font(.system(size: 35, weight: .bold))
@@ -96,13 +84,51 @@ struct LevelButton: View {
                     }
                     .padding(.horizontal, 8)
                     
-                }.background(
+                }
+                .background(
                     Image("table-\(themeManager.current.id)")
                         .resizable()
                         .scaledToFill()
                 )
+                if level.isCompleted {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(.black.opacity(0.78))
+
+                        VStack(spacing: 10) {
+                            ZStack {
+                                Circle()
+                                    .fill(Color.green.opacity(0.15))
+                                    .frame(width: 68, height: 68)
+                                Circle()
+                                    .stroke(Color.green.opacity(0.5), lineWidth: 1.5)
+                                    .frame(width: 68, height: 68)
+                                Image(systemName: "lock.fill")
+                                    .font(.system(size: 28, weight: .bold))
+                                    .foregroundStyle(.green)
+                            }
+
+                            Text("LOCKED")
+                                .font(.system(size: 22, weight: .bold))
+                                .tracking(4)
+                                .foregroundStyle(themeManager.current.colors.text)
+
+                            HStack(spacing: 5) {
+                                Image(systemName: "clock")
+                                    .font(.system(size: 13, weight: .medium))
+                                Text("Unlocks in \(lockTimeString)")
+                                    .font(.system(size: 14, weight: .semibold))
+                            }
+                            .foregroundStyle(themeManager.current.colors.secondary)
+                        }
+                    }
+                    .onReceive(timer) { _ in
+                        level.tickLock()
+                    }
+                }
             }
         }
+        .disabled(level.isCompleted)
         .buttonStyle(PressableButtonStyle())
         .frame(width: 360, height: 240)
         .clipShape(RoundedRectangle(cornerRadius: 14))
@@ -112,9 +138,16 @@ struct LevelButton: View {
         )
         .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 4)
     }
+
+    private var lockTimeString: String {
+        let t = level.lockTimeLeft
+        let minutes = t / 60
+        let seconds = t % 60
+        return minutes > 0 ? String(format: "%d:%02d", minutes, seconds) : "\(seconds)s"
+    }
 }
 
 #Preview {
-    LevelButton(level: Level(id: 99, name: "Level 1", startingChips: 1000, requiredChips: 10000, minimumBet: 500))
+    LevelButton(level: Level(id: 99, name: "Level 1", startingChips: 1000, requiredChips: 10000, minimumBet: 500, lockDuration: 10))
         .environment(ThemeManager())
 }

@@ -80,9 +80,11 @@ struct ThemeStoreView: View {
                     .padding(.bottom, 30)
                     
                 }
+                #if DEBUG
                 Button("add money"){
                     user.increaseCoins(by: 1000)
                 }
+                #endif
             }
             .background(themeManager.current.background)
             .toolbar {

@@ -71,14 +71,16 @@ struct LevelOutcomeOverlay: View {
 
                 // Buttons
                 VStack(spacing: 10) {
-                    ActionButton(
-                        text: "PLAY AGAIN",
-                        icon: "arrow.counterclockwise",
-                        backgroundColor: accentColor,
-                        foregroundColor: themeManager.current.colors.text,
-                        action: onPlayAgain,
-                        doesPlaySound: true
-                    )
+                    if !isWon{
+                        ActionButton(
+                            text: "PLAY AGAIN",
+                            icon: "arrow.counterclockwise",
+                            backgroundColor: accentColor,
+                            foregroundColor: themeManager.current.colors.text,
+                            action: onPlayAgain,
+                            doesPlaySound: true
+                        )
+                    }
                     ActionButton(
                         text: "MAIN MENU",
                         icon: "house.fill",

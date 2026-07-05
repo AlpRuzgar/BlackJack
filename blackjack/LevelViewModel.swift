@@ -141,4 +141,3 @@ class LevelViewModel: GameViewModel {
         calculateHand(newHand)
     }
 }
-///Maybe add a animation to split, like a slide
