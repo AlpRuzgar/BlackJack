@@ -39,7 +39,7 @@ struct LevelView: View {
                         levelWon = false
                         showOutcomeOverlay = true
                     }
-                }, isBackButtonHidden: true)
+                }, isLevel: true)
             }
 
             if showOutcomeOverlay {

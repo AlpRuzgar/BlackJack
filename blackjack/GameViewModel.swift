@@ -9,6 +9,8 @@ import Foundation
 import Combine
 import SwiftUI
 
+// MARK: - Enums
+
 enum GameResult {
     case playerWin, dealerWin, push, playerBust, dealerBust
 }
@@ -22,7 +24,12 @@ enum GameType {
     case endless
 }
 
+// MARK: - GameViewModel
+
 class GameViewModel: ObservableObject {
+
+    // MARK: - Properties
+
     var themeManager: ThemeManager = ThemeManager()
     var soundManager: SoundManager = SoundManager()
     var cardValueArray = ["2","3","4","5","6","7","8","9","10","J","Q","K","A"]
@@ -49,6 +56,8 @@ class GameViewModel: ObservableObject {
         self.hands = [playersHand]
     }
 
+    // MARK: - Deck
+
     func createDeck() -> Void {
         for value in cardValueArray {
             for suit in suitsArray {
@@ -63,6 +72,8 @@ class GameViewModel: ObservableObject {
     #if DEBUG
     var debugForcePairs: Bool = false
     #endif
+
+    // MARK: - Card Dealing
 
     func giveCard(to hand: Hand) {
         guard !cardsArray.isEmpty else { return }
@@ -81,6 +92,8 @@ class GameViewModel: ObservableObject {
         calculateHand(hand)
         soundManager.play("cardPlacingSound.mp3")
     }
+
+    // MARK: - Hand Calculation
 
     func calculateHand(_ hand: Hand) {
         var base = 0
@@ -107,6 +120,9 @@ class GameViewModel: ObservableObject {
     }
 
     func calculateAces(base: Int, aceCount: Int) -> Int {
+        // Start with every ace as 11, then downgrade to 1 (subtract 10) one at a
+        // time until the hand is no longer bust. This correctly handles hands like
+        // A-A-9 (11+11+9=31 → 11+1+9=21) without special-casing.
         var total = base + aceCount * 11
         var remainingAces = aceCount
         while total > 21 && remainingAces > 0 {
@@ -115,6 +131,8 @@ class GameViewModel: ObservableObject {
         }
         return total
     }
+
+    // MARK: - Game Flow
 
     func startGame(for hand: Hand) async {
         resetGame()
@@ -143,6 +161,8 @@ class GameViewModel: ObservableObject {
             evaluateRoundResult()
         }
     }
+
+    // MARK: - Round Evaluation
 
     func evaluateRoundResult() {
         for hand in hands {
@@ -175,6 +195,8 @@ class GameViewModel: ObservableObject {
         gameOverMessage = message
         isGameOver = true
     }
+
+    // MARK: - Reset
 
     func resetGame() {
         cardsArray.removeAll()

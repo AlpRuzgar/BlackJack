@@ -128,7 +128,7 @@ struct StartView: View {
                 LevelMenuView()
             }
             .navigationDestination(isPresented: $navigateToEndless) {
-                GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
+                GameView(viewModel: GameViewModel(gameType: .endless), isLevel: false)
             }
             .navigationDestination(isPresented: $navigateToThemes) {
                 ThemeStoreView()

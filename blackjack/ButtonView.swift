@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 import AVFoundation
 
+// MARK: - ActionButton
+
 struct ActionButton: View {
     enum Layout {
         case standard   // full-width, text and/or icon, height 62
@@ -98,6 +100,8 @@ struct ActionButton: View {
         .buttonStyle(PressableButtonStyle())
     }
 }
+
+// MARK: - PressableButtonStyle
 
 struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {

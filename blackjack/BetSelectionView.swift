@@ -30,28 +30,28 @@ struct BetSelectionView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
-                // Back button
+                //MARK: Back button & chip amount
                 HStack {
                     BackButton()
                     Spacer()
+                    HStack(spacing: 6) {
+                        Image(systemName: "dollarsign.circle.fill")
+                            .foregroundStyle(themeManager.current.colors.secondary)
+                        Text("\(vm.level.chipsOwned)")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundStyle(themeManager.current.colors.secondary)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 6)
+                    .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 4)
-
-                // Header — balance, title, divider, bet amount
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+                .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
+                //MARK: Header — balance, title, divider, bet amount
                 VStack(spacing: 6) {
                     HStack {
                         Spacer()
-                        HStack(spacing: 6) {
-                            Image(systemName: "dollarsign.circle.fill")
-                                .foregroundStyle(themeManager.current.colors.secondary)
-                            Text("\(vm.level.chipsOwned)")
-                                .font(.system(size: 17, weight: .bold))
-                                .foregroundStyle(themeManager.current.colors.secondary)
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 6)
-                        .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                     }
                     .padding(.horizontal, 16)
                     .padding(.bottom, 10)
@@ -89,7 +89,7 @@ struct BetSelectionView: View {
                 .opacity(headerVisible ? 1 : 0)
                 .offset(y: headerVisible ? 0 : -20)
                 
-                //MARK: Placed chips panel (decrease area)
+                // MARK: - Placed Chips Panel (tap to remove)
                 VStack(spacing: 0) {
                     HStack {
                         Text("YOUR BET")
@@ -182,7 +182,7 @@ struct BetSelectionView: View {
                 .opacity(chipsVisible ? 1 : 0)
                 .offset(y: chipsVisible ? 0 : 20)
                 
-                //MARK: Chip tray (increase area)
+                // MARK: - Chip Tray (tap to add)
                 VStack(spacing: 0) {
                     HStack {
                         Text("CHIP TRAY")
@@ -239,7 +239,7 @@ struct BetSelectionView: View {
                 .opacity(chipsVisible ? 1 : 0)
                 .offset(y: chipsVisible ? 0 : 20)
                 
-                // Action buttons
+                // MARK: - Action Buttons
                 VStack(spacing: 6) {
                     HStack(spacing: 8) {
                         ActionButton(
@@ -255,8 +255,7 @@ struct BetSelectionView: View {
                             },
                             doesPlaySound: false
                         )
-                        .padding(.trailing,5)
-                        .padding(.bottom,10)
+                        .padding(.trailing,3)
 
                         ActionButton(
                             text: "MAX BET",
@@ -271,9 +270,9 @@ struct BetSelectionView: View {
                             },
                             doesPlaySound: false
                         )
-                        .padding(.leading,5)
-                        .padding(.bottom,10)
+                        .padding(.leading,3)
                     }
+                    .padding(.bottom, 6)
                     ActionButton(
                         text: "PLACE BET",
                         icon: "checkmark.circle.fill",
@@ -286,6 +285,7 @@ struct BetSelectionView: View {
                         },
                         doesPlaySound: true
                     )
+                    
                 }
                 .padding(.horizontal, 12)
                 .padding(.top, 10)
@@ -334,6 +334,8 @@ struct BetSelectionView: View {
         }
     }
     
+    // MARK: - Helpers
+
     func showError(_ message: String) {
         errorMessage = message
         errorVisible = true
@@ -364,22 +366,21 @@ struct BetSelectionView: View {
         soundManager.play("chipPlacingSound.mp3")
     }
     
+    /// Converts a chip total into per-denomination counts using greedy decomposition
+    /// (largest denomination first), so the chip tray always shows the fewest chips.
     func calculateBetinChips(bet: Int) {
         var betLeft = bet
-        chip1000BetAmount = betLeft / 1000
-        betLeft = betLeft % 1000
-        chip500BetAmount = betLeft / 500
-        betLeft = betLeft % 500
-        chip100BetAmount = betLeft / 100
-        betLeft = betLeft % 100
-        chip25BetAmount = betLeft / 25
-        betLeft = betLeft % 25
-        chip5BetAmount = betLeft / 5
-        betLeft = betLeft % 5
-        chip1BetAmount = betLeft / 1
-        betLeft = betLeft % 1
+        chip1000BetAmount = betLeft / 1000; betLeft = betLeft % 1000
+        chip500BetAmount  = betLeft / 500;  betLeft = betLeft % 500
+        chip100BetAmount  = betLeft / 100;  betLeft = betLeft % 100
+        chip25BetAmount   = betLeft / 25;   betLeft = betLeft % 25
+        chip5BetAmount    = betLeft / 5;    betLeft = betLeft % 5
+        chip1BetAmount    = betLeft / 1
     }
 }
+
+// MARK: - Supporting Views
+
 struct ChipCountDisplay: View {
     let amount: Int
     @Environment(ThemeManager.self) var themeManager

@@ -21,17 +21,26 @@ struct GameView: View {
     @State private var buttonsOffset: CGFloat = 50
     
     @State private var isHowToShowing = false
-    let isBackButtonHidden: Bool
+    let isLevel: Bool
+    var isBackButtonActive: Bool { !isLevel }
     
     var body: some View {
         NavigationStack {
             ZStack {
                 themeManager.current.gameBG
                 VStack(spacing: 20) {
-                    // Chip & Bet status bar
-                    chipBar
-                        .opacity(chipBarOpacity)
-                        .offset(y: chipBarOffset)
+                    HStack {
+                        if !isLevel {
+                            BackButton()
+                            Spacer()
+                        }
+                        else {
+                            chipBar
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 6)
+                        }
+                    }
+
                     // Dealer Section
                     VStack  (spacing: 12){
                         VStack(spacing: 12) {
@@ -130,7 +139,7 @@ struct GameView: View {
                                     }
                                 }
                             }, doesPlaySound: false)
-
+                            
                             if let levelVM = viewModel as? LevelViewModel,
                                levelVM.hands.count == 1 && levelVM.currentHand.cards.count == 2 {
                                 ActionButton(icon: "chevron.up.2", layout: .compact, backgroundColor: themeManager.current.colors.extra, action: {
@@ -173,17 +182,12 @@ struct GameView: View {
                         .foregroundStyle(themeManager.current.colors.text)
                         .font(.system(size: 20, weight: .medium))
                     })
-                        .padding(10)
+                    .padding(10)
                     
                 }
             }
-            .toolbar {
-                Button("", systemImage: "info"){
-                    isHowToShowing = true
-                }
-            }
         }
-        .navigationBarBackButtonHidden(isBackButtonHidden)
+        .navigationBarBackButtonHidden(isLevel)
         .onAppear() {
             viewModel.themeManager = themeManager
             viewModel.soundManager = soundManager
@@ -327,7 +331,7 @@ private struct InfoRow: View {
     let icon: String
     let color: Color
     let text: String
-
+    
     var body: some View {
         HStack(spacing: 14) {
             Image(systemName: icon)
@@ -344,8 +348,13 @@ private struct InfoRow: View {
 }
 
 #Preview {
-    GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
-        .environment(ThemeManager())
-        .environment(User())
-        .environment(SoundManager())
+//    GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
+//        .environment(ThemeManager())
+//        .environment(User())
+//        .environment(SoundManager())
+    GameView(viewModel: LevelViewModel(level: Level(id: 99, name: "a", startingChips: 10000, requiredChips: 100000, minimumBet: 1, lockDuration: 1)), isLevel: true)
+            .environment(ThemeManager())
+            .environment(User())
+            .environment(SoundManager())
+
 }

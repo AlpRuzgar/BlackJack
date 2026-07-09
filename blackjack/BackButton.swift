@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+// MARK: - BackButton
+
 struct BackButton: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(ThemeManager.self) var themeManager
@@ -33,6 +35,8 @@ struct BackButton: View {
         .buttonStyle(PressableButtonStyle())
     }
 }
+
+// MARK: - InfoButton
 
 struct InfoButton: View {
     @Environment(ThemeManager.self) var themeManager

@@ -221,7 +221,6 @@ struct ThemeButton: View {
                         } else {
                             Button {
                                 if user.coins >= selectedTheme!.price {
-                                    print("Bought \(theme.id)")
                                     selectedTheme?.unlock()
                                     user.coins -= selectedTheme!.price
                                     AudioServicesPlaySystemSound(1407)

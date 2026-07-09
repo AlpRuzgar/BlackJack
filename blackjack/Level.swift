@@ -9,18 +9,25 @@ import Foundation
 import Combine
 
 class Level: Identifiable, ObservableObject {
+
+    // MARK: - Properties
+
     let id: Int
     let name: String
     let startingChips: Int
     @Published var chipsOwned: Int
     let requiredChips: Int
     let minimumBet: Int
+    /// How many seconds the level stays locked after completion.
     let lockDuration: Int
 
     @Published private(set) var isCompleted: Bool
     @Published var lockTimeLeft: Int
 
+    // Stored as an absolute Date so the countdown survives app restarts.
     private var unlockDate: Date?
+
+    // MARK: - Init
 
     init(id: Int, name: String, startingChips: Int, requiredChips: Int, minimumBet: Int, lockDuration: Int) {
         self.id = id
@@ -31,6 +38,8 @@ class Level: Identifiable, ObservableObject {
         self.minimumBet = minimumBet
         self.lockDuration = lockDuration
 
+        // We persist the absolute unlock date (not a remaining-seconds value) so the
+        // timer continues counting down even while the app is closed.
         let savedTimestamp = UserDefaults.standard.double(forKey: Self.unlockDateKey(for: id))
         if savedTimestamp > 0 {
             let date = Date(timeIntervalSince1970: savedTimestamp)
@@ -57,6 +66,8 @@ class Level: Identifiable, ObservableObject {
         }
     }
 
+    // MARK: - Lock System
+
     func markCompleted() {
         let date = Date().addingTimeInterval(TimeInterval(lockDuration))
         unlockDate = date
@@ -66,6 +77,8 @@ class Level: Identifiable, ObservableObject {
         UserDefaults.standard.set(true, forKey: Self.completionDefaultsKey(for: id))
     }
 
+    /// Called every second by LevelButton's timer. Recalculates from the saved
+    /// absolute date rather than decrementing, so accuracy survives app restarts.
     func tickLock() {
         guard let date = unlockDate else { return }
         let remaining = Int(date.timeIntervalSinceNow)
@@ -84,6 +97,8 @@ class Level: Identifiable, ObservableObject {
         UserDefaults.standard.removeObject(forKey: Self.unlockDateKey(for: id))
     }
 
+    // MARK: - Chip Management
+
     func resetChips() {
         chipsOwned = startingChips
     }
@@ -92,6 +107,8 @@ class Level: Identifiable, ObservableObject {
         chipsOwned = startingChips
         resetCompletion()
     }
+
+    // MARK: - UserDefaults Keys
 
     private static func completionDefaultsKey(for id: Int) -> String {
         "level_\(id)_completed"
