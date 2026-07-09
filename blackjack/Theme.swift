@@ -61,21 +61,26 @@ class Theme: Identifiable {
     let gameBG: ThemeBackground
     
     init(isUnlocked: Bool, price: Int, id: String, background: ThemeBackground, colors: ThemeColors, gameBG: ThemeBackground) {
-        self.isUnlocked = UserDefaults.standard.bool(forKey: "theme_Unlocked-\(id)")
+        let unlockedKey = "theme_Unlocked-\(id)"
+        if UserDefaults.standard.object(forKey: unlockedKey) != nil {
+            self.isUnlocked = UserDefaults.standard.bool(forKey: unlockedKey)
+        } else {
+            self.isUnlocked = isUnlocked
+        }
         self.price = price
         self.id = id
         self.background = background
         self.colors = colors
         self.gameBG = gameBG
     }
-    
+
     func unlock() {
         isUnlocked = true
         UserDefaults.standard.set(true, forKey: "theme_Unlocked-\(id)")
     }
-    
+
     func lock(){
         isUnlocked = false
-        UserDefaults.standard.set(false, forKey: "theme_locked-\(id)")
+        UserDefaults.standard.set(false, forKey: "theme_Unlocked-\(id)")
     }
 }
