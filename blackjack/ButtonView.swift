@@ -57,7 +57,7 @@ struct ActionButton: View {
                     }
                     if let text {
                         Text(text)
-                            .font(.system(size: 20, weight: .bold))
+                            .font(.system(size:20, weight: .bold))
                             .tracking(1.5)
                     }
                 }
@@ -68,8 +68,12 @@ struct ActionButton: View {
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .fill(backgroundColor)
                 )
+                .overlay(content: {
+                    RoundedRectangle(cornerRadius: 14)
+                        .foregroundStyle(LinearGradient(colors: [.white.opacity(0),.white.opacity(0.25)], startPoint: .leading, endPoint: .trailing))
+                })
                 .clipShape(RoundedRectangle(cornerRadius: 14))
-                .shadow(color: backgroundColor.opacity(0.7), radius: 8)
+                .shadow(color: backgroundColor, radius: 15)
 
             case .compact:
                 Image(systemName: icon ?? "")
@@ -77,6 +81,17 @@ struct ActionButton: View {
                     .foregroundStyle(foregroundColor)
                     .frame(width: 70, height: 70)
                     .background(backgroundColor, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [.white.opacity(0.3), .black.opacity(0.25)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 1.5
+                            )
+                    )
                     .shadow(color: backgroundColor.opacity(0.6), radius: 8, x: 0, y: 4)
             }
         }
@@ -84,28 +99,12 @@ struct ActionButton: View {
     }
 }
 
-struct ButtonView: View {
-    var text: String
-    var action: () -> Void
-    var backgroundColor: Color
-    var textColor: Color
-
-    var body: some View {
-        ActionButton(text: text, backgroundColor: backgroundColor, foregroundColor: textColor, action: { action() }, doesPlaySound: true)
-    }
-
-    init(action: @escaping () -> Void, text: String, backgroundColor: Color, textColor: Color) {
-        self.text = text
-        self.action = action
-        self.backgroundColor = backgroundColor
-        self.textColor = textColor
-    }
-}
-
 struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .brightness(configuration.isPressed ? -0.06 : 0)
+            .offset(y: configuration.isPressed ? 2 : 0)
             .animation(
                 configuration.isPressed
                     ? .easeIn(duration: 0.08)
@@ -119,7 +118,6 @@ struct PressableButtonStyle: ButtonStyle {
     VStack(spacing: 20) {
         ActionButton(text: "TABLES", icon: "rectangle.stack.fill", backgroundColor: .blue, action: {}, doesPlaySound: true)
         ActionButton(icon: "plus", layout: .compact, backgroundColor: .green, action: {}, doesPlaySound: false)
-        ButtonView(action: {}, text: "Legacy Button", backgroundColor: .blue, textColor: .ivory)
     }
     .padding(20)
     .environment(ThemeManager())

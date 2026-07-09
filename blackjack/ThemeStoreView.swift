@@ -22,9 +22,11 @@ struct ThemeStoreView: View {
         ZStack {
             ScrollView {
                 VStack(spacing: 0) {
-                    // Coin display — fixed top-right
-                    HStack{
+                    // Top bar — back, info, coin display
+                    HStack {
+                        BackButton()
                         Spacer()
+                        InfoButton { isInfoShowing = true }
                         HStack(spacing: 6) {
                             Image(systemName: "dollarsign.circle.fill")
                                 .foregroundStyle(themeManager.current.colors.secondary)
@@ -32,12 +34,12 @@ struct ThemeStoreView: View {
                                 .font(.system(size: 18, weight: .bold))
                                 .foregroundStyle(themeManager.current.colors.secondary)
                         }
-                        
                         .padding(.horizontal, 16)
                         .padding(.vertical, 6)
                         .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
-                        .padding(.trailing)
                     }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
                     VStack(spacing: 10) {
                         Text("Themes")
                             .font(.system(size: 40, weight: .bold))
@@ -59,7 +61,7 @@ struct ThemeStoreView: View {
                         }
                         .padding(.horizontal, 50)
                     }
-                    .padding(.top, 40)
+                    .padding(.top, 12)
                     .padding(.bottom, 28)
                     .opacity(titleVisible ? 1 : 0)
                     .offset(y: titleVisible ? 0 : -25)
@@ -87,12 +89,7 @@ struct ThemeStoreView: View {
                 #endif
             }
             .background(themeManager.current.background)
-            .toolbar {
-                Button("", systemImage: "info") {
-                    isInfoShowing = true
-                }
-            }
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbar(.hidden, for: .navigationBar)
             .onAppear {
                 titleVisible = true
                 cardsVisible = true

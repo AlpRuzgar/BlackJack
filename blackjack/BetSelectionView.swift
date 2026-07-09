@@ -21,9 +21,7 @@ struct BetSelectionView: View {
     @State var chip25BetAmount = 0
     @State var chip100BetAmount = 0
     @State var chip500BetAmount = 0
-    
-    // @State private var buttonPositions: [String: CGPoint] = [:]
-    // @State private var flyingChips: [ActiveFlyingChip] = []
+    @State var chip1000BetAmount = 0
     
     @State private var headerVisible = false
     @State private var chipsVisible = false
@@ -32,6 +30,14 @@ struct BetSelectionView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 10) {
+                // Back button
+                HStack {
+                    BackButton()
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 4)
+
                 // Header — balance, title, divider, bet amount
                 VStack(spacing: 6) {
                     HStack {
@@ -74,11 +80,16 @@ struct BetSelectionView: View {
                         .font(.system(size: 22, weight: .bold))
                         .foregroundStyle(themeManager.current.colors.secondary)
                         .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
+                    Text("TARGET CHIPS: \(vm.level.requiredChips)")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(themeManager.current.colors.secondary)
+                        .shadow(color: .black.opacity(0.6), radius: 4, x: 0, y: 2)
+
                 }
                 .opacity(headerVisible ? 1 : 0)
                 .offset(y: headerVisible ? 0 : -20)
                 
-                // Placed chips panel (decrease area)
+                //MARK: Placed chips panel (decrease area)
                 VStack(spacing: 0) {
                     HStack {
                         Text("YOUR BET")
@@ -100,7 +111,7 @@ struct BetSelectionView: View {
                         .foregroundStyle(themeManager.current.colors.secondary.opacity(0.3))
                         .padding(.horizontal, 14)
                     
-                    VStack(spacing: 4) {
+                    VStack(spacing: 15) {
                         HStack {
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip1BetAmount, value: 1)
@@ -119,6 +130,7 @@ struct BetSelectionView: View {
                             .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip5BetAmount > 0)
                             .allowsHitTesting(chip5BetAmount > 0)
                             ChipCountDisplay(amount: chip5BetAmount)
+                            
                             
                             ChipButton(action: {
                                 doDecrease(chipAmount: &chip25BetAmount, value: 25)
@@ -147,6 +159,16 @@ struct BetSelectionView: View {
                             .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip500BetAmount > 0)
                             .allowsHitTesting(chip500BetAmount > 0)
                             ChipCountDisplay(amount: chip500BetAmount)
+                            
+                            ChipButton(action: {
+                                doDecrease(chipAmount: &chip1000BetAmount, value: 1000)
+                            }, image: Image("1000-\(themeManager.current.id)"))
+                            .opacity(chip1000BetAmount > 0 ? 1 : 0)
+                            .scaleEffect(chip1000BetAmount > 0 ? 1.0 : 0.4)
+                            .animation(.spring(response: 0.35, dampingFraction: 0.5), value: chip1000BetAmount > 0)
+                            .allowsHitTesting(chip1000BetAmount > 0)
+                            ChipCountDisplay(amount: chip1000BetAmount)
+
                         }
                     }
                     .padding(.vertical, 8)
@@ -160,7 +182,7 @@ struct BetSelectionView: View {
                 .opacity(chipsVisible ? 1 : 0)
                 .offset(y: chipsVisible ? 0 : 20)
                 
-                // Chip tray (increase area)
+                //MARK: Chip tray (increase area)
                 VStack(spacing: 0) {
                     HStack {
                         Text("CHIP TRAY")
@@ -201,6 +223,9 @@ struct BetSelectionView: View {
                             ChipButton(action: {
                                 if doIncrease(value: 500) { chip500BetAmount += 1 }
                             }, image: Image("500-\(themeManager.current.id)"))
+                            ChipButton(action: {
+                                if doIncrease(value: 1000) { chip1000BetAmount += 1}
+                            }, image: Image("1000-\(themeManager.current.id)"))
                         }
                     }
                     .padding(.vertical, 8)
@@ -288,7 +313,6 @@ struct BetSelectionView: View {
             
         }
         .background(themeManager.current.background)
-        .toolbarBackground(.hidden, for: .navigationBar)
         .onAppear {
             if vm.level.chipsOwned >= vm.startingBet {
                 vm.startingBet = vm.startingBet
@@ -342,6 +366,8 @@ struct BetSelectionView: View {
     
     func calculateBetinChips(bet: Int) {
         var betLeft = bet
+        chip1000BetAmount = betLeft / 1000
+        betLeft = betLeft % 1000
         chip500BetAmount = betLeft / 500
         betLeft = betLeft % 500
         chip100BetAmount = betLeft / 100
@@ -363,7 +389,7 @@ struct ChipCountDisplay: View {
         Text("\(amount)")
             .font(.system(size: 15, weight: .bold))
             .foregroundStyle(themeManager.current.colors.text)
-            .frame(width: 20)
+            .frame(width: 30)
             .opacity(amount > 0 ? 1 : 0)
             .scaleEffect(scale)
             .onChange(of: amount) {
@@ -395,7 +421,7 @@ struct ChipButton: View {
 
 #Preview {
     BetSelectionView(
-        vm: LevelViewModel(level: Level(id: 1, name: "Preview", startingChips: 1000, requiredChips: 2000, minimumBet: 10, lockDuration: 10)),
+        vm: LevelViewModel(level: Level(id: 1, name: "Preview", startingChips: 100000, requiredChips: 200000, minimumBet: 10, lockDuration: 10)),
         betsPlaced: .constant(false)
     )
     .environment(ThemeManager())

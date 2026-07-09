@@ -18,12 +18,22 @@ struct StartView: View {
     @State private var navigateToLevels = false
     @State private var navigateToEndless = false
     @State private var navigateToThemes = false
+    
+    @State private var isInfoPresented  = false
 
     var body: some View {
         NavigationStack {
             ZStack {
                 themeManager.current.background
                 VStack(spacing: 0) {
+                    HStack{
+                        Spacer()
+                        InfoButton {
+                            isInfoPresented = true
+                        }
+                        .padding()
+                    }
+
                     Spacer()
 
                     // Title + gold divider
@@ -95,6 +105,24 @@ struct StartView: View {
                     .animation(.easeOut(duration: 0.4).delay(0.55), value: storeVisible)
                     .padding(.bottom, 48)
                 }
+                if isInfoPresented {
+                    InfoOverlay(isPresented: $isInfoPresented, title: "How to Play") {
+                        VStack(spacing: 2) {
+                            StartInfoRow(icon: "target", color: themeManager.current.colors.primary,
+                                         text: "Get closer to 21 than the dealer without going over.")
+                            StartInfoRow(icon: "a.square.fill", color: themeManager.current.colors.secondary,
+                                         text: "Aces count as 1 or 11. Face cards (J, Q, K) are worth 10.")
+                            StartInfoRow(icon: "xmark.circle.fill", color: themeManager.current.colors.alert,
+                                         text: "Go over 21 and you bust. If the dealer busts, you win.")
+                            StartInfoRow(icon: "person.fill", color: themeManager.current.colors.extra,
+                                         text: "Dealer draws until reaching 17, then must stand.")
+                            StartInfoRow(icon: "equal.circle.fill", color: themeManager.current.colors.text.opacity(0.6),
+                                         text: "Equal scores are a push — your bet is returned.")
+                        }
+                        .foregroundStyle(themeManager.current.colors.text)
+                        .font(.system(size: 15, weight: .medium))
+                    }
+                }
             }
             .navigationDestination(isPresented: $navigateToLevels) {
                 LevelMenuView()
@@ -110,8 +138,8 @@ struct StartView: View {
                 buttonsVisible = true
                 storeVisible = true
             }
-            #if DEBUG
             .toolbar {
+                #if DEBUG
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
                         showResetAlert = true
@@ -120,7 +148,9 @@ struct StartView: View {
                             .foregroundStyle(.red)
                     }
                 }
+                #endif
             }
+            #if DEBUG
             .alert("Reset All Data", isPresented: $showResetAlert) {
                 Button("Reset", role: .destructive) {
                     themeManager.reset()
@@ -131,6 +161,26 @@ struct StartView: View {
             }
             #endif
         }
+    }
+}
+
+private struct StartInfoRow: View {
+    let icon: String
+    let color: Color
+    let text: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            Image(systemName: icon)
+                .font(.system(size: 18, weight: .bold))
+                .foregroundStyle(color)
+                .frame(width: 28)
+            Text(text)
+                .multilineTextAlignment(.leading)
+            Spacer()
+        }
+        .padding(.vertical, 7)
+        .padding(.horizontal, 4)
     }
 }
 

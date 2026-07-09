@@ -48,8 +48,12 @@ class Level: Identifiable, ObservableObject {
                 UserDefaults.standard.removeObject(forKey: Self.completionDefaultsKey(for: id))
             }
         } else {
-            self.isCompleted = UserDefaults.standard.bool(forKey: Self.completionDefaultsKey(for: id))
+            // No unlock timestamp — either never completed, or stale data from before
+            // the timestamp system was introduced. Either way, clear any leftover
+            // completion flag so the level isn't permanently locked.
+            self.isCompleted = false
             self.lockTimeLeft = 0
+            UserDefaults.standard.removeObject(forKey: Self.completionDefaultsKey(for: id))
         }
     }
 

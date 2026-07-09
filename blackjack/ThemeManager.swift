@@ -41,6 +41,10 @@ class ThemeManager {
               colors: ThemeColors(primary: .neonCyan, secondary: .neonLime, alert: .neonMagenta, extra: .neonViolet, text: .neonGhost),
               gameBG: .image(Image("gameBG-cyberpunk"))),
         
+        Theme(isUnlocked: false, price: 40000, id: "japan",
+              background: .image(Image("background-japan")),
+              colors: ThemeColors(primary: .japanIndigo, secondary: .japanGoldLeaf, alert: .japanCrimson, extra: .japanIndigo, text: .japanRice), gameBG: .image(Image("gameBG-japan")))
+        
     ]
     
     var selectedThemeId: String {

@@ -17,6 +17,7 @@ struct blackjackApp: App {
     var body: some Scene {
         WindowGroup {
             StartView()
+                .fontDesign(.serif)
                 .environment(themeManager)
                 .environment(user)
                 .environment(soundManager)

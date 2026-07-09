@@ -34,6 +34,15 @@ struct LevelMenuView: View {
                 .ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 0) {
+                    // Top bar
+                    HStack {
+                        BackButton()
+                        Spacer()
+                        InfoButton { isInfoPresented.toggle() }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 8)
+
                     // Title + gold divider
                     VStack(spacing: 10) {
                         Text("Select Level")
@@ -56,7 +65,7 @@ struct LevelMenuView: View {
                         }
                         .padding(.horizontal, 50)
                     }
-                    .padding(.top, 40)
+                    .padding(.top, 12)
                     .padding(.bottom, 28)
                     .opacity(titleVisible ? 1 : 0)
                     .offset(y: titleVisible ? 0 : -25)
@@ -99,26 +108,15 @@ struct LevelMenuView: View {
             titleVisible = true
             levelsVisible = true
         }
+        .toolbar(.hidden, for: .navigationBar)
         #if DEBUG
-        .toolbar {
-            ToolbarItem {
-                Button("Reset Levels") {
-                    for level in levels {
-                        level.reset()
-                    }
-                }
+        .overlay(alignment: .bottom) {
+            Button("Reset Levels") {
+                for level in levels { level.reset() }
             }
+            .padding(.bottom, 8)
         }
         #endif
-        .toolbar {
-            ToolbarItem{
-                Button{
-                    isInfoPresented.toggle()
-                } label: {
-                    Image(systemName: "info.circle")
-                }
-            }
-        }
     }
 
     func unlockNextLevel() {

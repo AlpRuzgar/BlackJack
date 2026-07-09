@@ -54,6 +54,7 @@ struct LevelView: View {
             }
         }
         .animation(.easeInOut(duration: 0.2), value: showOutcomeOverlay)
+        .toolbar(.hidden, for: .navigationBar)
         .onAppear{
             AudioServicesPlaySystemSound(1306)
         }

@@ -33,7 +33,7 @@ extension Color {
     // Feudal Japan — black lacquer, crimson & gold
     static let japanLacquer  = Color(red: 0.10, green: 0.10, blue: 0.12)
     static let japanCrimson  = Color(red: 0.69, green: 0.12, blue: 0.18)
-    static let japanGoldLeaf = Color(red: 0.79, green: 0.66, blue: 0.30)
+    static let japanGoldLeaf = Color(red: 0.91, green: 0.72, blue: 0.22)
     static let japanIndigo   = Color(red: 0.20, green: 0.25, blue: 0.36)
     static let japanRice     = Color(red: 0.96, green: 0.94, blue: 0.90)
     
