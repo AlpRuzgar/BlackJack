@@ -38,8 +38,7 @@ struct ThemeStoreView: View {
                         .padding(.vertical, 6)
                         .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
+                    .padding()
                     VStack(spacing: 10) {
                         Text("Themes")
                             .font(.system(size: 40, weight: .bold))

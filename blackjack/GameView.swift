@@ -29,18 +29,24 @@ struct GameView: View {
             ZStack {
                 themeManager.current.gameBG
                 VStack(spacing: 20) {
-                    HStack {
-                        if !isLevel {
-                            BackButton()
+                    VStack(spacing: 0) {
+                        HStack {
+                            if !isLevel {
+                                BackButton()
+                                    .padding()
+                            }
                             Spacer()
+                            InfoButton {
+                                isHowToShowing.toggle()
+                            }
+                            .padding()
                         }
-                        else {
+                        if isLevel {
                             chipBar
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 6)
                         }
                     }
-
+                    
+                    
                     // Dealer Section
                     VStack  (spacing: 12){
                         VStack(spacing: 12) {
@@ -66,6 +72,7 @@ struct GameView: View {
                                     dealerCardView(index: index, card: card)
                                 }
                             }
+                            .frame(height: 165)
                             .shadow(color: .black.opacity(0.4), radius: 10, x: 0, y: 5)
                         }
                         
@@ -176,8 +183,10 @@ struct GameView: View {
                         VStack(spacing: 4) {
                             InfoRow(icon: "plus", color: themeManager.current.colors.alert, text: "Hit: draw a card.")
                             InfoRow(icon: "hand.raised.fill", color: themeManager.current.colors.primary, text: "Stand: end your turn.")
-                            InfoRow(icon: "chevron.up.2", color: themeManager.current.colors.extra, text: "Double: double your bet, draw one card.")
-                            InfoRow(icon: "arrow.left.and.right", color: themeManager.current.colors.secondary, text: "Split: split a matching pair into two hands.")
+                            if isLevel {
+                                InfoRow(icon: "chevron.up.2", color: themeManager.current.colors.extra, text: "Double: double your bet, draw one card.")
+                                InfoRow(icon: "arrow.left.and.right", color: themeManager.current.colors.secondary, text: "Split: split a matching pair into two hands.")
+                            }
                         }
                         .foregroundStyle(themeManager.current.colors.text)
                         .font(.system(size: 20, weight: .medium))
@@ -187,7 +196,7 @@ struct GameView: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(isLevel)
+        .navigationBarBackButtonHidden(true)
         .onAppear() {
             viewModel.themeManager = themeManager
             viewModel.soundManager = soundManager
@@ -219,8 +228,7 @@ struct GameView: View {
                     viewModel.isGameOver = false
                 }
             }
-        }        .toolbarBackground(.hidden, for: .navigationBar)
-        
+        }
     }
     
     @ViewBuilder
@@ -310,8 +318,7 @@ struct GameView: View {
                 .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                 
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 10)
+            .padding()
             .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
             
             
@@ -348,13 +355,13 @@ private struct InfoRow: View {
 }
 
 #Preview {
-//    GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
-//        .environment(ThemeManager())
-//        .environment(User())
-//        .environment(SoundManager())
+    //    GameView(viewModel: GameViewModel(gameType: .endless), isBackButtonHidden: false)
+    //        .environment(ThemeManager())
+    //        .environment(User())
+    //        .environment(SoundManager())
     GameView(viewModel: LevelViewModel(level: Level(id: 99, name: "a", startingChips: 10000, requiredChips: 100000, minimumBet: 1, lockDuration: 1)), isLevel: true)
-            .environment(ThemeManager())
-            .environment(User())
-            .environment(SoundManager())
-
+        .environment(ThemeManager())
+        .environment(User())
+        .environment(SoundManager())
+    
 }

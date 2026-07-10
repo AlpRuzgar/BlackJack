@@ -37,6 +37,7 @@ struct PlayerHandView: View {
                         }
                 }
             }
+            .frame(height: 165)
             .shadow(color: isActive ? .black.opacity(0.6) : .black.opacity(0.4), radius: 5, x: 0, y: 5)
 
             ZStack {

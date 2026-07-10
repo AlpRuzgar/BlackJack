@@ -45,8 +45,7 @@ struct BetSelectionView: View {
                     .padding(.vertical, 6)
                     .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                 }
-                .padding(.horizontal, 20)
-                .padding(.top, 10)
+                .padding()
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                 //MARK: Header — balance, title, divider, bet amount
                 VStack(spacing: 6) {
