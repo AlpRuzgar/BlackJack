@@ -353,14 +353,14 @@ struct BetSelectionView: View {
     
     @discardableResult
     func doIncrease(value: Int) -> Bool {
-        guard vm.level.chipsOwned >= vm.startingBet + value else { showError("You don't have enough chips"); return false }
+        guard vm.level.chipsOwned >= vm.startingBet + value else { showError(String(localized: "You don't have enough chips")); return false }
         increaseBet(by: value)
         soundManager.play("chipPlacingSound.mp3")
         return true
     }
     
     func doDecrease(chipAmount: inout Int, value: Int) {
-        guard vm.startingBet - value >= vm.level.minimumBet else { showError("You can't bet less than \(vm.level.minimumBet)"); return }
+        guard vm.startingBet - value >= vm.level.minimumBet else { showError(String(localized: "You can't bet less than \(vm.level.minimumBet)")); return }
         decreaseBet(by: value)
         chipAmount -= 1
         soundManager.play("chipPlacingSound.mp3")

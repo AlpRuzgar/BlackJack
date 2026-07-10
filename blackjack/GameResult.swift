@@ -10,21 +10,21 @@ import SwiftUI
 extension GameResult {
     var title: String {
         switch self {
-        case .playerWin: return "YOU WIN!"
-        case .dealerWin: return "DEALER WINS"
-        case .push: return "PUSH"
-        case .playerBust: return "BUST!"
-        case .dealerBust: return "DEALER BUST!"
+        case .playerWin: return String(localized: "YOU WIN!")
+        case .dealerWin: return String(localized: "DEALER WINS")
+        case .push: return String(localized: "PUSH")
+        case .playerBust: return String(localized: "BUST!")
+        case .dealerBust: return String(localized: "DEALER BUST!")
         }
     }
 
     var message: String {
         switch self {
-        case .playerWin: return "Your hand beats the dealer!"
-        case .dealerWin: return "Dealer's hand is closer to 21"
-        case .push: return "It's a tie!"
-        case .playerBust: return "You went over 21"
-        case .dealerBust: return "Dealer went over 21. You win!"
+        case .playerWin: return String(localized: "Your hand beats the dealer!")
+        case .dealerWin: return String(localized: "Dealer's hand is closer to 21")
+        case .push: return String(localized: "It's a tie!")
+        case .playerBust: return String(localized: "You went over 21")
+        case .dealerBust: return String(localized: "Dealer went over 21. You win!")
         }
     }
 
@@ -46,10 +46,10 @@ extension GameResult {
 
     var shortLabel: String {
         switch self {
-        case .playerWin, .dealerBust: return "WIN"
-        case .dealerWin: return "LOSE"
-        case .push: return "PUSH"
-        case .playerBust: return "BUST"
+        case .playerWin, .dealerBust: return String(localized: "WIN")
+        case .dealerWin: return String(localized: "LOSE")
+        case .push: return String(localized: "PUSH")
+        case .playerBust: return String(localized: "BUST")
         }
     }
 }

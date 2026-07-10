@@ -10,17 +10,17 @@ import SwiftUI
 struct LevelMenuView: View {
     @Environment(ThemeManager.self) var themeManager
     @State private var levels: [Level] = [
-        Level(id: 1, name: "Garage Game", startingChips: 1000, requiredChips: 2000, minimumBet: 10,
+        Level(id: 1, name: String(localized: "Garage Game"), startingChips: 1000, requiredChips: 2000, minimumBet: 10,
               lockDuration: 5*60),
-        Level(id: 2, name: "Local Casino", startingChips: 1500, requiredChips: 4000, minimumBet: 25,
+        Level(id: 2, name: String(localized: "Local Casino"), startingChips: 1500, requiredChips: 4000, minimumBet: 25,
               lockDuration: 10*60),
-        Level(id: 3, name: "The Mainfloor", startingChips: 2500, requiredChips: 8000, minimumBet: 50,
+        Level(id: 3, name: String(localized: "The Mainfloor"), startingChips: 2500, requiredChips: 8000, minimumBet: 50,
               lockDuration: 20*60),
-        Level(id: 4, name: "Members Only", startingChips: 4000, requiredChips: 15000, minimumBet: 100,
+        Level(id: 4, name: String(localized: "Members Only"), startingChips: 4000, requiredChips: 15000, minimumBet: 100,
               lockDuration: 40*60),
-        Level(id: 5, name: "VIP Lounge", startingChips: 6000, requiredChips: 30000, minimumBet: 250,
+        Level(id: 5, name: String(localized: "VIP Lounge"), startingChips: 6000, requiredChips: 30000, minimumBet: 250,
               lockDuration: 60*60),
-        Level(id: 6, name: "Monte Carlo", startingChips: 10000, requiredChips: 60000, minimumBet: 500,
+        Level(id: 6, name: String(localized: "Monte Carlo"), startingChips: 10000, requiredChips: 60000, minimumBet: 500,
               lockDuration: 120*60)
     ]
 
@@ -127,7 +127,7 @@ struct LevelMenuView: View {
 private struct LevelInfoRow: View {
     let icon: String
     let color: Color
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         HStack(spacing: 14) {

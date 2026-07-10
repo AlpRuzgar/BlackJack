@@ -227,7 +227,7 @@ struct ThemeButton: View {
                                     purchaseCount += 1
                                 }
                                 else {
-                                    showError("Not enough coins")
+                                    showError(String(localized: "Not enough coins"))
                                     AudioServicesPlaySystemSound(1053)
                                 }
                             } label: {
@@ -264,7 +264,7 @@ struct ThemeButton: View {
 private struct ThemeInfoRow: View {
     let icon: String
     let color: Color
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         HStack(spacing: 14) {

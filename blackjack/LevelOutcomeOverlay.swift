@@ -18,8 +18,8 @@ struct LevelOutcomeOverlay: View {
 
     var accentColor: Color { isWon ? themeManager.current.colors.primary : themeManager.current.colors.alert }
     var iconName: String { isWon ? "trophy.fill" : "xmark.circle.fill" }
-    var title: String { isWon ? "LEVEL COMPLETE" : "OUT OF CHIPS" }
-    var subtitle: String { isWon ? "You reached the goal!" : "Better luck next time." }
+    var title: String { isWon ? String(localized: "LEVEL COMPLETE") : String(localized: "OUT OF CHIPS") }
+    var subtitle: String { isWon ? String(localized: "You reached the goal!") : String(localized: "Better luck next time.") }
 
     var body: some View {
         ZStack {

@@ -11,7 +11,7 @@ struct PlayerHandView: View {
     @Environment(ThemeManager.self) var themeManager
     let cards: [Card]
     let handValue: Int
-    let label: String
+    let label: LocalizedStringKey
     var isActive: Bool = false
     var handResult: GameResult? = nil
     @Binding var dealtCardIDs: Set<UUID>

@@ -17,7 +17,7 @@ struct ActionButton: View {
         case compact    // fixed 70×70 square, icon only
     }
 
-    var text: String?
+    var text: LocalizedStringKey?
     var icon: String?
     var layout: Layout
     var backgroundColor: Color
@@ -26,7 +26,7 @@ struct ActionButton: View {
     var doesPlaySound: Bool
 
     init(
-        text: String? = nil,
+        text: LocalizedStringKey? = nil,
         icon: String? = nil,
         layout: Layout = .standard,
         backgroundColor: Color,

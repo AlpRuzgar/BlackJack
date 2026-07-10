@@ -1,0 +1,775 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "?" : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld coins" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld jeton"
+          }
+        }
+      }
+    },
+    "Aces count as 1 or 11. Face cards (J, Q, K) are worth 10." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "As 1 veya 11 sayılır. Resimli kartlar (J, Q, K) 10 değerindedir."
+          }
+        }
+      }
+    },
+    "ACTIVE" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AKTİF"
+          }
+        }
+      }
+    },
+    "Back" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geri"
+          }
+        }
+      }
+    },
+    "BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAHİS"
+          }
+        }
+      }
+    },
+    "BET: %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAHİS: %lld"
+          }
+        }
+      }
+    },
+    "Better luck next time." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir dahaki sefere bol şans."
+          }
+        }
+      }
+    },
+    "BUST" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BATTI"
+          }
+        }
+      }
+    },
+    "BUST!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BATTIN!"
+          }
+        }
+      }
+    },
+    "BUY — %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SATIN AL — %lld"
+          }
+        }
+      }
+    },
+    "Buy locked themes with coins." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kilitli temaları jetonla satın al."
+          }
+        }
+      }
+    },
+    "CHIP TRAY" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FİŞ TEPSİSİ"
+          }
+        }
+      }
+    },
+    "Completed levels lock for a cooldown period. They unlock automatically when the timer expires." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlanan seviyeler bir süre kilitlenir. Süre dolduğunda otomatik olarak açılır."
+          }
+        }
+      }
+    },
+    "Currently Active" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şu Anda Aktif"
+          }
+        }
+      }
+    },
+    "DEALER" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KRUPİYE"
+          }
+        }
+      }
+    },
+    "DEALER BUST!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KRUPİYE BATTI!"
+          }
+        }
+      }
+    },
+    "Dealer draws until reaching 17, then must stand." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krupiye 17'ye ulaşana kadar kart çeker, sonra durmak zorundadır."
+          }
+        }
+      }
+    },
+    "Dealer went over 21. You win!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krupiye 21'i geçti. Kazandın!"
+          }
+        }
+      }
+    },
+    "DEALER WINS" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KRUPİYE KAZANDI"
+          }
+        }
+      }
+    },
+    "Dealer's hand is closer to 21" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Krupiyenin eli 21'e daha yakın"
+          }
+        }
+      }
+    },
+    "Double on 17" : {
+
+    },
+    "Double: double your bet, draw one card." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İkiye Katla: bahsini ikiye katla, bir kart çek."
+          }
+        }
+      }
+    },
+    "Earn coins by completing levels." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seviyeleri tamamlayarak jeton kazan."
+          }
+        }
+      }
+    },
+    "ENDLESS MODE" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SONSUZ MOD"
+          }
+        }
+      }
+    },
+    "Equal scores are a push — your bet is returned." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eşit skorlar berabere sayılır — bahsin iade edilir."
+          }
+        }
+      }
+    },
+    "Garage Game" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garaj Oyunu"
+          }
+        }
+      }
+    },
+    "Get closer to 21 than the dealer without going over." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batmadan krupiyeden 21'e daha yakın ol."
+          }
+        }
+      }
+    },
+    "Go over 21 and you bust. If the dealer busts, you win." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "21'i geçersen batarsın. Krupiye batarsa kazanırsın."
+          }
+        }
+      }
+    },
+    "HAND %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EL %lld"
+          }
+        }
+      }
+    },
+    "Hit: draw a card." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çek: bir kart al."
+          }
+        }
+      }
+    },
+    "How to Play" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nasıl Oynanır"
+          }
+        }
+      }
+    },
+    "How to Play?" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nasıl Oynanır?"
+          }
+        }
+      }
+    },
+    "It's a tie!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berabere!"
+          }
+        }
+      }
+    },
+    "LEVEL COMPLETE" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SEVİYE TAMAMLANDI"
+          }
+        }
+      }
+    },
+    "Levels" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seviyeler"
+          }
+        }
+      }
+    },
+    "Local Casino" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yerel Kumarhane"
+          }
+        }
+      }
+    },
+    "LOCKED" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KİLİTLİ"
+          }
+        }
+      }
+    },
+    "LOSE" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KAYIP"
+          }
+        }
+      }
+    },
+    "MAIN MENU" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANA MENÜ"
+          }
+        }
+      }
+    },
+    "MAX BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MAKS BAHİS"
+          }
+        }
+      }
+    },
+    "Members Only" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üyelere Özel"
+          }
+        }
+      }
+    },
+    "MIN BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MİN BAHİS"
+          }
+        }
+      }
+    },
+    "Monte Carlo" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monte Carlo"
+          }
+        }
+      }
+    },
+    "Not enough coins" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeterli jeton yok"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TAMAM"
+          }
+        }
+      }
+    },
+    "OUT OF CHIPS" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FİŞLERİN BİTTİ"
+          }
+        }
+      }
+    },
+    "PLACE BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAHİS YAP"
+          }
+        }
+      }
+    },
+    "PLACE YOUR BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAHSİNİ YAP"
+          }
+        }
+      }
+    },
+    "PLAY AGAIN" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TEKRAR OYNA"
+          }
+        }
+      }
+    },
+    "PLAYER" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OYUNCU"
+          }
+        }
+      }
+    },
+    "PUSH" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BERABERE"
+          }
+        }
+      }
+    },
+    "Reach the target chips to complete a level and earn coins." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir seviyeyi tamamlamak ve jeton kazanmak için hedef fişe ulaş."
+          }
+        }
+      }
+    },
+    "SELECT" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SEÇ"
+          }
+        }
+      }
+    },
+    "Select Level" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seviye Seç"
+          }
+        }
+      }
+    },
+    "Split: split a matching pair into two hands." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Böl: eşleşen çifti iki ele böl."
+          }
+        }
+      }
+    },
+    "Stand: end your turn." : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dur: sıranı bitir."
+          }
+        }
+      }
+    },
+    "START" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAŞLANGIÇ"
+          }
+        }
+      }
+    },
+    "TABLES" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MASALAR"
+          }
+        }
+      }
+    },
+    "TAP TO ADD" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EKLEMEK İÇİN DOKUN"
+          }
+        }
+      }
+    },
+    "TAP TO REMOVE" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KALDIRMAK İÇİN DOKUN"
+          }
+        }
+      }
+    },
+    "TARGET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HEDEF"
+          }
+        }
+      }
+    },
+    "TARGET CHIPS: %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HEDEF FİŞ: %lld"
+          }
+        }
+      }
+    },
+    "The Mainfloor" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ana Salon"
+          }
+        }
+      }
+    },
+    "Theme Store" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema Mağazası"
+          }
+        }
+      }
+    },
+    "Themes" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temalar"
+          }
+        }
+      }
+    },
+    "THEMES" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TEMALAR"
+          }
+        }
+      }
+    },
+    "UNLOCKED" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AÇILDI"
+          }
+        }
+      }
+    },
+    "Unlocks in %@" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ içinde açılır"
+          }
+        }
+      }
+    },
+    "VIP Lounge" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VIP Salonu"
+          }
+        }
+      }
+    },
+    "WIN" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KAZANÇ"
+          }
+        }
+      }
+    },
+    "You can't bet less than %lld" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld değerinden az bahis yapamazsın"
+          }
+        }
+      }
+    },
+    "You don't have enough chips" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeterli fişin yok"
+          }
+        }
+      }
+    },
+    "You reached the goal!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hedefe ulaştın!"
+          }
+        }
+      }
+    },
+    "You went over 21" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "21'i geçtin"
+          }
+        }
+      }
+    },
+    "YOU WIN!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KAZANDIN!"
+          }
+        }
+      }
+    },
+    "YOUR BET" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BAHSİN"
+          }
+        }
+      }
+    },
+    "Your hand beats the dealer!" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elin krupiyeyi yendi!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}

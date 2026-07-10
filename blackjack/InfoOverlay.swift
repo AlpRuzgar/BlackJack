@@ -9,7 +9,7 @@ import SwiftUI
 
 struct InfoOverlay<Content: View>: View {
     @Binding var isPresented: Bool
-    var title: String
+    var title: LocalizedStringKey
     @ViewBuilder var overlayBody: () -> Content
     @Environment(ThemeManager.self) var themeManager
     @State private var scale: CGFloat = 0.5

@@ -43,6 +43,7 @@ struct StartView: View {
                             .foregroundStyle(themeManager.current.colors.text)
                             .tracking(1)
                             .shadow(color: .black.opacity(0.6), radius: 6, x: 2, y: 3)
+                            .shiningEffect()
 
                         HStack {
                             Rectangle()
@@ -167,7 +168,7 @@ struct StartView: View {
 private struct StartInfoRow: View {
     let icon: String
     let color: Color
-    let text: String
+    let text: LocalizedStringKey
 
     var body: some View {
         HStack(spacing: 14) {
@@ -187,4 +188,65 @@ private struct StartInfoRow: View {
 #Preview {
     StartView()
         .environment(ThemeManager())
+}
+
+struct ShimmerEffect: ViewModifier {
+    @State private var startPoint = UnitPoint(x: -1.8, y: 0)
+    @State private var endPoint = UnitPoint(x: -0.2, y: 0)
+    
+    let duration: Double = 1.5 // Time it takes to sweep across
+    let interval: Double = 3.5 // Total loop duration (1.5s sweep + 2s pause)
+
+    func body(content: Content) -> some View {
+        content
+            .overlay(
+                LinearGradient(
+                    colors: [
+                        .clear,
+                        .white.opacity(0.1),
+                        .white.opacity(0.8), // The core shine streak
+                        .white.opacity(0.1),
+                        .clear
+                    ],
+                    startPoint: startPoint,
+                    endPoint: endPoint
+                )
+                // Blend mode ensures it only illuminates the existing text pixels
+                .blendMode(.screen)
+                // Mask hides the gradient outside the boundaries of the text letters
+                .mask(content)
+            )
+            .onAppear {
+                startShimmerLoop()
+            }
+    }
+
+    private func startShimmerLoop() {
+        // Force an immediate initial run
+        runShimmerAnimation()
+        
+        // Loop the animation at your specific interval
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
+            runShimmerAnimation()
+        }
+    }
+
+    private func runShimmerAnimation() {
+        // Reset instantly off-screen to the left (leading)
+        startPoint = UnitPoint(x: -1.8, y: 0)
+        endPoint = UnitPoint(x: -0.2, y: 0)
+        
+        // Animate smoothly to the right (trailing)
+        withAnimation(.linear(duration: duration)) {
+            startPoint = UnitPoint(x: 1.2, y: 0)
+            endPoint = UnitPoint(x: 2.8, y: 0)
+        }
+    }
+}
+
+// Convenient Extension for cleaner syntax
+extension View {
+    func shiningEffect() -> some View {
+        self.modifier(ShimmerEffect())
+    }
 }
