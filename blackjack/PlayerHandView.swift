@@ -57,6 +57,7 @@ struct PlayerHandView: View {
                     .padding(.horizontal, 12)
                     .padding(.vertical, 4)
                     .background(Capsule().fill(result.color))
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
 
             Text(label)
@@ -64,6 +65,7 @@ struct PlayerHandView: View {
                 .foregroundStyle(isActive ? AnyShapeStyle(themeManager.current.colors.secondary.gradient) : AnyShapeStyle(themeManager.current.colors.text.opacity(0.8)))
                 .tracking(2)
         }
+        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: handResult != nil)
         .padding(8)
 //        .background(isActive ? Color.yellow.opacity(0.08) : Color.clear)
         .cornerRadius(12)

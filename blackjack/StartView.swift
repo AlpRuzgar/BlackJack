@@ -11,15 +11,13 @@ import SwiftUI
 struct StartView: View {
     @Environment(ThemeManager.self) var themeManager
 
-    @State private var titleVisible = false
-    @State private var buttonsVisible = false
-    @State private var storeVisible = false
     @State private var showResetAlert = false
     @State private var navigateToLevels = false
     @State private var navigateToEndless = false
     @State private var navigateToThemes = false
     
     @State private var isInfoPresented  = false
+    @State private var endlessGameActive = false
 
     var body: some View {
         NavigationStack {
@@ -59,9 +57,6 @@ struct StartView: View {
                         }
                         .padding(.horizontal, 40)
                     }
-                    .opacity(titleVisible ? 1 : 0)
-                    .offset(y: titleVisible ? 0 : -30)
-                    .animation(.easeOut(duration: 0.6), value: titleVisible)
 
                     Spacer()
 
@@ -75,19 +70,23 @@ struct StartView: View {
                             action: { navigateToLevels = true },
                             doesPlaySound: true
                         )
-                        ActionButton(
-                            text: "ENDLESS MODE",
-                            icon: "infinity",
-                            backgroundColor: themeManager.current.colors.alert,
-                            foregroundColor: themeManager.current.colors.text,
-                            action: { navigateToEndless = true },
-                            doesPlaySound: true
-                        )
+//                        ActionButton(
+//                            text: "ENDLESS MODE",
+//                            icon: "infinity",
+//                            backgroundColor: themeManager.current.colors.alert,
+//                            foregroundColor: themeManager.current.colors.text,
+//                            action: { navigateToEndless = true },
+//                            doesPlaySound: true
+//                        )
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.35)) {
+                                endlessGameActive = true
+                            }
+                        } label: {
+                            NavigationLabel(icon: "infinity", text: "ENDLESS", foregroundColor: themeManager.current.colors.text, backgroundColor: themeManager.current.colors.alert)
+                        }
                     }
                     .padding(.horizontal, 24)
-                    .opacity(buttonsVisible ? 1 : 0)
-                    .offset(y: buttonsVisible ? 0 : 40)
-                    .animation(.easeOut(duration: 0.5).delay(0.3), value: buttonsVisible)
 
                     Spacer()
 
@@ -101,9 +100,6 @@ struct StartView: View {
                         doesPlaySound: true
                     )
                     .padding(.horizontal, 24)
-                    .opacity(storeVisible ? 1 : 0)
-                    .offset(y: storeVisible ? 0 : 20)
-                    .animation(.easeOut(duration: 0.4).delay(0.55), value: storeVisible)
                     .padding(.bottom, 48)
                 }
                 if isInfoPresented {
@@ -124,6 +120,15 @@ struct StartView: View {
                         .font(.system(size: 15, weight: .medium))
                     }
                 }
+                if endlessGameActive {
+                    GameView(viewModel: GameViewModel(gameType: .endless), onExit: {
+                        withAnimation(.easeInOut(duration: 0.35)) {
+                            endlessGameActive = false
+                        }
+                    }, isLevel: false)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(1)
+                }
             }
             .navigationDestination(isPresented: $navigateToLevels) {
                 LevelMenuView()
@@ -133,11 +138,6 @@ struct StartView: View {
             }
             .navigationDestination(isPresented: $navigateToThemes) {
                 ThemeStoreView()
-            }
-            .onAppear {
-                titleVisible = true
-                buttonsVisible = true
-                storeVisible = true
             }
             .toolbar {
                 #if DEBUG
@@ -189,6 +189,8 @@ private struct StartInfoRow: View {
     StartView()
         .environment(ThemeManager())
 }
+
+
 
 struct ShimmerEffect: ViewModifier {
     @State private var startPoint = UnitPoint(x: -1.8, y: 0)
@@ -248,5 +250,15 @@ struct ShimmerEffect: ViewModifier {
 extension View {
     func shiningEffect() -> some View {
         self.modifier(ShimmerEffect())
+    }
+
+    // navigationTransition(_:) requires iOS 18; on older systems the view is returned unchanged
+    @ViewBuilder
+    func navigationTransitionIfAvailable() -> some View {
+        if #available(iOS 18.0, *) {
+            self.navigationTransition(.automatic)
+        } else {
+            self
+        }
     }
 }

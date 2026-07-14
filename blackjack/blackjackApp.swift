@@ -29,8 +29,8 @@ struct blackjackApp: App {
     }
 }
 
-//TODO: buttonların farklı ekranlarda tutarlı boyutlanması ve konumlanması
-//TODO: game view açılırken bir geçiş animasyonu
-//TODO: Belki yeni game bg resimleri
-//TODO: default theme card back image yeniden yap
+//TODO: buttonların farklı ekranlarda tutarlı boyutlanması ve konumlanması -> bitti, test et
+//TODO: Daha fazla level
+//TODO: game view açılırken bir geçiş animasyonu -> bitti, test et
+//TODO: Endless streak -> bitti, test et
 //TODO: kovboy teması

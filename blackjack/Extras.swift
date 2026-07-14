@@ -43,14 +43,7 @@ extension Color {
     static let neonViolet  = Color(red: 0.49, green: 0.23, blue: 0.93)
     static let neonLime    = Color(red: 0.64, green: 0.90, blue: 0.21)
     static let neonGhost   = Color(red: 0.90, green: 0.95, blue: 0.96)
-    
-    // Dark & Moody — noir with a single ember
-    static let moodyCharcoal = Color(red: 0.12, green: 0.13, blue: 0.14)
-    static let moodySlate    = Color(red: 0.23, green: 0.25, blue: 0.28)
-    static let moodyEmber    = Color(red: 0.78, green: 0.42, blue: 0.23)
-    static let moodyAsh      = Color(red: 0.42, green: 0.44, blue: 0.47)
-    static let moodyFog      = Color(red: 0.85, green: 0.85, blue: 0.87)
-    
+        
     // Ottoman — Iznik ceramic & imperial gold
     static let ottomanTurquoise = Color(red: 0.11, green: 0.54, blue: 0.60)
     static let ottomanCobalt    = Color(red: 0.12, green: 0.30, blue: 0.55)
@@ -58,5 +51,12 @@ extension Color {
     static let ottomanGold      = Color(red: 0.79, green: 0.64, blue: 0.15)
     static let ottomanIvory     = Color(red: 0.95, green: 0.93, blue: 0.86)
     
+    // Wild West — warm saloon night
+    static let westLeather   = Color(red: 0.42, green: 0.29, blue: 0.18)
+    static let westBarnRed   = Color(red: 0.62, green: 0.23, blue: 0.18)
+    static let westBrass     = Color(red: 0.78, green: 0.61, blue: 0.29)
+    static let westWood      = Color(red: 0.23, green: 0.16, blue: 0.12)
+    static let westParchment = Color(red: 0.94, green: 0.89, blue: 0.78)
+
 }
 

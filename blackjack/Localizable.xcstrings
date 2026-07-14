@@ -208,7 +208,7 @@
       }
     },
     "Double on 17" : {
-
+      "shouldTranslate" : false
     },
     "Double: double your bet, draw one card." : {
       "localizations" : {
@@ -231,6 +231,7 @@
       }
     },
     "ENDLESS MODE" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
@@ -520,6 +521,20 @@
         }
       }
     },
+    "Record: %lld" : {
+
+    },
+    "RECORD: %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "REKOR: %lld"
+          }
+        }
+      }
+    },
     "SELECT" : {
       "localizations" : {
         "tr" : {
@@ -566,6 +581,20 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "BAŞLANGIÇ"
+          }
+        }
+      }
+    },
+    "Streak: %lld" : {
+
+    },
+    "STREAK: %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SERİ: %lld"
           }
         }
       }

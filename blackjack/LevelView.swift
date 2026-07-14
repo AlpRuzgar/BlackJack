@@ -27,9 +27,13 @@ struct LevelView: View {
         ZStack {
             if !betsPlaced {
                 BetSelectionView(vm: viewModel, betsPlaced: $betsPlaced)
+                    // Slides out toward / back in from the left, like the previous screen in a navigation pop
+                    .transition(.move(edge: .leading))
             } else {
                 GameView(viewModel: viewModel, onRestart: {
-                    betsPlaced = false
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        betsPlaced = false
+                    }
                     if viewModel.checkLevelPass() {
                         level.markCompleted()
                         levelWon = true
@@ -40,6 +44,8 @@ struct LevelView: View {
                         showOutcomeOverlay = true
                     }
                 }, isLevel: true)
+                // Slides in from / back out to the right, like a pushed screen
+                .transition(.move(edge: .trailing))
             }
 
             if showOutcomeOverlay {
@@ -47,7 +53,9 @@ struct LevelView: View {
                     level.resetChips()
                     viewModel.resetGame()
                     showOutcomeOverlay = false
-                    betsPlaced = false
+                    withAnimation(.easeInOut(duration: 0.35)) {
+                        betsPlaced = false
+                    }
                 }
                 .transition(.opacity)
                 .zIndex(1)

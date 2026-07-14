@@ -50,10 +50,15 @@ class GameViewModel: ObservableObject {
     @Published var isGameOver: Bool = true
     @Published var gameOverMessage: String = ""
     @Published var isRoundComplete: Bool = false
+    
+    @Published var record: Int
+    @Published var streak: Int = 0
+
 
     init(gameType: GameType) {
         self.gameType = gameType
-        self.hands = [playersHand]
+        self.record = UserDefaults.standard.integer(forKey: "record")
+        self.hands = [self.playersHand]
     }
 
     // MARK: - Deck
@@ -168,12 +173,16 @@ class GameViewModel: ObservableObject {
         for hand in hands {
             if hand.value > 21 {
                 hand.result = .playerBust
+                streak = 0
             } else if dealersHandValue > 21 {
                 hand.result = .dealerBust
+                streak += 1
             } else if hand.value > dealersHandValue {
                 hand.result = .playerWin
+                streak += 1
             } else if hand.value < dealersHandValue {
                 hand.result = .dealerWin
+                streak = 0
             } else {
                 hand.result = .push
             }
@@ -181,9 +190,18 @@ class GameViewModel: ObservableObject {
         withAnimation(.spring()) {
             isRoundComplete = true
         }
+        setRecord()
     }
 
+    func setRecord() {
+        if streak > record {
+            record = streak
+            UserDefaults.standard.set(streak, forKey: "record")
+        }
+    }
+    
     func playerBust() {
+        streak = 0
         hands[targetHandIndex].result = .playerBust
         isGameOver = true
         withAnimation(.spring()) {

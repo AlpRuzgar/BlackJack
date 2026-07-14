@@ -38,6 +38,9 @@ struct ThemeStoreView: View {
                         .padding(.vertical, 6)
                         .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
                     }
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 3)
+
                     .padding()
                     VStack(spacing: 10) {
                         Text("Themes")
@@ -83,7 +86,7 @@ struct ThemeStoreView: View {
                 }
                 #if DEBUG
                 Button("add money"){
-                    user.increaseCoins(by: 1000)
+                    user.increaseCoins(by: 10000)
                 }
                 #endif
             }

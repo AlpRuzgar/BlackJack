@@ -44,8 +44,14 @@ struct BetSelectionView: View {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 6)
                     .background(.black.opacity(0.5), in: RoundedRectangle(cornerRadius: 8))
+                    .overlay{
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(themeManager.current.colors.secondary.opacity(0.9), lineWidth: 2)
+                    }
+                    .shadow(color: themeManager.current.colors.secondary.opacity(0.6), radius: 4)
                 }
-                .padding()
+                .padding(.horizontal, 10)
+                .padding(.vertical, 3)
                 .shadow(color: .black.opacity(0.2), radius: 5, x: 0, y: 2)
                 //MARK: Header — balance, title, divider, bet amount
                 VStack(spacing: 6) {
@@ -279,7 +285,9 @@ struct BetSelectionView: View {
                         foregroundColor: themeManager.current.colors.text,
                         action: {
                             vm.placeBet()
-                            betsPlaced = true
+                            withAnimation(.easeInOut(duration: 0.35)) {
+                                betsPlaced = true
+                            }
                             vm.startingBet = vm.currentBet
                         },
                         doesPlaySound: true

@@ -43,7 +43,12 @@ class ThemeManager {
         
         Theme(isUnlocked: false, price: 40000, id: "japan",
               background: .image(Image("background-japan")),
-              colors: ThemeColors(primary: .japanIndigo, secondary: .japanGoldLeaf, alert: .japanCrimson, extra: .japanIndigo, text: .japanRice), gameBG: .image(Image("gameBG-japan")))
+              colors: ThemeColors(primary: .japanLacquer, secondary: .japanGoldLeaf, alert: .japanCrimson, extra: .japanIndigo, text: .japanRice), gameBG: .image(Image("gameBG-japan"))),
+        
+        Theme(isUnlocked: false, price: 40000, id: "wildwest",
+              background: .image(Image("background-wildwest")),
+              colors: ThemeColors(primary: .westLeather, secondary: .westBrass, alert: .westBarnRed, extra: .westWood, text: .westParchment),
+              gameBG: .image(Image("gameBG-wildwest")))
         
     ]
     
