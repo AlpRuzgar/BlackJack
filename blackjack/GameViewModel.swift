@@ -68,7 +68,7 @@ class GameViewModel: ObservableObject {
             for suit in suitsArray {
                 let card = Card(value: value, suit: suit)
                     card.frontImage = "\(value)\(suit)-\(themeManager.current.id)"
-                card.backImage = "Back-\(themeManager.current.id)"
+                card.backImage = "back-\(themeManager.current.id)"
                 cardsArray.append(card)
             }
         }
