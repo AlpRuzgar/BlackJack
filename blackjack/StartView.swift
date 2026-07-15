@@ -83,7 +83,7 @@ struct StartView: View {
                                 endlessGameActive = true
                             }
                         } label: {
-                            NavigationLabel(icon: "infinity", text: "ENDLESS", foregroundColor: themeManager.current.colors.text, backgroundColor: themeManager.current.colors.alert)
+                            NavigationLabel(icon: "infinity", text: String(localized:"ENDLESS"), foregroundColor: themeManager.current.colors.text, backgroundColor: themeManager.current.colors.alert)
                         }
                     }
                     .padding(.horizontal, 24)

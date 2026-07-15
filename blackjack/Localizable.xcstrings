@@ -77,6 +77,16 @@
         }
       }
     },
+    "Black Chip Lounge" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siyah Fiş Salonu"
+          }
+        }
+      }
+    },
     "BUST" : {
       "localizations" : {
         "tr" : {
@@ -113,6 +123,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kilitli temaları jetonla satın al."
+          }
+        }
+      }
+    },
+    "Center Stage" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merkez Oyun"
           }
         }
       }
@@ -230,13 +250,13 @@
         }
       }
     },
-    "ENDLESS MODE" : {
-      "extractionState" : "stale",
+    "ENDLESS" : {
+      "extractionState" : "manual",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "SONSUZ MOD"
+            "value" : "SONSUZ"
           }
         }
       }
@@ -252,6 +272,7 @@
       }
     },
     "Garage Game" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
@@ -287,6 +308,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "EL %lld"
+          }
+        }
+      }
+    },
+    "High Limit Room" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüksek Bahis Odası"
           }
         }
       }
@@ -331,6 +362,26 @@
         }
       }
     },
+    "Kitchen Table" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mutfak Masası"
+          }
+        }
+      }
+    },
+    "Legend's Table" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efsaneler Masası"
+          }
+        }
+      }
+    },
     "LEVEL COMPLETE" : {
       "localizations" : {
         "tr" : {
@@ -352,6 +403,7 @@
       }
     },
     "Local Casino" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
@@ -391,6 +443,16 @@
         }
       }
     },
+    "Main Room" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ana Salon"
+          }
+        }
+      }
+    },
     "MAX BET" : {
       "localizations" : {
         "tr" : {
@@ -402,6 +464,7 @@
       }
     },
     "Members Only" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
@@ -422,6 +485,7 @@
       }
     },
     "Monte Carlo" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
@@ -531,6 +595,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "REKOR: %lld"
+          }
+        }
+      }
+    },
+    "Saturday Night" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cumartesi Gecesi"
           }
         }
       }
@@ -649,12 +723,53 @@
         }
       }
     },
+    "The Back Room" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arka Oda"
+          }
+        }
+      }
+    },
     "The Mainfloor" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ana Salon"
+          }
+        }
+      }
+    },
+    "The Summit" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zirve"
+          }
+        }
+      }
+    },
+    "The Vault" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasa"
+          }
+        }
+      }
+    },
+    "The Whale Room" : {
+      "localizations" : {
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balinalar Odası"
           }
         }
       }
@@ -710,6 +825,7 @@
       }
     },
     "VIP Lounge" : {
+      "extractionState" : "stale",
       "localizations" : {
         "tr" : {
           "stringUnit" : {

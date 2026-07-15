@@ -10,18 +10,24 @@ import SwiftUI
 struct LevelMenuView: View {
     @Environment(ThemeManager.self) var themeManager
     @State private var levels: [Level] = [
-        Level(id: 1, name: String(localized: "Garage Game"), startingChips: 1000, requiredChips: 2000, minimumBet: 10,
+        Level(id: 1, name: String(localized: "Kitchen Table"), startingChips: 100, requiredChips: 200, minimumBet: 5,
               lockDuration: 5*60),
-        Level(id: 2, name: String(localized: "Local Casino"), startingChips: 1500, requiredChips: 4000, minimumBet: 25,
+        Level(id: 2, name: String(localized: "The Back Room"), startingChips: 150, requiredChips: 350, minimumBet: 10,
               lockDuration: 10*60),
-        Level(id: 3, name: String(localized: "The Mainfloor"), startingChips: 2500, requiredChips: 8000, minimumBet: 50,
+        Level(id: 3, name: String(localized: "Saturday Night"), startingChips: 200, requiredChips: 500, minimumBet: 15,
               lockDuration: 20*60),
-        Level(id: 4, name: String(localized: "Members Only"), startingChips: 4000, requiredChips: 15000, minimumBet: 100,
+        Level(id: 4, name: String(localized: "Main Room"), startingChips: 300, requiredChips: 750, minimumBet: 25,
+              lockDuration: 30*60),
+        Level(id: 5, name: String(localized: "Center Stage"), startingChips: 500, requiredChips: 1500, minimumBet: 40,
               lockDuration: 40*60),
-        Level(id: 5, name: String(localized: "VIP Lounge"), startingChips: 6000, requiredChips: 30000, minimumBet: 250,
-              lockDuration: 60*60),
-        Level(id: 6, name: String(localized: "Monte Carlo"), startingChips: 10000, requiredChips: 60000, minimumBet: 500,
-              lockDuration: 120*60)
+        Level(id: 6, name: String(localized: "Black Chip Lounge"), startingChips: 800, requiredChips: 3000, minimumBet: 75,
+              lockDuration: 50*60),
+        Level(id: 7, name: String(localized: "High Limit Room"), startingChips: 1000, requiredChips: 4000, minimumBet: 100, lockDuration: 60*60),
+        Level(id: 8, name: String(localized: "The Whale Room"), startingChips: 1500, requiredChips: 7500, minimumBet: 250, lockDuration: 75*60),
+        Level(id: 9, name: String(localized: "The Vault"), startingChips: 2000, requiredChips: 12000, minimumBet: 300, lockDuration: 90*60),
+        Level(id: 10, name: String(localized: "The Summit"), startingChips: 3000, requiredChips: 21000, minimumBet: 500, lockDuration: 105*60),
+        Level(id: 11, name: String(localized: "Legend's Table"), startingChips: 5000, requiredChips: 50000, minimumBet: 1000, lockDuration: 120*60),
+
     ]
 
     @State private var titleVisible = false

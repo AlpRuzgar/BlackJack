@@ -30,7 +30,8 @@ struct blackjackApp: App {
 }
 
 //TODO: buttonların farklı ekranlarda tutarlı boyutlanması ve konumlanması -> bitti, test et
-//TODO: Daha fazla level
 //TODO: game view açılırken bir geçiş animasyonu -> bitti, test et
 //TODO: Endless streak -> bitti, test et
-//TODO: kovboy teması
+//TODO: compression
+
+//TODO: skip ile androide portla
