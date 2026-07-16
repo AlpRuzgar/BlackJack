@@ -106,13 +106,14 @@ struct ActionButton: View {
 struct PressableButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .scaleEffect(configuration.isPressed ? 0.88 : 1.0)
             .brightness(configuration.isPressed ? -0.06 : 0)
             .offset(y: configuration.isPressed ? 2 : 0)
             .animation(
                 configuration.isPressed
                     ? .easeIn(duration: 0.08)
-                    : .spring(response: 0.35, dampingFraction: 0.45),
+                    // Low damping so the button overshoots and bounces back on release
+                    : .spring(response: 0.4, dampingFraction: 0.3),
                 value: configuration.isPressed
             )
     }

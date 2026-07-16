@@ -1,0 +1,22 @@
+{
+  "images": [
+    {
+      "idiom": "iphone",
+      "scale": "1x"
+    },
+    {
+      "filename": "back-future.heic",
+      "idiom": "iphone",
+      "scale": "2x"
+    },
+    {
+      "filename": "back-future.heic",
+      "idiom": "iphone",
+      "scale": "3x"
+    }
+  ],
+  "info": {
+    "author": "xcode",
+    "version": 1
+  }
+}

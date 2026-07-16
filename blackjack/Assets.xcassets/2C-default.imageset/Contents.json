@@ -1,16 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "2C-default.heic",
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "1x"
     },
     {
-      "idiom" : "universal",
+      "filename" : "2C-default 1.heic",
+      "idiom" : "iphone",
       "scale" : "2x"
     },
     {
-      "idiom" : "universal",
+      "filename" : "2C-default.heic",
+      "idiom" : "iphone",
       "scale" : "3x"
     }
   ],

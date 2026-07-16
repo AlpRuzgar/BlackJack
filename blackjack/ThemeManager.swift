@@ -26,26 +26,26 @@ class ThemeManager {
               colors: ThemeColors(primary: .egyptLapis, secondary: .egyptGold, alert: .egyptCarnelian, extra: .egyptTurquoise, text: .egyptSandstone),
               gameBG: .image(Image("gameBG-egypt"))),
         
-        Theme(isUnlocked: false, price: 20000, id: "greece",
+        Theme(isUnlocked: false, price: 10000, id: "greece",
               background: .image(Image("background-greece")),
               colors: ThemeColors(primary: .greekAegean, secondary: .greekGold, alert: .greekOlive, extra: .greekSky, text: .greekMarble),
               gameBG: .image(Image("gameBG-greece"))),
         
-        Theme(isUnlocked: false, price: 20000, id: "ottoman",
+        Theme(isUnlocked: false, price: 10000, id: "ottoman",
               background: .image(Image("background-ottoman")),
               colors: ThemeColors(primary: .ottomanTurquoise, secondary: .ottomanGold, alert: .ottomanCrimson, extra: .ottomanCobalt, text: .ottomanIvory),
               gameBG: .image(Image("gameBG-ottoman"))),
         
-        Theme(isUnlocked: false, price: 40000, id: "cyberpunk",
+        Theme(isUnlocked: false, price: 10000, id: "cyberpunk",
               background: .image(Image("background-cyberpunk")),
               colors: ThemeColors(primary: .neonCyan, secondary: .neonLime, alert: .neonMagenta, extra: .neonViolet, text: .neonGhost),
               gameBG: .image(Image("gameBG-cyberpunk"))),
         
-        Theme(isUnlocked: false, price: 40000, id: "japan",
+        Theme(isUnlocked: false, price: 10000, id: "japan",
               background: .image(Image("background-japan")),
               colors: ThemeColors(primary: .japanLacquer, secondary: .japanGoldLeaf, alert: .japanCrimson, extra: .japanIndigo, text: .japanRice), gameBG: .image(Image("gameBG-japan"))),
         
-        Theme(isUnlocked: false, price: 40000, id: "wildwest",
+        Theme(isUnlocked: false, price: 10000, id: "wildwest",
               background: .image(Image("background-wildwest")),
               colors: ThemeColors(primary: .westLeather, secondary: .westBrass, alert: .westBarnRed, extra: .westWood, text: .westParchment),
               gameBG: .image(Image("gameBG-wildwest")))
